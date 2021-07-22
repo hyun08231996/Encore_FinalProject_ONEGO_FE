@@ -3,7 +3,6 @@
     <div id="nav">
 		<Header>
 		</Header>
-
     </div>
   </div>
 </template>
@@ -16,7 +15,7 @@
 	export default Vue.extend({
 		name: "App",
 		components:{
-			Header,
+			Header
 		}
 
 
@@ -25,5 +24,7 @@
 
 
 <style lang="scss">
-
+	#app {
+		font-family: 'Nanum Myeongjo', serif;
+	}
 </style>

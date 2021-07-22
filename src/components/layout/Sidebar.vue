@@ -2,9 +2,7 @@
 	<v-app>
 		<v-card>
 			<v-navigation-drawer
-				v-model="drawer"
-				absolute
-				temporary
+				v-model="drawer" permanent
 				>
 				<template v-slot:prepend>
 					<v-list-item two-line>
