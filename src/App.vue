@@ -11,7 +11,7 @@
 <script lang="ts">
 	import Vue from 'vue'
 	import Header from '@/components/layout/Header.vue'
-	//import Sidebar from '@/components/layout/Sidebar.vue'
+	import Sidebar from '@/components/layout/Sidebar.vue'
 
 	export default Vue.extend({
 		name: "App",
