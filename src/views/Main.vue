@@ -1,16 +1,16 @@
 <template>
-  <div id="textArea">
-    <!-- ONEGO Intro -->
-    <div class="intro_onego">
-        <h1>커서가 깜빡이는 순간, 당신은 이미 작가입니다.</h1>
-        <h1 style="opacity: 80%">ONEGO에서는 작가님을 응원합니다.</h1>
-    </div>
-    <br><br>
-    <!-- Slide Area -->
-    <div id="discover_posts">
-        <Carousel />
-    </div>
-  </div>
+	<div id="textArea">
+		<!-- ONEGO Intro -->
+		<div class="intro_onego">
+			<h1>커서가 깜빡이는 순간, 당신은 이미 작가입니다.</h1>
+			<h1 style="opacity: 80%">ONEGO에서는 작가님을 응원합니다.</h1>
+		</div>
+		<br><br>
+		<!-- Slide Area -->
+		<div id="discover_posts">
+			<Carousel />
+		</div>
+	</div>
 </template>
 
 <script>
@@ -27,6 +27,13 @@ import Carousel from '../components/layout/Carousel.vue'
 	})
 </script>
 <style>
+	#textArea{
+		margin-top: 100px;
+	}
+	.intro_onego{
+		padding-left: 300px;
+		padding-right: 300px;
+	}
     #discover_posts {
         width: 100vw;
         position: relative;
