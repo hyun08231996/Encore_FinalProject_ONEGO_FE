@@ -31,6 +31,13 @@ import Carousel from '../components/layout/Carousel.vue'
 	})
 </script>
 <style>
+	#textArea{
+		margin-top: 100px;
+	}
+	.intro_onego{
+		padding-left: 300px;
+		padding-right: 300px;
+	}
     #discover_posts {
         width: 100vw;
         position: relative;

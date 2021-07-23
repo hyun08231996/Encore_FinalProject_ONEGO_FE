@@ -1,18 +1,16 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Main.vue'
+import VueRouter, { RouteConfig } from 'vue-router'
+import Main from '@/views/Main.vue'
 import SignUp from '../views/SignUp.vue'
 import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: "/",
-    name: "home",
-    alias: "/home",
-    component: Home
-  },
+const routes: Array<RouteConfig> = [
+	{
+		path: "/",
+		component: Main
+	},
   {
     path: "/signup",
     name: "signup",
