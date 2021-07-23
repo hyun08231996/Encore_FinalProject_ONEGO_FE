@@ -133,7 +133,7 @@
 			showMenu:false,
 			menusBL: [
 				{ title: '홈', link: '/'},
-				{ title: '최신글'},
+				{ title: '최신글', link: '/article'},
 			],
 			menusAL: [
 				{ title: '내 프로필'},

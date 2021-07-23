@@ -1,10 +1,15 @@
 <template>
 	<v-footer
-		dark
-		padless
-	>
+        dark
+        padless
+        app
+        bottom
+        absolute
+        inset
+        height="200"
+  >
     <v-card
-	  id="margin"
+      id="margin"
       flat
       tile
       class="grey darken-3 white--text text-center"
