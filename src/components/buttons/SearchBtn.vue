@@ -9,8 +9,9 @@
 
 	export default Vue.extend({
 		methods:{
-			// showSearch(){
-			// }
+			showSearch(){
+			console.log("hello")
+			}
 		}
 	})
 </script>
