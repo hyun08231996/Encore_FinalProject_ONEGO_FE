@@ -5,7 +5,7 @@ import Scrap from '@/views/Scrap.vue'
 import Article from '@/views/Article.vue'
 	
 Vue.use(VueRouter)
-
+	
 const routes: Array<RouteConfig> = [
 	{
 		path: "/",

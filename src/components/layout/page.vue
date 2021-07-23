@@ -3,7 +3,7 @@
     <v-flex
         v-for="article in articles"
         v-bind:key="article.title"
-    > 
+    >
       <v-card 
         class="mx-auto"
         max-width="55%"

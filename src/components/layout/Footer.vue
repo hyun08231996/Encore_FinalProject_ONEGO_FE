@@ -6,7 +6,7 @@
         bottom
         absolute
         inset
-        height="200"  
+        height="200"
   >
     <v-card
       id="margin"
