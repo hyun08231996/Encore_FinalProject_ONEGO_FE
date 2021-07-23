@@ -23,7 +23,7 @@ import Page from '../components/layout/page.vue'
 			Page
 		},
 	})
-
+  
 </script>
 <style>
 </style>
