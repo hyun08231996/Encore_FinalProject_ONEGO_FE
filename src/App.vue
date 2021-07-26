@@ -1,8 +1,7 @@
 <template>
   <v-app >
 	<Header />
-	<router-view />
-	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<router-view id="content-margin"/>
 	<Footer />
   </v-app>
 </template>
@@ -24,5 +23,9 @@
 <style lang="scss">
 	#app {
 		font-family: 'Nanum Myeongjo', serif;
+	}
+	#content-margin{
+		margin-top:100px;
+		margin-bottom:400px;
 	}
 </style>

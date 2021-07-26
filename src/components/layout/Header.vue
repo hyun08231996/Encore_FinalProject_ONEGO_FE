@@ -9,13 +9,15 @@
 		>
 		<v-app-bar-nav-icon @click="drawer = true; openMenu()"></v-app-bar-nav-icon>
 
-		<a href="/"><img src="@/assets/logo/onego_logo.jpeg" width="20%" height="20%"></a>
+		<a href="/"><img src="@/assets/logo/onego_logo.jpeg"
+			width="120px" height="43.2px"
+			style="vertical-align:middle;"></a>
 
 		<v-spacer></v-spacer>
 		<div v-if="isAuth"><logout-btn @logout="isAuth = $event"/></div>
 		<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 
-		<search-btn />
+		<search-modal @openDrawer="drawer = $event" />
 		</v-app-bar>
 
 		<!-- sidebar -->
@@ -28,8 +30,8 @@
 			>
 			<br><br>
 			<div v-if="isAuth">
-				<div class="side-itms" style="padding-left:5%;">
-					<v-list-item-avatar size=90>
+				<div class="side-itms">
+					<v-list-item-avatar size=90 class="mx-auto">
 						<img src="https://randomuser.me/api/portraits/women/82.jpg">
 					</v-list-item-avatar>
 				</div>
@@ -40,8 +42,8 @@
 				</div>
 			</div>
 			<div v-else>
-				<div class="side-itms" style="padding-left:5%;">
-					<v-list-item-avatar size=90>
+				<div class="side-itms">
+					<v-list-item-avatar size=90 class="mx-auto">
 						<img src="@/assets/logo/onego_mac.png">
 					</v-list-item-avatar>
 				</div>
@@ -63,10 +65,10 @@
 			<br>
 			<v-divider></v-divider>
 			<br>
-				<v-btn id="menu-btn" retain-focus-on-click rounded outlined color="grey" @click="openMenu" >
+				<v-btn id="menu-btn" rounded outlined color="#00d5aa" @click="openMenu" >
 					메뉴
 				</v-btn>&nbsp;&nbsp;
-				<v-btn retain-focus-on-click rounded outlined color="grey" @click="openCategory">
+				<v-btn id="cate-btn" rounded outlined @click="openCategory">
 					카테고리
 				</v-btn>
 			</div>
@@ -107,9 +109,9 @@
 					</div>
 			</v-list>
 
-			<div class="side-itms">
-				<div v-if="isAuth" id="side-footer1"><logout-btn @logout="isAuth = $event"/></div>
-				<div v-else id="side-footer2"><signup-btn /><login-btn @login="isAuth = $event" /></div>
+			<div class="side-itms" id="side-footer">
+				<div v-if="isAuth"><setting-btn /><logout-btn @logout="isAuth = $event"/></div>
+				<div v-else><signup-btn id="signup-btn" /><login-btn id="login-btn" @login="isAuth = $event" /></div>
 			</div>
 
 		</v-navigation-drawer>
@@ -122,7 +124,8 @@
 	import LoginBtn from '@/components/buttons/LoginBtn.vue'
 	import LogoutBtn from '@/components/buttons/LogoutBtn.vue'
 	import SignupBtn from '@/components/buttons/SignupBtn.vue'
-	import SearchBtn from '@/components/buttons/SearchBtn.vue'
+	import SettingBtn from '@/components/buttons/SettingBtn.vue'
+	import SearchModal from '@/views/SearchModal.vue'
 
 	export default Vue.extend({
 		data: () => ({
@@ -151,23 +154,38 @@
 		}),
 		name: "Header",
 		components:{
-			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn,
-			'search-btn':SearchBtn
+			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,
+			'search-modal':SearchModal
 		},
 		methods:{
 			openCategory(){
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				document.getElementById('menu-btn')!.style.color = "grey";
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				document.getElementById('cate-btn')!.style.color = "#00d5aa";
 				this.showMenu = false;
 				this.showCate = true;
 			},
 			openMenu(){
-				this.showCate = false;
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				document.getElementById('menu-btn')!.style.color = "#00d5aa";
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				document.getElementById('cate-btn')!.style.color = "grey";
 				this.showMenu = true;
+				this.showCate = false;
+
 			}
 		}
 	})
 </script>
 
 <style>
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+		flex: 0 !important;
+		margin: 0 !important;
+	}
 	.side-itms{
 		text-align:center;
 
@@ -175,23 +193,23 @@
 	.v-btn::before{
 		background-color: transparent !important;
 	}
-	.v-btn:hover,
-	.v-btn:focus,
-	.v-btn:active{
+	.v-btn:hover{
 		color: #00d5aa !important;
 	}
-	#side-footer2{
+	#side-footer{
 		position:fixed !important;
+		left: 18px;
 		bottom:3%;
-		left:10%;
-	}
-	#side-footer1{
-		position:fixed !important;
-		bottom:3%;
-		left:28%;
 	}
 	#menu-btn{
 		padding-left:30px !important;
 		padding-right:30px !important;
+	}
+	#login-btn{
+		padding-left:23px !important;
+		padding-right:23px !important;
+	}
+	.v-navigation-drawer {
+		z-index: 999999 !important;
 	}
 </style>

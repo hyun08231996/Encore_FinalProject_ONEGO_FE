@@ -1,6 +1,10 @@
 <template>
-	<v-btn icon @click="showSearch">
-		<v-icon>mdi-magnify</v-icon>
+	<v-btn
+		class="ma-2"
+		rounded
+		outlined
+		color="grey">
+		계정설정
 	</v-btn>
 </template>
 
@@ -8,10 +12,7 @@
 	import Vue from 'vue'
 
 	export default Vue.extend({
-		methods:{
-			// showSearch(){
-			// }
-		}
+
 	})
 </script>
 

@@ -2,9 +2,14 @@
 	<v-footer
 		dark
 		padless
+		app
+		bottom
+		absolute
+		inset
+		height="200"
 	>
     <v-card
-	  id="margin"
+	  id="padding"
       flat
       tile
       class="grey darken-3 white--text text-center"
@@ -29,7 +34,7 @@
       <v-divider></v-divider>
 
       <v-card-text class="white--text">
-        <img src="@/assets/logo/onego_white.png" width="12%" height="12%">
+        <img src="@/assets/logo/onego_white.png" width="100px" height="36px">
       </v-card-text>
     </v-card>
   </v-footer>
@@ -51,7 +56,7 @@
 </script>
 
 <style>
-	#margin{
+	#padding{
 		padding-left:300px;
 		padding-right:300px;
 	}
