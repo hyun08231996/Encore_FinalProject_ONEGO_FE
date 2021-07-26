@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Main from '@/views/Main.vue'
+<<<<<<< HEAD
 import SearchResult from '@/views/SearchResult.vue'
 
+=======
+import Scrap from '@/views/Scrap.vue'
+import Article from '@/views/Article.vue'
+	
+>>>>>>> f7f200cefe4043aaa565425101171bfd45fb1df1
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -12,10 +18,19 @@ const routes: Array<RouteConfig> = [
 		component: Main
 	},
 	{
+<<<<<<< HEAD
 		path: "/search/:search",
 		name: "SearchResult",
 		component: SearchResult,
 		props: true
+=======
+		path: "/scrap",
+		component: Scrap
+	},
+	{
+		path: "/article",
+		component: Article
+>>>>>>> f7f200cefe4043aaa565425101171bfd45fb1df1
 	}
 ]
 

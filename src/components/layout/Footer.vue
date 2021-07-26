@@ -1,5 +1,6 @@
 <template>
 	<v-footer
+<<<<<<< HEAD
 		dark
 		padless
 		app
@@ -10,6 +11,18 @@
 	>
     <v-card
 	  id="padding"
+=======
+        dark
+        padless
+        app
+        bottom
+        absolute
+        inset
+        height="200"  
+  >
+    <v-card
+      id="margin"
+>>>>>>> f7f200cefe4043aaa565425101171bfd45fb1df1
       flat
       tile
       class="grey darken-3 white--text text-center"
