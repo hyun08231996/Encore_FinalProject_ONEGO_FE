@@ -1,14 +1,17 @@
-#text-field-container {
-    margin-left: 300px;
-    margin-right: 300px;
-    margin-top: 20vh;
+#modal-margin {
+    max-width: 55%;
 }
 
-.v-text-field input {
+#text-field-container {
+    margin-top: 20vh;
+    max-width: 55%;
+}
+
+.text_field input {
     font-size: 1.8em !important;
 }
 
-.v-text-field .v-icon {
+.text_field .v-icon {
     margin-bottom: -25px !important;
 }
 

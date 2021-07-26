@@ -8,12 +8,12 @@
 		inset
 		height="200"
 	>
-    <v-card id="padding"
+    <v-card id="footer-padding"
       flat
       tile
       class="grey darken-3 white--text text-center"
     >
-      <v-card-text>
+      <v-card-text id="footer-icons">
         <v-btn
           v-for="icon in icons"
           :key="icon"
@@ -26,14 +26,18 @@
         </v-btn>
       </v-card-text>
 
-      <v-card-text class="white--text pt-0">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+      <v-card-text class="mx-auto white--text">
+		  <div class="footer-paragraph"><a href="#" class='footer-content'>원고소개</a> |
+			<a href="#" class='footer-content'>이용약관</a> |
+			<a href="#" class='footer-content'>개인정보처리방침</a> |
+			<a href="#" class='footer-content'>운영정책</a> |
+			<a href="#" class='footer-content'>고객센터</a>
+		  </div>
       </v-card-text>
-
-      <v-divider></v-divider>
-
+      <div align="center"><v-divider class="divider-footer"></v-divider></div>
       <v-card-text class="white--text">
-        <img src="@/assets/logo/onego_white.png" width="100px" height="36px">
+        <img src="@/assets/logo/onego_white.png" width="100px" height="36px"><br>
+		<em style="opacity:60%;">© Copyright 2021. All rights reserved.</em>
       </v-card-text>
     </v-card>
   </v-footer>
@@ -55,8 +59,24 @@
 </script>
 
 <style>
-	#padding{
-		padding-left:300px;
-		padding-right:300px;
+	#footer-padding{
+		width:100%;
+	}
+	.divider-footer{
+		text-align: center;
+		width:1320px;
+	}
+	#footer-icons{
+		margin-bottom:-10px;
+	}
+	.footer-paragraph{
+		word-spacing: 1.2em;
+	}
+	.footer-content{
+		text-decoration: none !important;
+		color: white !important;
+	}
+	.footer-content:hover{
+		text-decoration: underline !important;
 	}
 </style>

@@ -25,19 +25,21 @@
 			v-model="drawer"
 			temporary
 			fixed
-			fluid style="height: 100vh;"
+			fluid style="height: 100vh; width: 250px;"
 			app
 			>
 			<br><br>
 			<div v-if="isAuth">
 				<div class="side-itms">
+					<a href="#">
 					<v-list-item-avatar size=90 class="mx-auto">
 						<img src="https://randomuser.me/api/portraits/women/82.jpg">
 					</v-list-item-avatar>
+					</a>
 				</div>
 				<div class="side-itms">
 					<v-list-item-content>
-						<v-list-item-title>Mary Jane</v-list-item-title>
+						<v-list-item-title>{{user.nickname}}</v-list-item-title>
 					</v-list-item-content>
 				</div>
 			</div>
@@ -109,9 +111,13 @@
 					</div>
 			</v-list>
 
-			<div class="side-itms" id="side-footer">
-				<div v-if="isAuth"><setting-btn /><logout-btn @logout="isAuth = $event"/></div>
-				<div v-else><signup-btn id="signup-btn" /><login-btn id="login-btn" @login="isAuth = $event" /></div>
+			<div id="side-footer">
+				<div v-if="isAuth" class="side-footer-btns">
+				  <div><setting-btn /><logout-btn @logout="isAuth = $event"/></div>
+				</div>
+				<div v-else class="side-footer-btns">
+				  <div><signup-btn id="signup-btn" /><login-btn id="login-btn" @login="isAuth = $event" /></div>
+				</div>
 			</div>
 
 		</v-navigation-drawer>
@@ -150,7 +156,14 @@
 				{title:'요리·레시피'},
 				{title:'운동·건강'},
 				{title:'사랑·이별'}
-			]
+			],
+			user:{
+				name:'Mary Jane',
+				nickname:'Mary',
+				email:'mj123@gmail.com',
+				intro:'Hello, I am an avid writer',
+				pic:"https://randomuser.me/api/portraits/women/82.jpg"
+			},
 		}),
 		name: "Header",
 		components:{
@@ -160,7 +173,7 @@
 		methods:{
 			openCategory(){
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				document.getElementById('menu-btn')!.style.color = "grey";
+				document.getElementById('menu-btn')!.style.color = "#9E9E9E";
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('cate-btn')!.style.color = "#00d5aa";
 				this.showMenu = false;
@@ -170,7 +183,7 @@
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('menu-btn')!.style.color = "#00d5aa";
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				document.getElementById('cate-btn')!.style.color = "grey";
+				document.getElementById('cate-btn')!.style.color = "#9E9E9E";
 				this.showMenu = true;
 				this.showCate = false;
 
@@ -197,9 +210,16 @@
 		color: #00d5aa !important;
 	}
 	#side-footer{
-		position:fixed !important;
-		left: 18px;
-		bottom:3%;
+		width:250px;
+	}
+	.side-footer-btns{
+		position: absolute !important;
+		margin-left: auto;
+		margin-right: auto;
+		left: 0;
+		right: 0;
+		bottom: 3%;
+		text-align: center;
 	}
 	#menu-btn{
 		padding-left:30px !important;

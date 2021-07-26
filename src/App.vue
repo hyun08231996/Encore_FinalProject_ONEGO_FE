@@ -22,7 +22,7 @@
 
 <style lang="scss">
 	#app {
-		font-family: "Noto Sans KR", sans-serif !important;
+		font-family: "Noto Sans KR", sans-serif;
 	}
 	#content-margin{
 		margin-top:100px;

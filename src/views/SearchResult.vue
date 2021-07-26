@@ -17,8 +17,7 @@
 	<!-- search result -->
 	</v-card>
 	<v-divider style="margin-bottom:30px;"></v-divider>
-	<!-- <div v-if="(filteredSearch.length===0 || search!=='') ||
-		(showResult == true && filteredSearch.length===0)">
+	<div v-if="filteredSearch.length===0">
 	<v-flex>
 		<v-card
 			class="mx-auto"
@@ -28,8 +27,8 @@
 			<v-card-text>검색 결과가 없습니다.</v-card-text>
 		</v-card>
 	</v-flex>
-	</div> -->
-	<div>
+	</div>
+	<div v-else>
 	<v-flex>
 
       <v-card
@@ -37,6 +36,7 @@
         max-width="55%"
         max-height="600"
 		tile=false
+		elevation="5"
 		:key="i" v-for="(article, i) in filteredSearch"
       >
 	  	<a href='#' id="list-item" >
@@ -81,7 +81,6 @@
 			}
 		},
 		data: ()=>({
-			showResult:false,
 			blogList:[
 				{title:'고구마는 맛있다', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user1',date:'2.15.2020'},
 				{title:'호박 고구마 곡', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user2',date:'2.15.2020'},
@@ -98,8 +97,11 @@
 		},
 		methods:{
 			doSearch(){
-				this.showResult = true;
 				this.newSearch = (document.getElementById('text-field') as HTMLTextAreaElement).value;
+				if(this.newSearch == ""){
+					alert("검색어를 입력해주세요.");
+					return;
+				}
 				location.href = "/search/"+this.newSearch;
 			},
 			highlightTitle(title:string){

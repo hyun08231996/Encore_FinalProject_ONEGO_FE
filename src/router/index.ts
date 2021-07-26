@@ -4,6 +4,9 @@ import Main from '@/views/Main.vue'
 import SearchResult from '@/views/SearchResult.vue'
 import Scrap from '@/views/Scrap.vue'
 import Article from '@/views/Article.vue'
+import Setting from '@/views/Setting.vue'
+import ChangePassword from '@/views/ChangePassword.vue'
+import EditProfile from '@/views/EditProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -26,16 +29,23 @@ const routes: Array<RouteConfig> = [
 	{
 		path: "/article",
 		component: Article
+	},
+	{
+		path: "/setting",
+		name: "Setting",
+		component: Setting
+	},
+	{
+		path:"/change-pass",
+		name: "ChangePassword",
+		component: ChangePassword
+	},
+	{
+		path:"/edit-prof",
+		name: "EditProfile",
+		component: EditProfile
 	}
 ]
-
-function castRoute(route:any) {
-	return{
-		search: String(route.params.search),
-		filteredSearch: Array(route.params.search),
-
-	};
-}
 
 const router = new VueRouter({
   mode: 'history',

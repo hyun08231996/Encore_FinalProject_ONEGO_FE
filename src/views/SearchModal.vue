@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row id="modal-margin" class="mx-auto justify-center">
 	<!-- modal -->
     <v-dialog
       v-model="dialog"
@@ -35,9 +35,9 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
-		<v-flex id="text-field-container">
+		<v-flex id="text-field-container" class="mx-auto justify-center">
 			<!-- search bar -->
-			<v-text-field id="text-field"
+			<v-text-field id="text-field" class="text_field"
 				v-model="search"
 				color="#00d5aa"
 				height="50px"

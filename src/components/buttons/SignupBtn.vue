@@ -1,5 +1,5 @@
 <template>
-	<v-btn
+	<v-btn id="signup-btn"
 		class="ma-2"
 		rounded
 		outlined
@@ -16,6 +16,8 @@
 	})
 </script>
 
-<style scoped>
-
+<style>
+#signup-btn:hover{
+	color:#757575 !important;
+}
 </style>
