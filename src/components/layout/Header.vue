@@ -91,7 +91,7 @@
 					v-for="item in menusAL"
 					:key="item.title">
 						<v-list-item-content>
-							<v-btn text><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
+							<v-btn text :href="item.link"><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
 						</v-list-item-content>
 					</v-list-item>
 				</div>
@@ -141,7 +141,7 @@
 			menusAL: [
 				{ title: '내 프로필'},
 				{ title: '내 원고'},
-				{ title: '스크랩'},
+				{ title: '스크랩', link: '/scrap'},
 			],
 			categories:[
 				{title:'일상'},
