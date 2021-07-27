@@ -64,7 +64,7 @@
 	}
 	.divider-footer{
 		text-align: center;
-		width:1320px;
+		width:55%;
 	}
 	#footer-icons{
 		margin-bottom:-10px;

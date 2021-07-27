@@ -5,7 +5,7 @@
 				<label id="title">계정설정</label>
 			</div>
 			<div class="spacing">
-				<label class="subtitle">계정</label>
+				<label class="subtitle"><strong>계정</strong></label>
 				<div class="center-space">
 					<span class="content">{{user.email}}</span>
 					<span class="button"><v-btn id="change-btn"
@@ -19,7 +19,7 @@
 			</div>
 			<v-divider class="divider"/>
 			<div class="spacing">
-				<label class="subtitle">프로필</label>
+				<label class="subtitle"><strong>프로필</strong></label>
 				<div class="center-space">
 					<span class="content">
 						<div class="content-info"><label style="font-size:1.1em;">{{user.name}} ({{user.nickname}})</label></div>
@@ -70,7 +70,7 @@
 <style>
 #setting-margin{
 	max-width:55%;
-	margin-top: -15px;
+	margin-top: -25px;
 }
 .spacing{
 	margin-bottom:30px;

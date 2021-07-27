@@ -1,5 +1,5 @@
 <template>
-	<v-card>
+	<v-card class="header-padding">
 		<!-- navbar -->
 		<v-app-bar
 		fixed
@@ -59,11 +59,10 @@
 			<br>
 			<div class="side-itms">
 				<div v-if="isAuth">
-					<v-btn class="ma-2" rounded outlined color="#00d5aa">
+					<v-btn rounded outlined color="#00d5aa">
 						글쓰기
 					</v-btn>
 				</div>
-
 			<br>
 			<v-divider></v-divider>
 			<br>
@@ -87,7 +86,7 @@
 						</v-list-item-content>
 					</v-list-item>
 				</div>
-				<br><br>
+				<br>
 				<div v-if="isAuth" class="side-itms">
 					<v-list-item
 					v-for="item in menusAL"
@@ -145,8 +144,8 @@
 				{ title: '최신글', link: '/article'},
 			],
 			menusAL: [
-				{ title: '내 프로필'},
-				{ title: '내 원고'},
+				{ title: '내 프로필', link: '/myprofile'},
+				{ title: '내 원고', link: '/myonego'},
 				{ title: '스크랩', link: '/scrap'},
 			],
 			categories:[
@@ -198,6 +197,9 @@
 		flex-wrap: wrap;
 		flex: 0 !important;
 		margin: 0 !important;
+	}
+	.header-padding .v-toolbar__content{
+		padding-right:5px;
 	}
 	.side-itms{
 		text-align:center;

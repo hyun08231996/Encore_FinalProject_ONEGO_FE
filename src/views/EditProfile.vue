@@ -33,7 +33,7 @@
 				</div>
 				<v-text-field id="name-input" class="name-input"
 					:value="user.name"
-					:fieldRules="fieldRules"
+					:rules="[rules.fieldLimit,rules.required]"
 					color="#00d5aa"
 					dense
 					counter
@@ -50,7 +50,7 @@
 				</div>
 				<v-text-field id="nickname-input" class="nickname-input"
 					:value="user.nickname"
-					:fieldRules="fieldRules"
+					:rules="[rules.fieldLimit,rules.required]"
 					color="#00d5aa"
 					dense
 					counter
@@ -75,7 +75,7 @@
 						auto-grow
 						row-height="12px"
 						:value="user.intro"
-						:areaRules="areaRules"/>
+						:rules="[rules.areaLimit]"/>
 				</v-container>
 			</div>
 			<v-divider class="divider-edit"/>
@@ -113,8 +113,11 @@
 				intro:'Hello, I am an avid writer',
 				pic:"https://randomuser.me/api/portraits/women/82.jpg"
 			},
-			fieldRules: [v => v.length <= 25 || 'Max 25 characters'],
-			areaRules: [v => v.length <= 100 || 'Max 100 characters'],
+			rules: {
+				fieldLimit: v => v.length <= 25 || 'Max 25 characters',
+				areaLimit: v => v.length <= 100 || 'Max 100 characters',
+				required: v => !!v || '필수 입력사항입니다.'
+			},
 		}),
 		methods:{
 			updateProfile(){
@@ -135,7 +138,7 @@
 <style>
 #editprof-margin{
 	max-width:55%;
-	margin-top: -15px;
+	margin-top: -25px;
 }
 .spacing{
 	margin-bottom:30px;

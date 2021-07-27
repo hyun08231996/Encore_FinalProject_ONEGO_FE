@@ -7,6 +7,7 @@ import Article from '@/views/Article.vue'
 import Setting from '@/views/Setting.vue'
 import ChangePassword from '@/views/ChangePassword.vue'
 import EditProfile from '@/views/EditProfile.vue'
+import MyOnego from '@/views/MyOnego.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ const routes: Array<RouteConfig> = [
 		path:"/edit-prof",
 		name: "EditProfile",
 		component: EditProfile
+	},
+	{
+		path:"/myonego",
+		name: "MyOnego",
+		component: MyOnego
 	}
 ]
 

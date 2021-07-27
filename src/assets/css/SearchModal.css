@@ -4,7 +4,7 @@
 
 #text-field-container {
     margin-top: 20vh;
-    max-width: 55%;
+    width: 60%;
 }
 
 .text_field input {
@@ -16,10 +16,10 @@
 }
 
 #table-container {
-    margin-top: 150px;
+    margin-top: 100px;
     margin-left: auto;
     margin-right: auto;
-    width: 1100px;
+    width: 65%;
 }
 
 a {

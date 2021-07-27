@@ -26,10 +26,11 @@
     </v-carousel-item>
   </v-carousel>
 </template>
-<script>
-  export default {
-    data () {
-      return {
+<script lang="ts">
+  import Vue from 'vue'
+
+  export default Vue.extend({
+    data: () => ({
         colors: [
           'indigo',
           'warning',
@@ -44,7 +45,6 @@
           'Fourth',
           'Fifth',
         ],
-      }
-    },
-  }
+	})
+  })
 </script>

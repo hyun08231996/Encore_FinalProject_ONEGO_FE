@@ -3,7 +3,7 @@
 	<v-card elevation="0">
 	  <v-flex id="search-bar-container" class="mx-auto justify-center">
 		<!-- search bar -->
-		<v-text-field id="text-field"
+		<v-text-field id="text-field" class="text_field"
 			:value="search"
 			color="#00d5aa"
 			height="30px"
@@ -16,7 +16,7 @@
 	  </v-flex>
 	<!-- search result -->
 	</v-card>
-	<v-divider style="margin-bottom:30px;"></v-divider>
+	<v-divider style="margin-bottom:50px;"></v-divider>
 	<div v-if="filteredSearch.length===0">
 	<v-flex>
 		<v-card
@@ -36,7 +36,7 @@
         max-width="55%"
         max-height="600"
 		tile=false
-		elevation="5"
+		elevation="3"
 		:key="i" v-for="(article, i) in filteredSearch"
       >
 	  	<a href='#' id="list-item" >
@@ -72,6 +72,7 @@
 
 <script lang="ts">
 	import Vue from 'vue'
+	import '@/assets/css/SearchResult.css'
 
 	export default Vue.extend({
 		name:"SearchResult",
@@ -147,49 +148,5 @@
 </script>
 
 <style>
-  #search-bar-container{
-	margin-top: -30px !important;
-    max-width: 55%;
-  }
-  #article-title{
-	font-size : 1.45rem;
-  }
-  #list-item:hover{
-	text-decoration:none !important;
-	color: black !important;
-  }
-  #list-item:hover #article-title{
-	color: #00d5aa;
-    text-decoration: underline;
-  }
-  #item {
-	font-family: "Noto Sans KR", sans-serif !important;
-  }
-  .card{
-    margin: 0px 15px 0px 15px;
-  }
-  .text{
-    padding-top: 30px;
-    padding-bottom: 5px;
-  }
-  .text-post{
-    font-size : 1.1rem;
-    line-height: 1.7em;
-    font-weight: 300;
-    letter-spacing: 0;
-    /* 글자수 제한*/
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    word-wrap:break-word;
-    height: 5.1em; /*height는 1.7em * 3줄 = 5.1em */
-  }
-  .avatar-box{
-    padding-left: 17px;
-  }
-  .highlight {
-    color: #00d5aa !important;
-  }
+
 </style>

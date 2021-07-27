@@ -43,6 +43,7 @@
 				height="50px"
 				placeholder="검색어를 입력하세요"
 				single-line
+				autofocus
 				:append-icon="'mdi-magnify'"
 				@click:append="doSearch"
 				@keyup.enter="doSearch"
