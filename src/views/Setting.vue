@@ -7,7 +7,7 @@
 			<div class="spacing">
 				<label class="subtitle"><strong>계정</strong></label>
 				<div class="center-space">
-					<span class="content">{{user.email}}</span>
+					<span class="content" style="font-size:1em;">{{user.email}}</span>
 					<span class="button"><v-btn id="change-btn"
 						rounded
 						outlined
@@ -22,8 +22,8 @@
 				<label class="subtitle"><strong>프로필</strong></label>
 				<div class="center-space">
 					<span class="content">
-						<div class="content-info"><label style="font-size:1.1em;">{{user.name}} ({{user.nickname}})</label></div>
-						<div class="content-info"><label style="font-size:0.9em;color:#808080;">{{user.intro}}</label></div>
+						<div class="content-info"><label style="font-size:1.2em;">{{user.name}} ({{user.nickname}})</label></div>
+						<div class="content-info"><label style="font-size:0.9em;opacity:75%;">{{user.intro}}</label></div>
 					</span>
 					<span class="button" id="pic-btn">
 						<v-list-item-avatar size=90>
@@ -99,7 +99,7 @@
 	flex: 1;
 }
 #pic-btn{
-	margin-right: -15px !important;
+	margin-right: -8px !important;
 }
 .content-info{
 	margin-bottom:10px;

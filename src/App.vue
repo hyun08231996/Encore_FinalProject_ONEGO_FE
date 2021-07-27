@@ -1,6 +1,6 @@
 <template>
   <v-app >
-	<Header />
+	<Header :class="$route.meta.headerClass"/>
 	<router-view id="content-margin"/>
 	<Footer />
   </v-app>

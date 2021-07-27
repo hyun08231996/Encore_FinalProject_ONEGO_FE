@@ -85,7 +85,7 @@
 					rounded
 					outlined
 					color="grey"
-					href="/setting">
+					@click="$router.go(-1)">
 					취소
 				</v-btn>&nbsp;&nbsp;
 				<v-btn id="save-btn"

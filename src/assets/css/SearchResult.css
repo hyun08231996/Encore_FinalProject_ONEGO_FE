@@ -11,7 +11,7 @@
       font-size: 1.45rem;
   }
   
-  #list-item:hover {
+  #list-item {
       text-decoration: none !important;
       color: black !important;
   }

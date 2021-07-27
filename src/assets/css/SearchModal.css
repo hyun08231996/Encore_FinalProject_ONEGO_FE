@@ -22,7 +22,7 @@
     width: 65%;
 }
 
-a {
+.a-tag {
     color: black !important;
     text-decoration: none;
 }
@@ -32,14 +32,9 @@ a {
     width: 120px !important;
 }
 
-#user-name:hover,
-a:hover {
+#blog-item:hover {
     color: #00d5aa !important;
-}
-
-#list-item:hover {
-    color: #00d5aa !important;
-    text-decoration: underline;
+    text-decoration: underline!important;
 }
 
 #user-intro {
@@ -73,7 +68,8 @@ a:hover {
 }
 
 #user-img:hover~#user-name,
-#user-item:hover #user-intro {
+#user-item:hover #user-intro,
+#user-item:hover #user-name {
     color: #00d5aa !important;
 }
 

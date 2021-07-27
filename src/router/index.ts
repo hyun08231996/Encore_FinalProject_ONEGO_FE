@@ -8,6 +8,8 @@ import Setting from '@/views/Setting.vue'
 import ChangePassword from '@/views/ChangePassword.vue'
 import EditProfile from '@/views/EditProfile.vue'
 import MyOnego from '@/views/MyOnego.vue'
+import MyProfile from '@/views/MyProfile.vue'
+import UserProfile from '@/views/UserProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -50,6 +52,22 @@ const routes: Array<RouteConfig> = [
 		path:"/myonego",
 		name: "MyOnego",
 		component: MyOnego
+	},
+	{
+		path:"/myprofile",
+		name: "MyProfile",
+		component: MyProfile,
+		meta: {
+			headerClass: 'myprof-header-color'
+		}
+	},
+	{
+		path:"/userprofile",
+		name: "UserProfile",
+		component: UserProfile,
+		meta:{
+			headerClass: 'myprof-header-color'
+		}
 	}
 ]
 

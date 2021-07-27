@@ -14,9 +14,11 @@
 		<div v-else>
 	      <div v-for="(article,i) in savedList" :key="i">
 			<a href="#" class="edit-article">
+			  <div>
 		      <div class="article-title" style="font-size:1.35rem;">{{article.title}}</div>
 		      <div class="article-text">{{article.text}}</div><br>
 			  <div style="font-size:0.8rem;opacity:50%">{{article.date}}</div>
+			  </div>
 			</a>
 			<v-divider class="divider-myonego"/>
 	      </div>
@@ -29,9 +31,11 @@
 		<div v-else>
 	      <div v-for="(article,i) in postedList" :key="i">
 			<a href="#" class="edit-article">
+			  <div>
 		      <div class="article-title" style="font-size:1.35rem;">{{article.title}}</div>
 		      <div class="article-text">{{article.text}}</div><br>
 			  <div style="font-size:0.8rem;opacity:50%">{{article.date}}</div>
+			  </div>
 			</a>
 			<v-divider class="divider-myonego"/>
 	      </div>
@@ -107,8 +111,9 @@
 	margin-top:30px;
 	margin-bottom: 30px;
 }
-.edit-article:hover{
-	color:black !important;
+.edit-article,#saved-btn,#posted-btn{
+	text-decoration: none !important;
+	color: black !important;
 }
 .edit-article:hover .article-title{
 	text-decoration:underline !important;

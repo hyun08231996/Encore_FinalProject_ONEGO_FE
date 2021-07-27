@@ -58,7 +58,7 @@
 						</div>
 						<v-list-item
 							:key="i" v-for="(blog, i) in filteredSearch.slice(0,8)"><!-- shows only 8 search results from filteredSearch -->
-							<a href="#" id="list-item" v-html="highlight(blog.title)"><!-- v-html="highlight(blog.title)" -->
+							<a href="#" id="blog-item" class='a-tag' v-html="highlight(blog.title)"><!-- v-html="highlight(blog.title)" -->
 								<v-list-item-content>{{blog.content}}</v-list-item-content></a>
 						</v-list-item>
 					</v-list>
@@ -70,7 +70,7 @@
 			<v-simple-table style="text-align:center;">
 				<tr>
 					<td v-for="user in userList" :key="user.name">
-						<a href="#" id="user-item">
+						<a href="#" id="user-item" class='a-tag'>
 							<v-list-item-avatar size=100 class="mx-auto" id="user-img-div">
 								<img :src="user.img" id="user-img">
 							</v-list-item-avatar>

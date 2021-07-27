@@ -31,7 +31,7 @@
 			<br><br>
 			<div v-if="isAuth">
 				<div class="side-itms">
-					<a href="#">
+					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
 						<img src="https://randomuser.me/api/portraits/women/82.jpg">
 					</v-list-item-avatar>
@@ -59,7 +59,7 @@
 			<br>
 			<div class="side-itms">
 				<div v-if="isAuth">
-					<v-btn rounded outlined color="#00d5aa">
+					<v-btn id="write-btn" rounded outlined color="#00d5aa">
 						글쓰기
 					</v-btn>
 				</div>
@@ -210,6 +210,9 @@
 	}
 	.v-btn:hover{
 		color: #00d5aa !important;
+	}
+	#write-btn:hover{
+		color:#02bf99 !important;
 	}
 	#side-footer{
 		width:250px;
