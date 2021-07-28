@@ -13,6 +13,8 @@ import UserProfile from '@/views/UserProfile.vue'
 import SignUpPage from '@/views/SignupPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
+import MyContent from '@/views/MyContent.vue'
+import Content from '@/views/Content.vue'
 
 Vue.use(VueRouter)
 
@@ -100,6 +102,16 @@ const routes: Array<RouteConfig> = [
 		name: "Write",
 		component: Write,
 		meta:{ showFooter: false, showHeader: false }
+	},
+	{
+		path:"/myContent",
+		name: "MyContent",
+		component: MyContent
+	},
+	{
+		path:"/content",
+		name: "Content",
+		component: Content
 	}
 ]
 
