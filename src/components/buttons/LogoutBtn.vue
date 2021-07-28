@@ -1,5 +1,5 @@
 <template>
-	<v-btn
+	<v-btn id="logout-btn"
 		class="ma-2"
 		rounded
 		outlined
@@ -24,6 +24,8 @@
 	})
 </script>
 
-<style scoped>
-
+<style>
+#logout-btn:hover{
+	color:#02bf99 !important;
+}
 </style>

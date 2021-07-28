@@ -1,8 +1,7 @@
 <template>
   <v-app >
-	<Header />
-	<router-view />
-	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<Header :class="$route.meta.headerClass"/>
+	<router-view id="content-margin"/>
 	<Footer />
   </v-app>
 </template>
@@ -11,7 +10,6 @@
 	import Vue from 'vue'
 	import Header from '@/components/layout/Header.vue'
 	import Footer from '@/components/layout/Footer.vue'
-
 	export default Vue.extend({
 		name: "App",
 		components:{
@@ -23,6 +21,10 @@
 
 <style lang="scss">
 	#app {
-		font-family: 'Nanum Myeongjo', serif;
+		font-family: 'Nanum Myeongjo', serif !important;
+	}
+	#content-margin{
+		margin-top:100px;
+		margin-bottom:400px;
 	}
 </style>
