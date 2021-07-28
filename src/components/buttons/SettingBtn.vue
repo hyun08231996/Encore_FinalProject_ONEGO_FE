@@ -1,10 +1,11 @@
 <template>
-	<v-btn id="signup-btn"
+	<v-btn id="setting-btn"
 		class="ma-2"
 		rounded
 		outlined
-		color="grey" @click="signup">
-		회원가입
+		color="grey"
+		@click="settingPage">
+		계정설정
 	</v-btn>
 </template>
 
@@ -12,16 +13,16 @@
 	import Vue from 'vue'
 
 	export default Vue.extend({
-		methods: {
-			signup: function () {   
-				window.open("/signup","_self");    
+		methods:{
+			settingPage(){
+				location.href="/setting"
 			}
 		}
 	})
 </script>
 
 <style>
-#signup-btn:hover{
+#setting-btn:hover{
 	color:#757575 !important;
 }
 </style>

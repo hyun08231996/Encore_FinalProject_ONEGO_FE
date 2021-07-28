@@ -1,7 +1,7 @@
 <template>
   <v-app >
-	<Header />
-	<router-view />
+	<Header :class="$route.meta.headerClass"/>
+	<router-view id="content-margin"/>
 	<Footer v-if="$route.meta.showFooter"/>
   </v-app>
 </template>
@@ -22,6 +22,10 @@
 
 <style lang="scss">
 	#app {
-		font-family: 'Nanum Myeongjo', serif;
+		font-family: 'Nanum Myeongjo', serif !important;
+	}
+	#content-margin{
+		margin-top:100px;
+		margin-bottom:400px;
 	}
 </style>

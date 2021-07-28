@@ -1,26 +1,28 @@
 <template>
-    <div id="signup_background">
-        <div id="signup_content">
-            <div id="textArea"><br></div>
-            <div class="signup">
-                <v-row no-gutters>
-                    <v-col cols="12" md="7">
-                        <!-- Signup/Login Intro -->
-                        <div id="signup_intro">
-                            <h1>당신의 생각을 <br>ONEGO로 펼쳐보세요.</h1>
-                            <h4>AI 글쓰기 플랫폼 ONEGO</h4>
-                        </div>
-                    </v-col>
-                    
-                    <v-col cols="6" md="5">
-                        <div id="signup_area">
-                            <v-card class="mx-auto" max-width="400">
-                                <SignUp :info="info" @updateEmail="updateEmail" v-if="info.name==''"/>
-                                <EmailValidation :info="info" v-if="info.name!=''"/>
-                            </v-card>
-                        </div>
-                    </v-col>
-                </v-row>
+    <div style="margin-top:0px;">
+        <div id="signup_background">
+            <div id="signup_content">
+                <div id="textArea"><br></div>
+                <div class="signup">
+                    <v-row no-gutters>
+                        <v-col cols="12" md="7">
+                            <!-- Signup/Login Intro -->
+                            <div id="signup_intro">
+                                <h1>당신의 생각을 <br>ONEGO로 펼쳐보세요.</h1>
+                                <h4>AI 글쓰기 플랫폼 ONEGO</h4>
+                            </div>
+                        </v-col>
+                        
+                        <v-col cols="6" md="5">
+                            <div id="signup_area">
+                                <v-card class="mx-auto" max-width="400">
+                                    <SignUp :info="info" @updateEmail="updateEmail" v-if="info.name==''"/>
+                                    <EmailValidation :info="info" v-if="info.name!=''"/>
+                                </v-card>
+                            </div>
+                        </v-col>
+                    </v-row>
+                </div>
             </div>
         </div>
     </div>
@@ -67,6 +69,7 @@
         width: 50;
     }
     #signup_background {
+        margin-top: 60px;
         background-size: 100%;
         overflow: hidden;
     }
