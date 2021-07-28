@@ -11,6 +11,16 @@
 
 <script lang="ts">
 	import Vue from 'vue'
+	import { Auth } from 'aws-amplify';
+
+	async function signOut() {
+		try {
+			await Auth.signOut();
+			console.log('signout')
+		} catch (error) {
+			console.log('error signing out: ', error);
+		}
+	}
 
 	export default Vue.extend({
 		name:"LogoutBtn",
@@ -19,6 +29,7 @@
 		methods:{
 			logout(){
 				this.$emit('logout', false);
+				signOut();
 			}
 		}
 	})

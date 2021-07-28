@@ -9,11 +9,11 @@
 		>
 		<v-app-bar-nav-icon @click="drawer = true; openMenu()"></v-app-bar-nav-icon>
 
-		<a href="/"><img src="@/assets/logo/onego_logo.jpeg" width="20%" height="20%"></a>
+		<a href="/"><img src="@/assets/logo/onego_black.png" width="20%" height="20%"></a>
 
 		<v-spacer></v-spacer>
 		<div v-if="isAuth"><logout-btn @logout="isAuth = $event"/></div>
-		<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
+		<div v-else><signup-btn @click="signup"/><login-btn @login="isAuth = $event" /></div>
 
 		<search-btn />
 		</v-app-bar>
@@ -109,7 +109,7 @@
 
 			<div class="side-itms">
 				<div v-if="isAuth" id="side-footer1"><logout-btn @logout="isAuth = $event"/></div>
-				<div v-else id="side-footer2"><signup-btn /><login-btn @login="isAuth = $event" /></div>
+				<div v-else id="side-footer2"><signup-btn  @click="signup"/><login-btn @login="isAuth = $event" /></div>
 			</div>
 
 		</v-navigation-drawer>
@@ -123,7 +123,7 @@
 	import LogoutBtn from '@/components/buttons/LogoutBtn.vue'
 	import SignupBtn from '@/components/buttons/SignupBtn.vue'
 	import SearchBtn from '@/components/buttons/SearchBtn.vue'
-
+	
 	export default Vue.extend({
 		data: () => ({
 			drawer: false,
@@ -131,6 +131,7 @@
 			isAuth: false,
 			showCate:false,
 			showMenu:false,
+			showFooter: true,
 			menusBL: [
 				{ title: '홈', link: '/'},
 				{ title: '최신글'},
@@ -162,6 +163,9 @@
 			openMenu(){
 				this.showCate = false;
 				this.showMenu = true;
+			},
+			signup(){
+				window.open('/signup','_self');
 			}
 		}
 	})

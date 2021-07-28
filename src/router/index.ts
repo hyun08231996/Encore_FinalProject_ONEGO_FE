@@ -1,27 +1,29 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Main from '@/views/Main.vue'
-import SignUp from '../views/SignUp.vue'
-import Login from '../views/Login.vue'
+import SignUpPage from '../views/SignupPage.vue'
+import LoginPage from '../views/LoginPage.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
 	{
 		path: "/",
-		component: Main
+		component: Main,
+    meta: { showFooter: true }
 	},
   {
     path: "/signup",
     name: "signup",
-    alias: "/signup",
-    component: SignUp
+    component: SignUpPage,
+    meta: { showFooter: false }
   },
   {
     path: "/login",
     name: "login",
-    alias: "/login",
-    component: Login
+    component: LoginPage,
+    meta: { showFooter: false },
+    props: true
   }
 ]
 

@@ -12,7 +12,11 @@
             <div id="discover_posts">
                 <Carousel />
             </div>
+            <div id="aboutus">
+                <Carousel />
+            </div>
         </div>
+        <br><br><br><br><br><br><br><br><br><br><br>
     </div>
 </template>
 

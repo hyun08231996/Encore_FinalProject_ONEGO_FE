@@ -2,8 +2,7 @@
   <v-app >
 	<Header />
 	<router-view />
-	<br><br><br><br><br><br><br><br><br><br><br><br>
-	<Footer />
+	<Footer v-if="$route.meta.showFooter"/>
   </v-app>
 </template>
 
