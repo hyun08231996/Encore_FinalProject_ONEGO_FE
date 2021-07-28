@@ -7,7 +7,7 @@
 			<v-list-item-avatar id="prof-pic" absolute elevation="4" size=100>
 				<img :src="user.pic">
 			</v-list-item-avatar>
-			<v-btn id="myprof-write-btn" absolute rounded outlined color="#00d5aa">
+			<v-btn id="myprof-write-btn" href="/write" absolute rounded outlined color="#00d5aa">
 				글쓰기
 			</v-btn>
 			<v-menu bottom left offset-y content-class="elevation-0">
@@ -20,13 +20,15 @@
 					</v-btn>
 				</template>
 				<div style="margin-right:17px;">
+				<a class="link-hover" id="edit-hover" href="/edit-prof">
 				<v-list dense outlined class="mt-2 pt-0 pb-0 pl-3 pr-3">
 					<v-list-item>
-					  <v-list-item-title><a class="link-hover" id="edit-hover" href="/edit-prof">
-					  	<label class="label" style="font-size:0.95em;opacity:60%;">프로필 수정</label></a>
+					  <v-list-item-title>
+					  	<label class="label" style="font-size:0.95em;opacity:60%;">프로필 수정</label>
 					  </v-list-item-title>
 					</v-list-item>
 				</v-list>
+				</a>
 				</div>
 			</v-menu>
 
@@ -131,8 +133,13 @@
 .follow{
 	float:left;
 }
-#edit-hover:hover{
+#edit-hover:hover .label{
 	color:#00d5aa !important;
+	font-weight:900;
+	opacity:120%;
+}
+#edit-hover:hover .v-list{
+	background-color:#FAFAFA !important;
 }
 .link-hover:hover .label{
 	cursor:pointer !important;

@@ -2,7 +2,7 @@
   <v-app >
 	<Header :class="$route.meta.headerClass"/>
 	<router-view id="content-margin"/>
-	<Footer />
+	<Footer v-if="$route.meta.showFooter"/>
   </v-app>
 </template>
 

@@ -10,6 +10,7 @@ import EditProfile from '@/views/EditProfile.vue'
 import MyOnego from '@/views/MyOnego.vue'
 import MyProfile from '@/views/MyProfile.vue'
 import UserProfile from '@/views/UserProfile.vue'
+import Write from '@/views/Write.vue'
 
 Vue.use(VueRouter)
 
@@ -17,48 +18,57 @@ const routes: Array<RouteConfig> = [
 	{
 		path: "/",
 		name: "Main",
-		component: Main
+		component: Main,
+		meta:{ showFooter: true }
 	},
 	{
 		path: "/search/:search",
 		name: "SearchResult",
 		component: SearchResult,
-		props: true
+		props: true,
+		meta:{ showFooter: true }
 	},
 	{
 		path: "/scrap",
-		component: Scrap
+		component: Scrap,
+		meta:{ showFooter: true }
 	},
 	{
 		path: "/article",
-		component: Article
+		component: Article,
+		meta:{ showFooter: true }
 	},
 	{
 		path: "/setting",
 		name: "Setting",
-		component: Setting
+		component: Setting,
+		meta:{ showFooter: true }
 	},
 	{
 		path:"/change-pass",
 		name: "ChangePassword",
-		component: ChangePassword
+		component: ChangePassword,
+		meta:{ showFooter: true }
 	},
 	{
 		path:"/edit-prof",
 		name: "EditProfile",
-		component: EditProfile
+		component: EditProfile,
+		meta:{ showFooter: true }
 	},
 	{
 		path:"/myonego",
 		name: "MyOnego",
-		component: MyOnego
+		component: MyOnego,
+		meta:{ showFooter: true }
 	},
 	{
 		path:"/myprofile",
 		name: "MyProfile",
 		component: MyProfile,
 		meta: {
-			headerClass: 'myprof-header-color'
+			headerClass: 'myprof-header-color',
+			showFooter: true
 		}
 	},
 	{
@@ -66,8 +76,15 @@ const routes: Array<RouteConfig> = [
 		name: "UserProfile",
 		component: UserProfile,
 		meta:{
-			headerClass: 'myprof-header-color'
+			headerClass: 'myprof-header-color',
+			showFooter: true
 		}
+	},
+	{
+		path:"/write",
+		name: "Write",
+		component: Write,
+		meta:{ showFooter: false }
 	}
 ]
 

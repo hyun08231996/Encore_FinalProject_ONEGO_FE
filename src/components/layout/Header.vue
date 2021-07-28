@@ -14,10 +14,19 @@
 			style="vertical-align:middle;"></a>
 
 		<v-spacer></v-spacer>
-		<div v-if="isAuth"><logout-btn @logout="isAuth = $event"/></div>
-		<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
-
-		<search-modal @openDrawer="drawer = $event" />
+		<!-- write page -->
+		<div v-if="$route.meta.showFooter == false">
+			<preview-btn/>
+			<delete-btn/>
+			<save-btn/>
+			<post-btn/>
+		</div>
+		<!-- other pages -->
+		<div v-else>
+			<div v-if="isAuth"><logout-btn @logout="isAuth = $event"/></div>
+			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
+		</div>
+		<search-modal v-if="$route.meta.showFooter" @openDrawer="drawer = $event" />
 		</v-app-bar>
 
 		<!-- sidebar -->
@@ -59,7 +68,7 @@
 			<br>
 			<div class="side-itms">
 				<div v-if="isAuth">
-					<v-btn id="write-btn" rounded outlined color="#00d5aa">
+					<v-btn id="write-btn" href="/write" rounded outlined color="#00d5aa">
 						글쓰기
 					</v-btn>
 				</div>
@@ -130,6 +139,10 @@
 	import LogoutBtn from '@/components/buttons/LogoutBtn.vue'
 	import SignupBtn from '@/components/buttons/SignupBtn.vue'
 	import SettingBtn from '@/components/buttons/SettingBtn.vue'
+	import DeleteBtn from '@/components/buttons/write/DeleteBtn.vue'
+	import PostBtn from '@/components/buttons/write/PostBtn.vue'
+	import PreviewBtn from '@/components/buttons/write/PreviewBtn.vue'
+	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import SearchModal from '@/views/SearchModal.vue'
 
 	export default Vue.extend({
@@ -167,6 +180,7 @@
 		name: "Header",
 		components:{
 			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,
+			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-btn':PreviewBtn, 'save-btn':SaveBtn,
 			'search-modal':SearchModal
 		},
 		methods:{
