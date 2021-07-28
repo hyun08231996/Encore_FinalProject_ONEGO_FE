@@ -15,7 +15,7 @@
 
 		<v-spacer></v-spacer>
 		<!-- write page -->
-		<div v-if="$route.meta.showFooter == false">
+		<div v-if="$route.meta.showHeader == false">
 			<preview-btn/>
 			<delete-btn/>
 			<save-btn/>
@@ -26,7 +26,7 @@
 			<div v-if="isAuth"><logout-btn @logout="isAuth = $event"/></div>
 			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 		</div>
-		<search-modal v-if="$route.meta.showFooter" @openDrawer="drawer = $event" />
+		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
 		</v-app-bar>
 
 		<!-- sidebar -->
@@ -199,7 +199,6 @@
 				document.getElementById('cate-btn')!.style.color = "#9E9E9E";
 				this.showMenu = true;
 				this.showCate = false;
-
 			}
 		}
 	})

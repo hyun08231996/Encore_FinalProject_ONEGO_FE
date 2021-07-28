@@ -19,48 +19,48 @@ const routes: Array<RouteConfig> = [
 		path: "/",
 		name: "Main",
 		component: Main,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path: "/search/:search",
 		name: "SearchResult",
 		component: SearchResult,
 		props: true,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path: "/scrap",
 		component: Scrap,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path: "/article",
 		component: Article,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path: "/setting",
 		name: "Setting",
 		component: Setting,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path:"/change-pass",
 		name: "ChangePassword",
 		component: ChangePassword,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path:"/edit-prof",
 		name: "EditProfile",
 		component: EditProfile,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path:"/myonego",
 		name: "MyOnego",
 		component: MyOnego,
-		meta:{ showFooter: true }
+		meta:{ showFooter: true, showHeader: true }
 	},
 	{
 		path:"/myprofile",
@@ -68,7 +68,7 @@ const routes: Array<RouteConfig> = [
 		component: MyProfile,
 		meta: {
 			headerClass: 'myprof-header-color',
-			showFooter: true
+			showFooter: true, showHeader: true
 		}
 	},
 	{
@@ -77,14 +77,14 @@ const routes: Array<RouteConfig> = [
 		component: UserProfile,
 		meta:{
 			headerClass: 'myprof-header-color',
-			showFooter: true
+			showFooter: true, showHeader: true
 		}
 	},
 	{
 		path:"/write",
 		name: "Write",
 		component: Write,
-		meta:{ showFooter: false }
+		meta:{ showFooter: false, showHeader: false }
 	}
 ]
 
