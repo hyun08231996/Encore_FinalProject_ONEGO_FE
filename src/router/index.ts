@@ -10,6 +10,8 @@ import EditProfile from '@/views/EditProfile.vue'
 import MyOnego from '@/views/MyOnego.vue'
 import MyProfile from '@/views/MyProfile.vue'
 import UserProfile from '@/views/UserProfile.vue'
+import SignUpPage from '@/views/SignupPage.vue'
+import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
 
 Vue.use(VueRouter)
@@ -20,6 +22,19 @@ const routes: Array<RouteConfig> = [
 		name: "Main",
 		component: Main,
 		meta:{ showFooter: true, showHeader: true }
+	},
+	{
+		path: "/signup",
+		name: "signup",
+		component: SignUpPage,
+		meta: { showFooter: false, showHeader: true }
+	},
+	{
+		path: "/login",
+		name: "login",
+		component: LoginPage,
+		meta: { showFooter: false, showHeader: true },
+		props: true
 	},
 	{
 		path: "/search/:search",

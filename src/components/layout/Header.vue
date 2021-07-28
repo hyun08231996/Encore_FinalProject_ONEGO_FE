@@ -152,6 +152,7 @@
 			isAuth: false,
 			showCate:false,
 			showMenu:false,
+			showFooter: true,
 			menusBL: [
 				{ title: '홈', link: '/'},
 				{ title: '최신글', link: '/article'},

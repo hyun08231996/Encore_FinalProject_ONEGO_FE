@@ -19,6 +19,7 @@
 		methods:{
 			login(){
 				this.$emit('login', true);
+				window.open("/login","_self");    
 			}
 		}
 	})
