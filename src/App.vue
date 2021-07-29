@@ -1,56 +1,31 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <router-view/>
-    </v-main>
+  <v-app >
+	<Header :class="$route.meta.headerClass"/>
+	<router-view id="content-margin"/>
+	<Footer v-if="$route.meta.showFooter"/>
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+	import Vue from 'vue'
+	import Header from '@/components/layout/Header.vue'
+	import Footer from '@/components/layout/Footer.vue'
 
-export default Vue.extend({
-  name: 'App',
-
-  data: () => ({
-    //
-  }),
-});
+	export default Vue.extend({
+		name: "App",
+		components:{
+			Header, Footer
+		}
+	})
 </script>
+
+
+<style lang="scss">
+	#app {
+		font-family: 'Nanum Myeongjo', serif !important;
+	}
+	#content-margin{
+		margin-top:100px;
+		margin-bottom:400px;
+	}
+</style>

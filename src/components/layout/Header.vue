@@ -107,13 +107,13 @@
 				</div>
 			</v-list>
 
-			<v-list dense v-if="showCate">
+			<v-list dense v-if="showCate" class="side-itms">
 					<div>
 						<v-list-item
 						v-for="item in categories"
 						:key="item.title">
 							<v-list-item-content>
-								<v-btn text><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
+								<v-btn text :href="item.link"><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
 							</v-list-item-content>
 						</v-list-item>
 					</div>
@@ -163,8 +163,8 @@
 				{ title: '스크랩', link: '/scrap'},
 			],
 			categories:[
-				{title:'일상'},
-				{title:'시사·이슈'},
+				{title:'일상', link: '/content'},
+				{title:'시사·이슈', link: '/myContent'},
 				{title:'IT 트렌드'},
 				{title:'요리·레시피'},
 				{title:'운동·건강'},

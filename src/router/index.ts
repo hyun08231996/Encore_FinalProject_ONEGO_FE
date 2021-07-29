@@ -15,7 +15,6 @@ import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
 import MyContent from '@/views/MyContent.vue'
 import Content from '@/views/Content.vue'
-
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -106,12 +105,12 @@ const routes: Array<RouteConfig> = [
 	{
 		path:"/myContent",
 		name: "MyContent",
-		component: MyContent
+		component: MyContent,
 	},
 	{
 		path:"/content",
 		name: "Content",
-		component: Content
+		component: Content,
 	}
 ]
 
