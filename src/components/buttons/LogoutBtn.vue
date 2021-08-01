@@ -12,7 +12,6 @@
 <script lang="ts">
 	import Vue from 'vue'
 	import { Auth } from 'aws-amplify';
-	import router from '../../router'	
 
 	export default Vue.extend({
 		name:"LogoutBtn",
@@ -26,7 +25,8 @@
 						.then(data => {
 							this.$store.state.user.signedIn = !!data;
 							this.$store.state.user.userInfo = null;
-							router.push({ name: 'Main'})
+							
+							window.open("/","_self");  
 						})
 						.catch(err => console.log(err))
 				} catch (error) {

@@ -14,6 +14,8 @@ import SignUpPage from '@/views/SignupPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
 import store from "../store/index";
+import MyContent from '@/views/MyContent.vue'
+import Content from '@/views/Content.vue'
 Vue.use(VueRouter)
 
 const requireAuth = () => (to: any, from: any, next: any) => {
@@ -120,6 +122,16 @@ const routes: Array<RouteConfig> = [
 		component: Write,
 		meta:{ showFooter: false, showHeader: false },
 		// beforeEnter: requireAuth()
+	},
+	{
+		path:"/myContent",
+		name: "MyContent",
+		component: MyContent,
+	},
+	{
+		path:"/content",
+		name: "Content",
+		component: Content,
 	}
 ]
 
