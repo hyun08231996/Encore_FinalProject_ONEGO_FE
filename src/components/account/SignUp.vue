@@ -7,7 +7,6 @@
             <li v-for="error in errors">{{ error }}</li>
             </ul>
         </p> -->
-        <v-text-field label="이름" v-model="name"></v-text-field>
         <v-text-field label="이메일" v-model="registerEmail"></v-text-field>
         <v-text-field label="닉네임" v-model="nickname"></v-text-field>
         <v-text-field
@@ -28,14 +27,13 @@
 import Vue from 'vue'
 import { Auth } from 'aws-amplify';
 
-    async function signUp(email, name, nickname, password) {
+    async function signUp(email, nickname, password) {
         try {
             const { user } = Auth.signUp({
                 username: email,
                 password: password,
                 attributes: {          // optional - E.164 number convention
                     email: email,
-                    name: name,
                     nickname: nickname,// other custom attributes 
                 }
             });
@@ -56,7 +54,6 @@ import { Auth } from 'aws-amplify';
             show4: false,
             registerEmail: '',
             password: '',
-            name: '',
             nickname: '',
             rules: {
             required: value => !!value || 'Required.',
@@ -67,15 +64,14 @@ import { Auth } from 'aws-amplify';
         }),
         created(){
             this.registerEmail = this.info.email;
-            this.name = this.info.name;
+            this.nickname = this.info.nickname;
         },
         methods: {
             signUp(){
-                // if
-                signUp(this.registerEmail, this.name, this.nickname, this.password);
-                console.log(this.$parent.$parent.$data)
+                signUp(this.registerEmail, this.nickname, this.password);
                 this.$set(this.$parent.$parent.$data.info, 'email', this.registerEmail)
-                this.$set(this.$parent.$parent.$data.info, 'name', this.name)
+                this.$set(this.$parent.$parent.$data.info, 'nickname', this.nickname)
+                
             }
         }
     })

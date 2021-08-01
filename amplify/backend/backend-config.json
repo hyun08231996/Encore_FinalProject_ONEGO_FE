@@ -1,6 +1,6 @@
 {
   "auth": {
-    "onegosignupae862854": {
+    "onegosignup8a47d5f7": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

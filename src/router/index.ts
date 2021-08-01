@@ -13,8 +13,19 @@ import UserProfile from '@/views/UserProfile.vue'
 import SignUpPage from '@/views/SignupPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
-
+import store from "../store/index";
 Vue.use(VueRouter)
+
+const requireAuth = () => (to: any, from: any, next: any) => {
+	if(store.state.user.signedIn === true){
+		return next();
+	}
+	console.log("state user signedin: "+ store.state.user.signedIn)
+	console.log(store.state.user)
+	console.log(store.state.user.userInfo)
+	console.log(store.state.user.signedIn)
+	next('/login')
+}
 
 const routes: Array<RouteConfig> = [
 	{
@@ -46,36 +57,42 @@ const routes: Array<RouteConfig> = [
 	{
 		path: "/scrap",
 		component: Scrap,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true, showHeader: true },
+		// beforeEnter: requireAuth()
 	},
 	{
 		path: "/article",
 		component: Article,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true, showHeader: true },
+		// beforeEnter: requireAuth()
 	},
 	{
 		path: "/setting",
 		name: "Setting",
 		component: Setting,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true, showHeader: true },
+		// beforeEnter: requireAuth()
 	},
 	{
 		path:"/change-pass",
 		name: "ChangePassword",
 		component: ChangePassword,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true, showHeader: true },
+		// beforeEnter: requireAuth()
 	},
 	{
 		path:"/edit-prof",
 		name: "EditProfile",
 		component: EditProfile,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true, showHeader: true },
+		// beforeEnter: requireAuth()
 	},
 	{
 		path:"/myonego",
 		name: "MyOnego",
 		component: MyOnego,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true, showHeader: true },
+		// beforeEnter: requireAuth()
 	},
 	{
 		path:"/myprofile",
@@ -84,7 +101,8 @@ const routes: Array<RouteConfig> = [
 		meta: {
 			headerClass: 'myprof-header-color',
 			showFooter: true, showHeader: true
-		}
+		},
+		// beforeEnter: requireAuth()
 	},
 	{
 		path:"/userprofile",
@@ -93,13 +111,15 @@ const routes: Array<RouteConfig> = [
 		meta:{
 			headerClass: 'myprof-header-color',
 			showFooter: true, showHeader: true
-		}
+		},
+		// beforeEnter: requireAuth()
 	},
 	{
 		path:"/write",
 		name: "Write",
 		component: Write,
-		meta:{ showFooter: false, showHeader: false }
+		meta:{ showFooter: false, showHeader: false },
+		// beforeEnter: requireAuth()
 	}
 ]
 

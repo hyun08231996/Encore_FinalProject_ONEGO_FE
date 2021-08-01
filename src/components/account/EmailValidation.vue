@@ -13,11 +13,10 @@ import { Auth } from 'aws-amplify';
 import { eventBus } from '../../main'
 import router from '../../router'
 
-    async function confirmSignUp(username, code, name) {
+    async function confirmSignUp(username, code, nickname) {
         try {
         await Auth.confirmSignUp(username, code)
-        router.push({ name: 'login', params: { email: username, name: name }})
-        // router.push({name:'ToolDetail'});
+        router.push({ name: 'login', params: { email: username, nickname: nickname }})
         } catch (error) {
             console.log('error confirming sign up', error)
         }
@@ -31,16 +30,16 @@ import router from '../../router'
         data: () => ({
             validationCode: '',
             registerEmail: '',
-            name: ''
+            nickname: ''
         }),
         created(){
             this.registerEmail = this.info.email;
-            this.name = this.info.name;
+            this.nickname = this.info.nickname;
         },
         methods: {
             validateEmail(){
                 this.registerEmail;
-                confirmSignUp(this.registerEmail, this.validationCode, this.name);
+                confirmSignUp(this.registerEmail, this.validationCode, this.nickname);
             }
         }
     })

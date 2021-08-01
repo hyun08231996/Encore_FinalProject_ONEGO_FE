@@ -12,15 +12,7 @@
 <script lang="ts">
 	import Vue from 'vue'
 	import { Auth } from 'aws-amplify';
-
-	async function signOut() {
-		try {
-			await Auth.signOut();
-			console.log('signout')
-		} catch (error) {
-			console.log('error signing out: ', error);
-		}
-	}
+	import router from '../../router'	
 
 	export default Vue.extend({
 		name:"LogoutBtn",
@@ -29,7 +21,17 @@
 		methods:{
 			logout(){
 				this.$emit('logout', false);
-				signOut();
+				try {
+					Auth.signOut()
+						.then(data => {
+							this.$store.state.user.signedIn = !!data;
+							this.$store.state.user.userInfo = null;
+							router.push({ name: 'Main'})
+						})
+						.catch(err => console.log(err))
+				} catch (error) {
+					console.log('error signing out: ', error);
+				}
 			}
 		}
 	})

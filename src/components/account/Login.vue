@@ -19,23 +19,14 @@
 <script>
 import Vue from 'vue'
 import { Auth } from 'aws-amplify';
-
-    async function signIn(username, password) {
-        try {
-            const user = await Auth.signIn(username, password);
-            console.log("login success")
-        } catch (error) {
-            console.log('error signing in', error);
-        }
-    }
-
+import router from '../../router'
+        
     export default Vue.extend({
         props: {
             info: Object
         },
 		data: () => ({
             email: '',
-            name: '',
             show1: false,
             show2: true,
             show3: false,
@@ -54,13 +45,26 @@ import { Auth } from 'aws-amplify';
 		components:{
 		},
         created(){
-            console.log('eventBussssss: '),
             this.email = this.info.email
-            this.name = this.info.name
+            this.nickname = this.info.nickname
         },
         methods: {
             login(){
-                signIn(this.email, this.password)
+                console.log('signedIn111: '+this.$store.state.user.signedIn);
+                console.log('user111: '+this.$store.state.user.userInfo);
+                try {
+                    const user = Auth.signIn(this.email, this.password)
+                            .then(user => {
+                                this.$store.state.user.signedIn = !!user;
+                                this.$store.state.user.userInfo = user;
+                                router.push({ name: 'Main'})
+                            })
+                            .catch(err => console.log(err));
+                    
+                    
+                } catch (error) {
+                    console.log('error signing in', error);
+                }
             }
         },
 	})

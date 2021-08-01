@@ -23,7 +23,7 @@
 		</div>
 		<!-- other pages -->
 		<div v-else>
-			<div v-if="isAuth"><logout-btn @logout="isAuth = $event"/></div>
+			<div v-if="this.$store.state.user.signedIn==true"><logout-btn @logout="isAuth = $event"/></div>
 			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 		</div>
 		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
@@ -38,7 +38,7 @@
 			app
 			>
 			<br><br>
-			<div v-if="isAuth">
+			<div v-if="this.$store.state.user.signedIn==true">
 				<div class="side-itms">
 					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
@@ -48,7 +48,7 @@
 				</div>
 				<div class="side-itms">
 					<v-list-item-content>
-						<v-list-item-title>{{user.nickname}}</v-list-item-title>
+						<v-list-item-title>{{this.$store.state.user.userInfo.attributes.nickname}}</v-list-item-title>
 					</v-list-item-content>
 				</div>
 			</div>
@@ -67,7 +67,7 @@
 			</div>
 			<br>
 			<div class="side-itms">
-				<div v-if="isAuth">
+				<div v-if="this.$store.state.user.signedIn==true">
 					<v-btn id="write-btn" href="/write" rounded outlined color="#00d5aa">
 						글쓰기
 					</v-btn>
@@ -96,7 +96,7 @@
 					</v-list-item>
 				</div>
 				<br>
-				<div v-if="isAuth" class="side-itms">
+				<div v-if="this.$store.state.user.signedIn==true" class="side-itms">
 					<v-list-item
 					v-for="item in menusAL"
 					:key="item.title">
@@ -120,7 +120,7 @@
 			</v-list>
 
 			<div id="side-footer">
-				<div v-if="isAuth" class="side-footer-btns">
+				<div v-if="this.$store.state.user.signedIn==true" class="side-footer-btns">
 				  <div><setting-btn /><logout-btn @logout="isAuth = $event"/></div>
 				</div>
 				<div v-else class="side-footer-btns">
@@ -149,7 +149,7 @@
 		data: () => ({
 			drawer: false,
 			group: null,
-			isAuth: false,
+			isAuth: true,
 			showCate:false,
 			showMenu:false,
 			showFooter: true,

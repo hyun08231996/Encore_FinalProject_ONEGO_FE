@@ -31,6 +31,10 @@ import Carousel from '../components/layout/Carousel.vue'
 		components:{
 			Carousel
 		},
+        mounted() {
+            console.log('main user: '+this.$store.state.user.signedIn);
+            console.log(this.$store.state.user.userInfo);
+        }
 	})
 </script>
 <style>

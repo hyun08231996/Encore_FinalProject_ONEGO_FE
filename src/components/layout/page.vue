@@ -8,7 +8,7 @@
         class="mx-auto"
         max-width="55%"
         max-height="600"
-        tile="false"
+        tile=false
       >
         <div class="card">
           <v-card-text class="text">
