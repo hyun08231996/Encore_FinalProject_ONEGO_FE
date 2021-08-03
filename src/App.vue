@@ -10,7 +10,7 @@
 	import Vue from 'vue'
 	import Header from '@/components/layout/Header.vue'
 	import Footer from '@/components/layout/Footer.vue'
-	import { Auth } from 'aws-amplify'
+	
 	// import { AmplifyEventBus } from 'aws-amplify-vue'
 
 	export default Vue.extend({
@@ -19,7 +19,7 @@
 			Header, Footer
 		},
 		created(){
-			this.findUser();
+			this.$store.dispatch('findUser');
 			// AmplifyEventBus.$on('authStaet', info => {
 			// 	if(info === 'signedIn'){
 			// 		this.findUser()
@@ -28,28 +28,6 @@
 			// 	}
 			// })
 		},
-		methods: {
-			async findUser(){
-				try{
-					const user = await Auth.currentAuthenticatedUser()
-						.then(user => {
-                                this.$store.state.user.signedIn = !!user;
-                                this.$store.state.user.userInfo = user;
-								console.log('App.vue signedin', this.$store.state.user.signedIn);
-                            })
-						.catch(err => {
-							console.log(err)
-							this.$store.state.user.signedIn = false;
-                            this.$store.state.user.userInfo = null;
-
-						});
-				}
-				catch (error) {
-                    console.log('not signed in', error);
-                }
-				console.log('App.vue signedin2222', this.$store.state.user.signedIn);
-			}
-		}
 	})
 </script>
 

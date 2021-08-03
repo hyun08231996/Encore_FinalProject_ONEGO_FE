@@ -50,13 +50,11 @@ import router from '../../router'
         },
         methods: {
             login(){
-                console.log('signedIn111: '+this.$store.state.user.signedIn);
-                console.log('user111: '+this.$store.state.user.userInfo);
                 try {
                     const user = Auth.signIn(this.email, this.password)
                             .then(user => {
-                                this.$store.state.user.signedIn = !!user;
-                                this.$store.state.user.userInfo = user;
+                                this.$store.commit('changeSignedInState', user);
+                                // this.$store.state.user.userInfo = user;
                                 router.push({ name: 'Main'})
                             })
                             .catch(err => console.log(err));

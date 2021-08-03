@@ -19,13 +19,13 @@
 		}),
 		methods:{
 			logout(){
-				this.$emit('logout', false);
+				// this.$emit('logout', false);
 				try {
 					Auth.signOut()
-						.then(data => {
-							this.$store.state.user.signedIn = !!data;
-							this.$store.state.user.userInfo = null;
-							
+						.then(user => {
+							this.$store.commit('changeSignedInState', user);
+							console.log("logout")
+							console.log(this.$store.state.user)
 							window.open("/","_self");  
 						})
 						.catch(err => console.log(err))

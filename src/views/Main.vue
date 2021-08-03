@@ -12,8 +12,11 @@
             <div id="discover_posts">
                 <Carousel />
             </div>
+            <br><br><br><br><br><br>
             <div id="aboutus">
-                <Carousel />
+                <br><br><br><br>
+                <h1 style="text-align: center">About OneGo</h1>
+                <MemberCard />
             </div>
         </div>
     </div>
@@ -22,6 +25,7 @@
 <script>
 import Vue from 'vue'
 import Carousel from '../components/layout/Carousel.vue'
+import MemberCard from '../components/layout/MemberCard.vue'
 
   export default Vue.extend({
 		data: () => ({
@@ -29,7 +33,7 @@ import Carousel from '../components/layout/Carousel.vue'
 		}),
 		name: "Header",
 		components:{
-			Carousel
+			Carousel, MemberCard
 		},
         mounted() {
             console.log('main user: '+this.$store.state.user.signedIn);
@@ -38,6 +42,9 @@ import Carousel from '../components/layout/Carousel.vue'
 	})
 </script>
 <style>
+#aboutus{
+    background-color: #fafafa;
+}
 	.intro_onego{
 		padding-left: 300px;
 		padding-right: 300px;

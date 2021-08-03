@@ -23,7 +23,7 @@
 		</div>
 		<!-- other pages -->
 		<div v-else>
-			<div v-if="this.$store.state.user.signedIn==true"><logout-btn @logout="isAuth = $event"/></div>
+			<div v-if="this.$store.state.user.signedIn==true"><logout-btn /></div>
 			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 		</div>
 		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
