@@ -2,7 +2,7 @@
   <div id="textArea">
     <!-- contents -->
     <div id="Posts">
-        <Mypost />
+        <Post />
     </div>
   </div>
 </template>
@@ -12,7 +12,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-import Mypost from '../components/layout/Mypost.vue'
+import Post from '../components/layout/Post-user.vue'
 
   export default Vue.extend({
 		data: () => ({
@@ -20,7 +20,7 @@ import Mypost from '../components/layout/Mypost.vue'
 		}),
 		name: "Header",
 		components:{
-			Mypost,
+			Post,
 		},
 	})
 

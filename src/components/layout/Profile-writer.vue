@@ -1,43 +1,31 @@
 <template>
-    <div id="item">
+    <div id="app">
         <v-card
             class="mx-auto"
             width="100%"
             height="215"
             elevation="1"
         >
-            <v-list-item three-line>
+            <v-list-item three-line w>
                 <v-list-item-content class="text">
                     <v-list-item-title class="name">
-                        집게사장 
-                        <v-btn
-                        outlined
-                        rounded
-                        text
-                        width="70"
-                        height="30"
-                        >
-                        구독
-                        </v-btn>
+                        {{ name }}
+                    <br/><br/>
                     </v-list-item-title>
                     <div class="text-description">
-                        저희 게살버거가 정말 맛있습니다
+                        {{ description }}
                     </div>
                     <v-list-item-subtitle class="text-info">
-                        게살버거 5000원 (+set 2500원) / 별점 5점 사진리뷰시 음료무제한!
-
-                        
+                        {{ info }}
                     </v-list-item-subtitle>
                 </v-list-item-content>
                     
                 <v-list-item-avatar
-                    size="180"
+                    heigth="200px"
                     color="grey"
                     class="avatar"
                 >
-                    <v-img
-                        alt="avatar"
-                        src="https://w.namu.la/s/986b0d64e035c2fc42127b088a3839345f7bbc7c4214a9d282dbb41a989cd7b04e6283fa1a9d854fc880d5d8d0457925dae7db3228856e092222f19a2dced1fe298ad5d8d0472b1c511aa4a80d2251e07d04682c9888838951cd30cff93d299f"
+                    <v-img :src="avatar"
                     ></v-img>
                 </v-list-item-avatar>
             </v-list-item>
@@ -45,22 +33,23 @@
     </div>     
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
-      data: () => ({
-          return: {
-          name: "집게사장",
-          description: "저희 게살버거가 정말 맛있습니다",
-          info: "게살버거 5000원 (+set 2500원) / 별점 5점 사진리뷰시 음료무제한!"
-       },
-      })
-})
+<script>
+export default {
+    data() {
+        return{
+            name: "집게사장",
+            description: "저희 게살버거가 정말 맛있습니다",
+            info: "게살버거 5000원 (+set 2500원) / 별점 5점 사진리뷰시 음료무제한!",
+            avatar: "https://w.namu.la/s/986b0d64e035c2fc42127b088a3839345f7bbc7c4214a9d282dbb41a989cd7b04e6283fa1a9d854fc880d5d8d0457925dae7db3228856e092222f19a2dced1fe298ad5d8d0472b1c511aa4a80d2251e07d04682c9888838951cd30cff93d299f"
+        }
+    }
+}
 </script>
 
 <style>
 .text{
-    padding: 0 10 0 0;
+    width:500px;
+    font-family: Noto Sans KR;
 }
 .name{
     font-size : 1.5rem; 
