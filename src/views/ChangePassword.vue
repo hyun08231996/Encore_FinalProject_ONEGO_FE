@@ -93,6 +93,7 @@
 							Auth.signOut()
 								.then(user => {
 									this.$store.commit('changeSignedInState', user);
+									this.$store.commit('setAccessToken', '');
 									console.log("logout")
 									window.open("/","_self");  
 								})
