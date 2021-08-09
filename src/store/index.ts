@@ -35,7 +35,7 @@ export default new Vuex.Store({
                 this.state.user.signedIn = !!user;
                 this.state.user.userInfo = user;
                 Auth.currentSession()
-                    .then(result => {
+                    .then((result: any) => {
                         this.state.accessToken = result.accessToken.jwtToken;
                 })
 

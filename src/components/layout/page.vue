@@ -17,7 +17,7 @@
               </v-card-text>
 
               <v-card-actions class="avatar-box">
-                  <v-list-item-avatar color="grey darken-3" style="width: 15px; height: 15px;">
+                  <v-list-item-avatar class="page-avatar" color="grey darken-3" style="width: 15px; height: 15px;">
                     <v-img
                       class="avatar"
                       alt="avatar"
@@ -37,7 +37,7 @@
         </v-flex>
         
         <div class="text-center">
-          <v-pagination v-model="page" :length="4" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" @input="changePage">
+          <v-pagination v-model="page" :length="totalPageNum" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" @input="changePage">
           </v-pagination>
         </div>
     
@@ -56,6 +56,7 @@ export default Vue.extend({
         loading: true,
         content: '',
         page: 1,
+        totalPageNum: 1
 		  }),
       methods: {
         async getArticles(pageNum: number){
@@ -63,7 +64,7 @@ export default Vue.extend({
               .get('/board', {
                 params: { 'pageNumber': pageNum }})
               .then(response => {
-                  response.data.forEach((d: any[]) => {
+                  response.data.forEach((d: any) => {
                     if(d.contents[0].content.length > 150){
                       d.contents[0].content = d.contents[0].content.substr(0,148)+"..."
                     }
@@ -89,13 +90,24 @@ export default Vue.extend({
             this.page = value
             console.log("changePage click")
             console.log("page: "+this.page)
-            this.getArticles(this.page-1)
+            this.getArticles(this.page)
+          },
+          async boardCount(){
+            await http
+                .get('/board/count')
+                .then(response => {
+                        this.totalPageNum = Math.floor(response.data / 5) + 1
+                      }
+                    )
+                .catch(() => { this.errored = true })
+                .finally(() => this.loading = false)                
           }
+              
       },
       async created(){
         console.log("mounted")
-        this.getArticles(0)
-        // console.log(this.articles)
+        this.getArticles(1)
+        this.boardCount()
       }
     })
 
@@ -132,7 +144,7 @@ export default Vue.extend({
   .newest-article{
     padding-bottom: 0px !important;
   }
-  .v-avatar{
+  .page-avatar{
     margin-top: 5px;
     margin-bottom: 0px;
     height: 50px !important;

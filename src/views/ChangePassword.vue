@@ -78,7 +78,6 @@
 <script lang="ts">
 	import Vue from 'vue'
 	import { Auth } from 'aws-amplify';
-	import router from '../router'
 
 	export default Vue.extend({
 		name: "ChangePassword",
