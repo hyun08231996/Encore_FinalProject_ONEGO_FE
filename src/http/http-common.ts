@@ -1,3 +1,4 @@
+import store from "@/store";
 import axios from "axios";
 
 export default axios.create({
@@ -6,7 +7,8 @@ export default axios.create({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
         'Content-Type': 'application/json; charset = utf-8',
-        'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS'
+        'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+        'Authorization': store.state.accessToken
     }
 });
 

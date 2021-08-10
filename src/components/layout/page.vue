@@ -1,8 +1,6 @@
 <template>
   <div id="item">
-    
-      
-        <v-flex v-for="article in articles" v-bind:key="article.title">
+        <v-flex v-for="article in articles" v-bind:key="article.id">
           <v-card
             class="mx-auto"
             max-width="55%"
@@ -13,7 +11,7 @@
               <v-card-text class="text newest-article">
                 <h2 v-html="article.title"></h2><br>
                 <!-- <h3 style="font-weight: normal" v-html="article.subtitle"></h3> -->
-                <p v-html="article.contents[0].content"></p>
+                <p v-html="article.contents ? article.contents : ''"></p>
               </v-card-text>
 
               <v-card-actions class="avatar-box">
@@ -26,9 +24,9 @@
                   </v-list-item-avatar>
                   <v-list-item-content class="author-date">
                     <span class="nickname" v-html="article.nickName"></span>
-                    <span class="modDatetime" v-html="article.modDatetime"></span>
-                    <!-- <span >{{currentDate(article.modDatetime)}}</span> -->
+                    
                   </v-list-item-content>
+                  <span class="right-padding">{{dateTime(article.modDatetime)}}</span>
               </v-card-actions>
               <br/>
             </div>
@@ -37,7 +35,7 @@
         </v-flex>
         
         <div class="text-center">
-          <v-pagination v-model="page" :length="totalPageNum" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" @input="changePage">
+          <v-pagination v-model="page" :length="totalPageNum" :total-visible="7" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" @input="changePage">
           </v-pagination>
         </div>
     
@@ -47,7 +45,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import http from '../../http/http-common'
-import moment from 'moment'
 
 export default Vue.extend({
       data: () => ({
@@ -60,14 +57,23 @@ export default Vue.extend({
 		  }),
       methods: {
         async getArticles(pageNum: number){
+          console.log('getArticles')
           await http
               .get('/board', {
                 params: { 'pageNumber': pageNum }})
               .then(response => {
+                  console.log(response.data)
                   response.data.forEach((d: any) => {
-                    if(d.contents[0].content.length > 150){
-                      d.contents[0].content = d.contents[0].content.substr(0,148)+"..."
+                    if(d.contents.length != 0){
+                      if(d.contents[0].content.length > 150){
+                        d.contents = d.contents[0].content.substr(0,148)+"..."
+                      }else{
+                        d.contents = d.contents[0].content
+                      }
+                    }else{
+                      d.contents = ""
                     }
+                    
                   })
                   this.articles = response.data;
               })
@@ -77,19 +83,31 @@ export default Vue.extend({
               .finally(() => this.loading = false)
               
             },
-          // currentDate(abc: string|number|Date) {
-          //   const date1 =  new Date(abc)
-          //   const test = date1.getMonth()
-          //   const current = new Date();
-          //   // const difference = moment(current).diff(moment(date1))
-          //   // console.log("difference: "+moment(difference))
-          //   const difference = current.getTime() - date1.getTime()
-          //   return current
-          // },
+          difference(date1: { getFullYear: () => number; getMonth: () => number; getDate: () => number|undefined; getHours: () => number|undefined; getMinutes: () => number|undefined; getSeconds: () => number|undefined }, date2: { getFullYear: () => number; getMonth: () => number; getDate: () => number|undefined; getHours: () => number|undefined; getMinutes: () => number|undefined; getSeconds: () => number|undefined }) {  
+            const date1utc = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate(), date1.getHours(), date1.getMinutes(), date1.getSeconds());
+            const date2utc = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate(), date2.getHours(), date2.getMinutes(), date2.getSeconds());
+            const day = 1000*60*60*24;
+            const hour = 1000*60*60;
+            const minute = 1000*60;
+            const second = 1000;
+            if((date2utc - date1utc)/day > 1){
+              return Math.floor((date2utc - date1utc)/day)+"일 전"
+            }else if((date2utc - date1utc)/hour > 1){
+              return Math.floor((date2utc - date1utc)/hour)+"시간 전"
+            }else if((date2utc - date1utc)/minute > 1){
+              return Math.floor((date2utc - date1utc)/minute)+"분 전"
+            }else{
+              return Math.floor((date2utc - date1utc)/second)+"초 전"
+            }
+            
+          },
+          dateTime(time: string|number|Date) {
+            const articleDate =  new Date(time)
+            const current = new Date();
+            return this.difference(articleDate, current)
+          },
           changePage(value: number){
             this.page = value
-            console.log("changePage click")
-            console.log("page: "+this.page)
             this.getArticles(this.page)
           },
           async boardCount(){
@@ -99,7 +117,7 @@ export default Vue.extend({
                         this.totalPageNum = Math.floor(response.data / 5) + 1
                       }
                     )
-                .catch(() => { this.errored = true })
+                .catch(() => this.errored = true )
                 .finally(() => this.loading = false)                
           }
               
