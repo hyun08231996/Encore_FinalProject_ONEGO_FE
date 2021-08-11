@@ -40,7 +40,7 @@
 	  </div>
 	  <div class="spacing">
 	    <div class="follow">
-		  <a :href="disabledFollower ? 'javascript:void(0)' : '#'" id="follower-hover" class="link-hover">
+		  <a href='#' id="follower-hover" class="link-hover">
 			<div>
 		    <div><label class="label label-follow" style="font-size:0.80em;opacity:60%;">구독자</label></div>
 		    <div><label class="label label-number" style="font-size:1.2em;opacity:55%;">{{user.followers}}</label></div>
@@ -48,7 +48,7 @@
 		  </a>
 		</div>
 		<div class="follow" style="margin-left:50px;">
-		  <a :href="disabledFollowing ? 'javascript:void(0)' : '/userprofile'" id="following-hover" class="link-hover">
+		  <a href='/userprofile' id="following-hover" class="link-hover">
 			<div>
 		    <div><label class="label label-follow" style="font-size:0.80em;opacity:60%;">관심 작가</label></div>
 		    <div><label class="label label-number" style="font-size:1.2em;opacity:55%;">{{user.following}}</label></div>
@@ -75,19 +75,7 @@
 				pic:"https://randomuser.me/api/portraits/women/82.jpg",
 				followers:'3', following:'5'
 			},
-			disabledFollowing:false,
-			disabledFollower:false
 		}),
-		created(){
-			if(this.user.following == '0'){
-				this.disabledFollowing = true;
-			}
-			if(this.user.followers == '0'){
-				this.disabledFollower = true;
-			}
-			//console.log(this.disabledFollowing);
-			//console.log(this.disabledFollower);
-		}
 	})
 </script>
 
@@ -139,7 +127,7 @@
 	opacity:120%;
 }
 #edit-hover:hover .v-list{
-	background-color:#FAFAFA !important;
+	background-color:#89e7d418 !important;
 }
 .link-hover:hover .label{
 	cursor:pointer !important;

@@ -14,7 +14,7 @@ export default new Vuex.Store({
       name: '',
       nickname: '',
     }
-    
+
   },
   mutations: {
     [SET_EMAIL](state, email) {

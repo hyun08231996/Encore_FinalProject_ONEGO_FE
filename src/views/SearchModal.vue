@@ -110,7 +110,7 @@
 				{name: 'User3', img: 'https://randomuser.me/api/portraits/women/83.jpg', intro: 'Hello everyone'},
 				{name: 'User4', img: 'https://randomuser.me/api/portraits/men/83.jpg', intro: 'Hello everyone'},
 				{name: 'User5', img: 'https://randomuser.me/api/portraits/women/84.jpg', intro: 'Hello everyone'},
-			],
+			],//get 5 random users from db
 			blogList:[
 				{title:'고구마는 맛있다', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user1',date:'2.15.2020'},
 				{title:'호박 고구마 곡', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user2',date:'2.15.2020'},

@@ -19,7 +19,7 @@
 	  </div>
 	  <div class="spacing">
 	    <div class="follow">
-		  <a :href="disabledFollower ? 'javascript:void(0)' : '#'" id="follower-hover">
+		  <a href='#' id="follower-hover">
 			<div>
 		    <div><label class="label label-follow" style="font-size:0.80em;opacity:60%;">구독자</label></div>
 		    <div><label class="label label-number" style="font-size:1.2em;opacity:55%;">{{user.followers}}</label></div>
@@ -27,7 +27,7 @@
 		  </a>
 		</div>
 		<div class="follow" style="margin-left:50px;">
-		  <a :href="disabledFollowing ? 'javascript:void(0)' : '#'" id="following-hover">
+		  <a href='#' id="following-hover">
 			<div>
 		    <div><label class="label label-follow" style="font-size:0.80em;opacity:60%;">관심 작가</label></div>
 		    <div><label class="label label-number" style="font-size:1.2em;opacity:55%;">{{user.following}}</label></div>
@@ -54,8 +54,6 @@
 				pic:"https://randomuser.me/api/portraits/women/82.jpg",
 				followers:'100', following:'0'
 			},
-			disabledFollowing:false,
-			disabledFollower:false
 		}),
 		methods:{
 			changeState(){
@@ -73,18 +71,8 @@
 					clicked.style.color = '#00d5aa';
 					clicked.style.borderColor = '#00d5aa';
 				}
-			}
+			},
 		},
-		created(){
-			if(this.user.following == '0'){
-				this.disabledFollowing = true;
-			}
-			if(this.user.followers == '0'){
-				this.disabledFollower = true;
-			}
-			//console.log(this.disabledFollowing);
-			//console.log(this.disabledFollower);
-		}
 	})
 </script>
 
@@ -136,7 +124,7 @@
 }
 #follower-hover:hover .label-number,
 #following-hover:hover .label-number{
-	text-decoration:underline !important;
-	color:#00d5aa !important;
+	text-decoration:underline;
+	color:#00d5aa;
 }
 </style>

@@ -13,13 +13,18 @@
 			width="120px" height="43.2px"
 			style="vertical-align:middle;"></a>
 
+		<!-- write page -->
+		<div v-if="$route.meta.showHeader == false" >
+			<dark-switch />
+		</div>
+
 		<v-spacer></v-spacer>
 		<!-- write page -->
 		<div v-if="$route.meta.showHeader == false">
-			<preview-btn/>
-			<delete-btn/>
-			<save-btn/>
-			<post-btn/>
+			<div style="float:right;"><post-btn/></div>
+			<div style="float:right;"><save-btn/></div>
+			<div style="float:right;"><delete-btn/></div>
+			<div style="float:right;"><preview-modal/></div>
 		</div>
 		<!-- other pages -->
 		<div v-else>
@@ -106,9 +111,9 @@
 					</v-list-item>
 				</div>
 			</v-list>
-
+			<div id="cate-height">
 			<v-list dense v-if="showCate">
-					<div>
+					<div >
 						<v-list-item
 						v-for="item in categories"
 						:key="item.title">
@@ -118,7 +123,7 @@
 						</v-list-item>
 					</div>
 			</v-list>
-
+			</div>
 			<div id="side-footer">
 				<div v-if="isAuth" class="side-footer-btns">
 				  <div><setting-btn /><logout-btn @logout="isAuth = $event"/></div>
@@ -141,8 +146,9 @@
 	import SettingBtn from '@/components/buttons/SettingBtn.vue'
 	import DeleteBtn from '@/components/buttons/write/DeleteBtn.vue'
 	import PostBtn from '@/components/buttons/write/PostBtn.vue'
-	import PreviewBtn from '@/components/buttons/write/PreviewBtn.vue'
+	import PreviewModal from '@/views/PreviewModal.vue'
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
+	import DarkModeSwitch from '@/components/buttons/write/DarkModeSwitch.vue'
 	import SearchModal from '@/views/SearchModal.vue'
 
 	export default Vue.extend({
@@ -168,7 +174,9 @@
 				{title:'IT 트렌드'},
 				{title:'요리·레시피'},
 				{title:'운동·건강'},
-				{title:'사랑·이별'}
+				{title:'사랑·이별'},
+				{title:'정치'},
+				{title:'기타'}
 			],
 			user:{
 				name:'Mary Jane',
@@ -181,8 +189,8 @@
 		name: "Header",
 		components:{
 			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,
-			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-btn':PreviewBtn, 'save-btn':SaveBtn,
-			'search-modal':SearchModal
+			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-modal':PreviewModal, 'save-btn':SaveBtn,
+			'dark-switch':DarkModeSwitch, 'search-modal':SearchModal
 		},
 		methods:{
 			openCategory(){
@@ -229,6 +237,7 @@
 		color:#02bf99 !important;
 	}
 	#side-footer{
+		height:72px;
 		width:250px;
 	}
 	.side-footer-btns{
@@ -237,7 +246,7 @@
 		margin-right: auto;
 		left: 0;
 		right: 0;
-		bottom: 3%;
+		bottom: 20px;
 		text-align: center;
 	}
 	#menu-btn{
@@ -250,5 +259,9 @@
 	}
 	.v-navigation-drawer {
 		z-index: 999999 !important;
+	}
+	#cate-height{
+		height:43vh;
+		overflow-y:auto;
 	}
 </style>

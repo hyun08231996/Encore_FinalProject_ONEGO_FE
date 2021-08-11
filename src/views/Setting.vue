@@ -22,7 +22,7 @@
 				<label class="subtitle"><strong>프로필</strong></label>
 				<div class="center-space">
 					<span class="content">
-						<div class="content-info"><label style="font-size:1.2em;">{{user.name}} ({{user.nickname}})</label></div>
+						<div class="content-info"><label style="font-size:1.2em;">{{user.nickname}}</label></div>
 						<div class="content-info"><label style="font-size:0.9em;opacity:75%;">{{user.intro}}</label></div>
 					</span>
 					<span class="button" id="pic-btn">
