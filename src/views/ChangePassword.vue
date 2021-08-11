@@ -4,37 +4,26 @@
 			<div align="center" class="spacing">
 				<label id="title">비밀번호 변경</label>
 			</div>
-			<!-- 현재 비밀번호 -->
+			<!-- 이메일 -->
 			<div class="spacing-pass">
 				<div style="margin-bottom:20px;">
-					<label class="subtitle">현재 비밀번호</label>
+					<label class="subtitle">이메일</label>
 				</div>
 				<div>
-					<v-text-field id="current-pass" class="current-pass"
-						v-model="curPass"
-						:append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-						:rules="[rules.required]"
-						:type="show1 ? 'text' : 'password'"
-						color="#00d5aa"
-						name="input-10-1"
-						dense
-						single-line
-						outlined
-						@click:append="show1 = !show1"/>
+					<v-text-field :value="this.signedIn? this.email: ''" disabled></v-text-field>
 				</div>
 			</div>
 			<v-divider class="divider-pass"/>
 			<!-- 새 비밀번호 -->
 			<div class="spacing-pass">
 				<div style="margin-bottom:20px;">
-					<label class="subtitle">새 비밀번호</label>
+					<label class="subtitle">기존 비밀번호</label>
 				</div>
 				<div>
-					<v-text-field id="new-pass" class="new-pass"
-						v-model="newPass"
-						:value="newPass"
+					<v-text-field id="cur-pass" class="cur-pass"
+						v-model="curPass"
+						:value="curPass"
 						:append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-						:rules="[rules.required]"
 						:type="show2 ? 'text' : 'password'"
 						color="#00d5aa"
 						name="input-10-1"
@@ -49,13 +38,12 @@
 			<!-- 새 비밀번호 확인 -->
 			<div class="spacing-pass">
 				<div style="margin-bottom:20px;">
-					<label class="subtitle">새 비밀번호 확인</label>
+					<label class="subtitle">새 비밀번호</label>
 				</div>
 				<div>
-					<v-text-field id="new-pass-check" class="new-pass-check"
-						v-model="newPassChk"
+					<v-text-field id="new-pass" class="new-pass"
+						v-model="newPass"
 						:append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-						:rules="[rules.required, rules.match]"
 						:type="show3 ? 'text' : 'password'"
 						color="#00d5aa"
 						name="input-10-1"
@@ -89,12 +77,40 @@
 
 <script lang="ts">
 	import Vue from 'vue'
+	import { Auth } from 'aws-amplify';
 
 	export default Vue.extend({
 		name: "ChangePassword",
 		methods:{
 			changePass(){
-				location.href='#';
+				Auth.currentAuthenticatedUser()
+					.then(user => {
+						return Auth.changePassword(user, this.curPass, this.newPass);
+					})
+					.then(data => {
+						if(data == "SUCCESS"){
+							Auth.signOut()
+								.then(user => {
+									this.$store.commit('changeSignedInState', user);
+									this.$store.commit('setAccessToken', '');
+									console.log("logout")
+									window.open("/","_self");  
+								})
+								.catch(err => console.log(err))
+								}
+						alert("성공적으로 비밀번호를 변경하였습니다.")
+					})
+					.catch(err => console.log(err));
+				
+				// try{
+				// 	return Auth.changePassword(this.$store.state.user.userAccount, this.curPass, this.newPass);
+					
+					
+					
+				// }catch(error){
+				// 	console.log('error changing password', error)
+				// }
+				// console.log("changed password")
 			},
 
 		},
@@ -105,11 +121,17 @@
 			curPass: '',
 			newPass: '',
 			newPassChk: '',
+			signedIn: false,
+			email: '',
 			rules: {
 				required: (value: string) => !!value || '필수 입력사항입니다.',
 				match: (v:string) => v === (document.getElementById('new-pass') as HTMLTextAreaElement).value || '비밀번호가 일치하지 않습니다.'
 			},
-		})
+		}),
+		mounted() {
+			this.signedIn = this.$store.state.user.signedIn
+			this.email = this.$store.state.user.userAccount.attributes.email
+		}
 
 
 	})

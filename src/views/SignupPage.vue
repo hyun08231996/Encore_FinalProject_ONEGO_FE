@@ -16,8 +16,8 @@
                         <v-col cols="6" md="5">
                             <div id="signup_area">
                                 <v-card class="mx-auto" max-width="400">
-                                    <SignUp :info="info" @updateEmail="updateEmail" v-if="info.name==''"/>
-                                    <EmailValidation :info="info" v-if="info.name!=''"/>
+                                    <SignUp :info="info" v-if="info.nickname==''"/>
+                                    <EmailValidation :info="info" v-if="info.nickname!=''"/>
                                 </v-card>
                             </div>
                         </v-col>
@@ -37,7 +37,8 @@
 		data: () => ({
             info: {
                 email: '',
-                name: ''
+                nickname: '',
+                signedIn: false
             }
             
 		}),
@@ -45,14 +46,6 @@
             SignUp,
             EmailValidation
 		},
-        methods: {
-            updateEmail(email, name){
-                this.info.email = email;
-                this.info.name = name;
-            }
-        }
-        
-        
 	})
 </script>
 <style>

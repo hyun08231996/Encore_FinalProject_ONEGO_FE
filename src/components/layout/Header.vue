@@ -28,7 +28,7 @@
 		</div>
 		<!-- other pages -->
 		<div v-else>
-			<div v-if="isAuth"><logout-btn @logout="isAuth = $event"/></div>
+			<div v-if="this.$store.state.user.signedIn==true"><logout-btn /></div>
 			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 		</div>
 		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
@@ -43,7 +43,7 @@
 			app
 			>
 			<br><br>
-			<div v-if="isAuth">
+			<div v-if="this.$store.state.user.signedIn==true">
 				<div class="side-itms">
 					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
@@ -53,7 +53,7 @@
 				</div>
 				<div class="side-itms">
 					<v-list-item-content>
-						<v-list-item-title>{{user.nickname}}</v-list-item-title>
+						<v-list-item-title>{{this.$store.state.user.userAccount.attributes.nickname}}</v-list-item-title>
 					</v-list-item-content>
 				</div>
 			</div>
@@ -72,7 +72,7 @@
 			</div>
 			<br>
 			<div class="side-itms">
-				<div v-if="isAuth">
+				<div v-if="this.$store.state.user.signedIn==true">
 					<v-btn id="write-btn" href="/write" rounded outlined color="#00d5aa">
 						글쓰기
 					</v-btn>
@@ -101,7 +101,7 @@
 					</v-list-item>
 				</div>
 				<br>
-				<div v-if="isAuth" class="side-itms">
+				<div v-if="this.$store.state.user.signedIn==true" class="side-itms">
 					<v-list-item
 					v-for="item in menusAL"
 					:key="item.title">
@@ -118,14 +118,14 @@
 						v-for="item in categories"
 						:key="item.title">
 							<v-list-item-content>
-								<v-btn text><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
+								<v-btn text :href="item.link"><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
 							</v-list-item-content>
 						</v-list-item>
 					</div>
 			</v-list>
 			</div>
 			<div id="side-footer">
-				<div v-if="isAuth" class="side-footer-btns">
+				<div v-if="this.$store.state.user.signedIn==true" class="side-footer-btns">
 				  <div><setting-btn /><logout-btn @logout="isAuth = $event"/></div>
 				</div>
 				<div v-else class="side-footer-btns">
@@ -155,7 +155,7 @@
 		data: () => ({
 			drawer: false,
 			group: null,
-			isAuth: false,
+			isAuth: true,
 			showCate:false,
 			showMenu:false,
 			showFooter: true,
@@ -169,8 +169,8 @@
 				{ title: '스크랩', link: '/scrap'},
 			],
 			categories:[
-				{title:'일상'},
-				{title:'시사·이슈'},
+				{title:'일상', link: '/content'},
+				{title:'시사·이슈', link: '/myContent'},
 				{title:'IT 트렌드'},
 				{title:'요리·레시피'},
 				{title:'운동·건강'},

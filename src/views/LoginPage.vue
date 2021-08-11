@@ -17,12 +17,11 @@
                             <div id="signup_area">
                                 
                                 <v-card class="mx-auto" max-width="400">
-                                    <v-alert border="bottom" colored-border color="#00d5aa" v-if="info.name!=''">
-                                    {{info.name}} 님 회원가입에 성공하셨습니다!
+                                    <v-alert border="bottom" colored-border color="#00d5aa" v-if="info.nickname!=''">
+                                    {{info.nickname}} 님 회원가입에 성공하셨습니다!
                                     </v-alert>
                                     <Login :info="info"/>
                                 </v-card>
-
                             </div>
                         </v-col>
                     </v-row>
@@ -34,23 +33,22 @@
 <script>
 import Vue from 'vue'
 import Login from '../components/account/Login.vue'
-import { eventBus } from '../main'
 
     export default Vue.extend({
         data: () => ({
             info: {
                 email: '',
-                name: '',
+                nickname: '',
             }
         }),
         created() {
-            if(!this.$route.params.name){
-                this.info.name = ''
+            if(!this.$route.params.nickname){
+                this.info.nickname = ''
                 this.info.email = ''
             } 
             else{
                 this.info.email = this.$route.params.email
-                this.info.name = this.$route.params.name
+                this.info.nickname = this.$route.params.nickname
             }
         },
         name: "LoginPage",

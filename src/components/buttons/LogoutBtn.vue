@@ -13,23 +13,25 @@
 	import Vue from 'vue'
 	import { Auth } from 'aws-amplify';
 
-	async function signOut() {
-		try {
-			await Auth.signOut();
-			console.log('signout')
-		} catch (error) {
-			console.log('error signing out: ', error);
-		}
-	}
-
 	export default Vue.extend({
 		name:"LogoutBtn",
 		data: ()=>({
 		}),
 		methods:{
 			logout(){
-				this.$emit('logout', false);
-				signOut();
+				// this.$emit('logout', false);
+				try {
+					Auth.signOut()
+						.then(user => {
+							this.$store.commit('changeSignedInState', user);
+							this.$store.commit('setAccessToken', '');
+							console.log("logout")
+							window.open("/","_self");  
+						})
+						.catch(err => console.log(err))
+				} catch (error) {
+					console.log('error signing out: ', error);
+				}
 			}
 		}
 	})

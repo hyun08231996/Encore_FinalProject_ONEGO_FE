@@ -7,8 +7,7 @@
             <li v-for="error in errors">{{ error }}</li>
             </ul>
         </p> -->
-        <v-text-field label="이름" v-model="name"></v-text-field>
-        <v-text-field label="이메일" v-model="registerEmail"></v-text-field>
+        <v-text-field ref="registerEmail" label="이메일" v-model="registerEmail"></v-text-field>
         <v-text-field label="닉네임" v-model="nickname"></v-text-field>
         <v-text-field
             v-model="password"
@@ -20,30 +19,17 @@
             hint="At least 8 characters"
             counter
             @click:append="show1 = !show1"
+            @keyup.enter="signUpCheck"
         ></v-text-field><br>
-        <v-btn class="btn-padding-0" rounded outlined color="grey" @click="signUp"> 회원가입 </v-btn><br>
+        <v-btn class="btn-padding-0" rounded outlined color="grey" @click="signUpCheck"> 회원가입 </v-btn><br>
     </v-card-text>
 </template>
 <script>
 import Vue from 'vue'
-import { Auth } from 'aws-amplify';
-
-    async function signUp(email, name, nickname, password) {
-        try {
-            const { user } = Auth.signUp({
-                username: email,
-                password: password,
-                attributes: {          // optional - E.164 number convention
-                    email: email,
-                    name: name,
-                    nickname: nickname,// other custom attributes 
-                }
-            });
-        } catch (error) {
-            console.log('error signing up:', error);
-        }
-    }
-
+import { Auth } from 'aws-amplify'
+import {validateEmail} from '@/utils/validation'
+import http from '../../http/http-common'
+    
     export default Vue.extend({
         name: 'SignUp',
         props: {
@@ -56,7 +42,6 @@ import { Auth } from 'aws-amplify';
             show4: false,
             registerEmail: '',
             password: '',
-            name: '',
             nickname: '',
             rules: {
             required: value => !!value || 'Required.',
@@ -67,15 +52,67 @@ import { Auth } from 'aws-amplify';
         }),
         created(){
             this.registerEmail = this.info.email;
-            this.name = this.info.name;
+            this.nickname = this.info.nickname;
         },
         methods: {
-            signUp(){
-                // if
-                signUp(this.registerEmail, this.name, this.nickname, this.password);
-                console.log(this.$parent.$parent.$data)
-                this.$set(this.$parent.$parent.$data.info, 'email', this.registerEmail)
-                this.$set(this.$parent.$parent.$data.info, 'name', this.name)
+            reset(){
+                this.registerEmail = '';
+                this.password ='';
+                this.nickname ='';
+                this.$refs.registerEmail.focus();
+            },
+            async postUser(email, nickName){
+                console.log('postUser')
+                console.log("email: "+email)
+                console.log("nickName: "+nickName)
+                await http
+                    .post('/users', {'email': email, 'nickName': nickName })
+                    .then(response => {
+                        console.log("SUCCESS")
+                        console.log(response.data)
+                    })
+            },
+            signUpCheck(){
+                if(this.registerEmail=='' || this.nickname=='' || this.password ==''){
+                    alert("이메일, 닉네임, 그리고 비밀번호를 모두 입력해주세요.");
+                    this.reset();
+                    return;
+                }else if(validateEmail(this.registerEmail)==false){
+                    alert("이메일 형식이 올바르지 않습니다.")
+                    this.reset();
+                    return;
+                }else if(this.password.length < 8){
+                    alert("8자리 이상의 비밀번호를 입력해주세요.")
+                    this.reset();
+                    return;
+                }
+                try {
+                    Auth.signUp({
+                        username: this.registerEmail,
+                        password: this.password,
+                        attributes: {          // optional - E.164 number convention
+                            email: this.registerEmail,
+                            nickname: this.nickname,// other custom attributes 
+                        }
+                    })
+                    .then(user =>{
+                        console.log('else '+this.registerEmail+' '+this.nickname)
+                        this.$set(this.$parent.$parent.$data.info, 'email', this.registerEmail)
+                        this.$set(this.$parent.$parent.$data.info, 'nickname', this.nickname)
+                        this.postUser(this.registerEmail, this.nickname)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        console.log(err.code)
+                        if(err.code === "UsernameExistsException"){
+                            this.reset();
+                            alert("이미 등록된 이메일입니다. 다른 이메일을 입력해주세요.");   
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.log('error signing up:', error);
+                }
             }
         }
     })

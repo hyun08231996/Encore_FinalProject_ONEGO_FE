@@ -14,7 +14,7 @@
         <v-card
           :color="active ? undefined : 'grey lighten-1'"
           class="ma-0"
-          height="500"
+          height="600"
           width="800"
           @click="toggle"
           style="padding: 1px"
