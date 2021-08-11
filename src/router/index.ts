@@ -133,7 +133,7 @@ const routes: Array<RouteConfig> = [
 		component: MyContent,
 	},
 	{
-		path:"/content",
+		path:"/content/:boardId",
 		name: "Content",
 		component: Content,
 	}

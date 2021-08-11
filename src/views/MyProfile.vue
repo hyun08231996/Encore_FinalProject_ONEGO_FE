@@ -35,7 +35,7 @@
 		</div>
 	  </div>
 	  <div class="spacing">
-		  <div><label style="font-size:1.4em;font-weight:bold;">{{user.nickname}}</label></div>
+		  <div><label style="font-size:1.4em;font-weight:bold;">{{$store.state.user.userAccount.attributes.nickname}}</label></div>
 		  <div><label style="font-size:0.95em;opacity:75%;">{{user.intro}}</label></div>
 	  </div>
 	  <div class="spacing">

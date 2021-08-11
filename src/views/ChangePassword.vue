@@ -103,7 +103,7 @@
 					.catch(err => console.log(err));
 				
 				// try{
-				// 	return Auth.changePassword(this.$store.state.user.userInfo, this.curPass, this.newPass);
+				// 	return Auth.changePassword(this.$store.state.user.userAccount, this.curPass, this.newPass);
 					
 					
 					
@@ -130,7 +130,7 @@
 		}),
 		mounted() {
 			this.signedIn = this.$store.state.user.signedIn
-			this.email = this.$store.state.user.userInfo.attributes.email
+			this.email = this.$store.state.user.userAccount.attributes.email
 		}
 
 

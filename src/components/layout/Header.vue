@@ -48,7 +48,7 @@
 				</div>
 				<div class="side-itms">
 					<v-list-item-content>
-						<v-list-item-title>{{this.$store.state.user.userInfo.attributes.nickname}}</v-list-item-title>
+						<v-list-item-title>{{this.$store.state.user.userAccount.attributes.nickname}}</v-list-item-title>
 					</v-list-item-content>
 				</div>
 			</div>
