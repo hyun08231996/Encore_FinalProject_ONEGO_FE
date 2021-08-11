@@ -9,10 +9,7 @@
 
 <script>
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
-import Page from '../components/layout/Page1.vue'
+import Page from '../components/layout/Page.vue'
 
   export default Vue.extend({
 		data: () => ({
