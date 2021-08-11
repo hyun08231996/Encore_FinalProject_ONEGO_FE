@@ -48,7 +48,7 @@
 				</div>
 				<div class="side-itms">
 					<v-list-item-content>
-						<v-list-item-title>{{this.$store.state.user.userInfo.attributes.nickname}}</v-list-item-title>
+						<v-list-item-title>{{this.$store.state.user.userAccount.attributes.nickname}}</v-list-item-title>
 					</v-list-item-content>
 				</div>
 			</div>
@@ -139,12 +139,16 @@
 	import LogoutBtn from '@/components/buttons/LogoutBtn.vue'
 	import SignupBtn from '@/components/buttons/SignupBtn.vue'
 	import SettingBtn from '@/components/buttons/SettingBtn.vue'
-	import DeleteBtn from '@/components/buttons/write/DeleteBtn.vue'
+	// import LikeBtn from '@/components/buttons/LikeBtn.vue'
+	// import BookmarkBtn from '@/components/buttons/BookmarkBtn.vue'
+	// import PostDeleteBtn from '@/components/buttons/PostDeleteBtn.vue'
+	// import PublishBtn from '@/components/buttons/PublishBtn.vue'
+	// import Comment from '@/components/buttons/Comment.vue'
 	import PostBtn from '@/components/buttons/write/PostBtn.vue'
+	import DeleteBtn from '@/components/buttons/write/DeleteBtn.vue'
 	import PreviewBtn from '@/components/buttons/write/PreviewBtn.vue'
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import SearchModal from '@/views/SearchModal.vue'
-
 	export default Vue.extend({
 		data: () => ({
 			drawer: false,
@@ -200,7 +204,6 @@
 				document.getElementById('cate-btn')!.style.color = "#9E9E9E";
 				this.showMenu = true;
 				this.showCate = false;
-
 			}
 		}
 	})
@@ -218,7 +221,6 @@
 	}
 	.side-itms{
 		text-align:center;
-
 	}
 	.v-btn::before{
 		background-color: transparent !important;

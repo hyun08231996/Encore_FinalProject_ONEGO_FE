@@ -1,69 +1,90 @@
 <template>
     <div id="app">
-        <v-card
-            class="mx-auto"
-            width="100%"
-            height="215"
-            elevation="1"
-        >
-            <v-list-item three-line w>
-                <v-list-item-content class="profile-text">
-                    <v-list-item-title class="profile-name">
-                        {{ name }}
-                        <v-btn
-                        outlined
-                        rounded
-                        text
-                        width="70"
-                        height="30"
-                        >
-                        구독
-                        </v-btn>
-                    <br/><br/>
-                    </v-list-item-title>
-                    <div class="profile-text-description">
-                        {{ description }}
+        <div class="profile">
+            <div class="profile-text">
+                <span class="profile-img">
+                    <div class="profile-avatar">
+                        <a href="/myprofile"><img class="img" :src="article.profileImage"></a>
                     </div>
-                    <v-list-item-subtitle class="profile-text-info">
-                        {{ info }}
-                    </v-list-item-subtitle>
-                </v-list-item-content>
-                    
-                <v-list-item-avatar
-                    heigth="200px"
-                    color="grey"
-                    class="profile-avatar"
-                >
-                    <v-img :src="avatar"
-                    ></v-img>
-                </v-list-item-avatar>
-            </v-list-item>
-        </v-card>  
+                </span>
+                <a href="/myprofile" style="color: #555555; text-decoration: none;">
+                    <span class="profile-name">
+                        {{ article.name }}   
+                     </span>
+                </a>
+                <span style="padding-left:10px; margin-top:10px;"><v-btn
+                    outlined
+                    rounded
+                    text
+                    width="70"
+                    height="30"
+                    style="vertical-align: middle;"
+                    >
+                    구독
+                </v-btn></span>
+                <br/><br/>
+                <div class="profile-text-description">
+                    {{ article.email }}
+                </div>
+                <div class="profile-text-info">
+                    {{ article.intro }}
+                </div>
+            </div>
+        </div> 
     </div>     
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import http from '../../http/http-common'
+
 export default {
-    data() {
-        return{
-            name: "집게사장",
-            description: "저희 게살버거가 정말 맛있습니다",
-            info: "게살버거 5000원 (+set 2500원) / 별점 5점 사진리뷰시 음료무제한!",
-            avatar: "https://w.namu.la/s/986b0d64e035c2fc42127b088a3839345f7bbc7c4214a9d282dbb41a989cd7b04e6283fa1a9d854fc880d5d8d0457925dae7db3228856e092222f19a2dced1fe298ad5d8d0472b1c511aa4a80d2251e07d04682c9888838951cd30cff93d299f"
-        }
-    }
+  data: () => ({
+          user: {},
+          errored: false,
+          loading: true,
+          content: '',
+          page: 1,
+        }),
+        methods: {
+          // async getUser(email){
+          //   await http
+          //       .get('/user/{email}', {
+          //         params: { 'email': string }})
+          //       .then(response => {
+          //           this.user = response.data
+          //       })
+          //       .catch(() => { this.errored = true })
+          //       .finally(() => this.loading = false)
+          //   },    
+          // async created(){
+          //     console.log("mounted")
+          //     this.getUser("")
+      }
+  }
 }
 </script>
 
 <style>
+.profile{
+    margin-top: 80px;
+    width: 100%;
+    box-shadow: 3px 3px 8px lightgray;
+}
 .profile-text{
-    width:500px;
+    padding-left: 25px;
+    padding-top: 20px;
     font-family: Noto Sans KR;
 }
 .profile-name{
     font-size : 1.5rem; 
     font-weight: 500; 
     padding-top: 10;
+    vertical-align: middle;
+}
+.profile-link{
+    color: #555555;
+    text-decoration: none;
 }
 .profile-text-description{
     font-size : 1.1rem; 
@@ -93,7 +114,19 @@ export default {
     word-wrap:break-word; 
     height: 5.1em; /*height는 1.7em * 3줄 = 5.1em */
 }
+.profile-img{
+  float: right;
+  margin-right: 30px;
+}
 .profile-avatar{
-    margin-right: 50;
+  width: 150px;
+  height: 150px; 
+  border-radius: 70%;
+  overflow: hidden;
+}
+.img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

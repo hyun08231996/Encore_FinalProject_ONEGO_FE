@@ -62,33 +62,54 @@
 
 
 <script>
+import Vue from 'vue'
+import Vuetify from 'vuetify/lib'
+import http from '../../http/http-common'
+
 export default {
      data: () => ({
-      items: [
-        {
-          id:'1',
-          userId:'asd1',
-          img: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          nickname: 'Brunch',
-          comment: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-          modDatetime: '2020-08-27'
-        },
-        {
-          id:'1',
-          userId:'asd1',
-          img: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          nickname: 'Brunch',
-          comment: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-          modDatetime: '2020-08-27'
-        }
-      ],
+      articles: {},
+      errored: false,
+      loading: true,
+      content: '',
+      page: 1,
       isedit:true,
     }),
 
     methods: {
+      async getComment(commentId){
+        await http
+            .post('/board', {
+              params: { 'commentId': commentId }})
+            .then(response => {
+                this.articles = response.data;
+                console.log(this.articles)
+            })
+            .catch(() => {
+              this.errored = true
+            })
+            .finally(() => this.loading = false)
+          },
+      async created(){
+      console.log("mounted")
+      this.getComment("1")
+      },
+
       delete2(i){
         this.items.splice(i,1)
+        await http
+        .post('/comment', {
+          params: { 'commentId': commentId }})
+        .then(response => {
+            this.articles = response.data;
+            console.log(this.articles)
+        })
+        .catch(() => {
+          this.errored = true
+        })
+        .finally(() => this.loading = false)
       },
+
       editMemo3(index){
             const textarea = document.getElementsByClassName('text')
             this.isedit = false
@@ -103,6 +124,7 @@ export default {
                 }
             }
       },
+      
       confirm(index){
             const textarea = document.getElementsByClassName('text')
             this.isedit = true
@@ -117,15 +139,11 @@ export default {
             }
       },
 
-      submit(){
-        const newcommentEL = document.getElementById("new_comment")
-        const newcomment = newcommentEL.value.trim()
+      async submit() {
+        const commentId = document.getElementById("commentId").value
+        const articleResponse = await http.post('/comment', {
+          params: { 'commentId': commentId }})
 
-        function dateToString(date){
-          const dateString = date.toISOstring()
-          const dateToString = dateString.substring(0,10) + " "+dateString.substring(11,19)
-          return dateToString
-        }
         
         if(newcomment) {
           const dateEL = document.createElement('div')
