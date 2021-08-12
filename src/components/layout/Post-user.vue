@@ -12,14 +12,20 @@
         flat
       >
         <v-spacer></v-spacer>
-        <v-toolbar-title style="font-weight: 700; font-size : 1.7rem;">
+        <div style="font-weight: 700; font-size : 2.3em;">
           {{ article.title }}
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-
+        </div>
+        <v-spacer></v-spacer> 
       </v-toolbar>
 
-      <br/><hr/><br/><br/>
+      <div>
+          <span>By</span>
+          <span class="nickName" v-html="article.nickName"> </span>
+          <span>.</span>
+          <span class="modDatetime" v-html="article.modDatetime"></span>
+      </div>
+
+      <br/><hr style="max-width : 1200px;"/><br/><br/>
       <img style="max-width: 1200px;" :src="article.titleImage">
       <div id="text">
         {{ article.subtitle }}
@@ -35,20 +41,20 @@
             active-class="primary--text"
           >
             <v-chip
-              v-for="tag in tags"
+              v-for="tag in article.tags"
               :key="tag"
               active-class="tag"
               color="#00d5aa"
               outlined
               link
             >
-              {{ article.tag }}
+              {{ tag }}
             </v-chip>
             <v-spacer></v-spacer>
-              <v-v-btn-toggle
+              <!-- <v-v-btn-toggle
                 color="#00d5aa"
                 text-color="#ffffff"
-                v-model="toggle_comment"
+                name="댓글"
               >
                 <v-btn
                 color="#00d5aa"
@@ -56,20 +62,17 @@
                 >
                   댓글
                 </v-btn>
-              </v-v-btn-toggle>
+              </v-v-btn-toggle> -->
           </v-chip-group>
         </v-col>
       </v-row>
       <br/><br/>
 
-      <!-- 댓글 layout component로 만들기,,,-->
       <span style="font-size : 1.2rem; font-weight: 400; padding-left: 1rem;">댓글</span>
       <v-banner>
       </v-banner>
       <Comment />
-      <br/>
-      <!-- 프로필 -->
-      <Profile />
+      <Profile :id = "article.userId"/>
    </v-card>
   </v-container>
 </div>
@@ -87,50 +90,52 @@ import http from '../../http/http-common'
 Vue.use(Vuetify)
 
 export default Vue.extend({
-  name: 'Mypost',
-  data: () => ({
-          articles: {},
+    name: 'Mypost',
+    data: () => ({
           errored: false,
           loading: true,
           content: '',
           page: 1,
-        }),
-        methods: {
-          async getArticles(userId: string){
-            await http
-                .post('/board', {
-                  params: { 'userId': userId }})
-                .then(response => {
-                    this.articles = response.data;
-                    console.log(this.articles)
-                })
-                .catch(() => {
-                  this.errored = true
-                })
-                .finally(() => this.loading = false)
-                
-              },
-    async created(){
-        console.log("mounted")
-        this.getArticles("1")
-        // console.log(this.articles)
-      }
-  }
+          article : {},
+          user: {},
+          id : '',
+          userId : ''
+    }),
+    components:{
+      Profile, Comment
+    },
+    methods: {
+        async getArticle(boardId: string){
+          console.log('getArticles')
+          await http
+              .get('/board', {
+                params: { 'boardId': boardId }})
+              .then(response => {
+                  console.log(response.data)
+                  this.article = response.data[0];
+              })
+        }
+    },
+    created(){  
+      console.log(this.$route.params.boardId)
+      this.getArticle(this.$route.params.boardId)
+    }
 })
-
-
 </script>
 
 
 <style >
 	#item {
-			font-family: "Noto Sans KR", sans-serif !important;
+		font-family: "Noto Sans KR", sans-serif !important;
 	}
+  .modDatetime{
+    float: left;
+
+  }
   .icons{
     padding-top: 1em;
     padding-right: 1.5em;
   }
-
 
   .icon{
     padding-left: 2em;

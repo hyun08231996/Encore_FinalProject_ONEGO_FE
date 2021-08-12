@@ -1,86 +1,80 @@
 <template>
-    <div id="app">
-        <div class="profile">
-            <div class="profile-text">
-                <span class="profile-img">
-                    <div class="profile-avatar">
-                        <a href="/myprofile"><img class="img" :src="article.profileImage"></a>
-                    </div>
+    <div id="profile">
+        <div class="profile-text">
+            <span class="profile-img">
+                <div class="profile-avatar">
+                    <a href="/myprofile"><img class="img" :src="user.profileImage"></a>
+                </div>
+            </span>
+            <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
+                <span class="profile-name">
+                    {{ user.name }}
                 </span>
-                <a href="/myprofile" style="color: #555555; text-decoration: none;">
-                    <span class="profile-name">
-                        {{ article.name }}   
-                     </span>
-                </a>
-                <span style="padding-left:10px; margin-top:10px;"><v-btn
-                    outlined
-                    rounded
-                    text
-                    width="70"
-                    height="30"
-                    style="vertical-align: middle;"
-                    >
-                    구독
-                </v-btn></span>
-                <br/><br/>
-                <div class="profile-text-description">
-                    {{ article.email }}
-                </div>
-                <div class="profile-text-info">
-                    {{ article.intro }}
-                </div>
+            </a>
+            <div style="margin-top:5px; margin-bottom:14px; padding-top:20px; vertical-align: middle;"><v-btn
+                outlined
+                rounded
+                text
+                width="60"
+                height="28"
+                >
+                구독
+            </v-btn>
             </div>
-        </div> 
-    </div>     
+            <div class="profile-text-description">
+                {{ user.email }}
+            </div>
+            <div class="profile-text-info">
+                {{ user.intro }}
+            </div>
+        </div>
+    </div>   
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import http from '../../http/http-common'
 
-export default {
-  data: () => ({
-          user: {},
-          errored: false,
-          loading: true,
-          content: '',
-          page: 1,
-        }),
-        methods: {
-          // async getUser(email){
-          //   await http
-          //       .get('/user/{email}', {
-          //         params: { 'email': string }})
-          //       .then(response => {
-          //           this.user = response.data
-          //       })
-          //       .catch(() => { this.errored = true })
-          //       .finally(() => this.loading = false)
-          //   },    
-          // async created(){
-          //     console.log("mounted")
-          //     this.getUser("")
-      }
-  }
+export default { 
+    props: {
+        id: String,
+    },
+    data: () => ({
+        user: {},
+    }),
+    methods: {
+        getUserInfo(id : string){
+            http
+            .get('/users/'+id)
+            .then(response => {
+                console.log(response.data)
+                this.user=response.data
+            })
+        },
+    },
+    watch: {
+        id() {
+            this.getUserInfo(this.id)
+        }
+    },
 }
 </script>
 
 <style>
-.profile{
+#profile{
     margin-top: 80px;
     width: 100%;
     box-shadow: 3px 3px 8px lightgray;
 }
 .profile-text{
     padding-left: 25px;
-    padding-top: 20px;
+    padding-top: 10px;
     font-family: Noto Sans KR;
 }
 .profile-name{
     font-size : 1.5rem; 
     font-weight: 500; 
-    padding-top: 10;
-    vertical-align: middle;
+    padding-right: 10px;
 }
 .profile-link{
     color: #555555;
@@ -89,6 +83,7 @@ export default {
 .profile-text-description{
     font-size : 1.1rem; 
     font-weight: 300; 
+    color: #555555;
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;
@@ -100,7 +95,7 @@ export default {
   }
 
 .profile-text-info{
-    color: gray;
+    color: #555555;
     font-size : 1.1rem; 
     line-height: 1.7em; 
     font-weight: 300; 
@@ -112,11 +107,12 @@ export default {
     -webkit-line-clamp: 1; 
     -webkit-box-orient: vertical;
     word-wrap:break-word; 
-    height: 5.1em; /*height는 1.7em * 3줄 = 5.1em */
+    height: 5.1em; /*height는 1.7em * 1줄 = 5.1em */
 }
 .profile-img{
   float: right;
   margin-right: 30px;
+  margin-bottom: 5px;
 }
 .profile-avatar{
   width: 150px;

@@ -2,21 +2,20 @@
   <v-card
     max-width="95%"
     flat
-    class="mx-auto"
+    id="comment"
   >
-
-  <div class="comment-box" v-for="(item, i) in items" :key="i">
+  <div class="comment-box" v-for="(comment, i) in comment.comments" :key="i">
     <div class="img-box">
-      <img class="img" :src="item.img">
+      <img class="img" :src="comment.img">
     </div>
 
     <div class="content">
         <span class="nickname"
-          v-html="item.nickname">  
+          v-html="comment.nickname">  
         </span>
-        <span class="modDatetime" v-html="item.modDatetime"></span>
+        <span class="modDatetime" v-html="comment.modDatetime"></span>
 
-        <span class="comment-btn">
+        <!-- <span class="comment-btn">
           <v-btn 
           small
           depressed
@@ -38,9 +37,9 @@
           small
           @click = "confirm($event,i)"
           >
-          확인</v-btn></span>
+          확인</v-btn></span> -->
 
-          <v-text-field class="text" flat solo readonly dense v-model="item.comment"></v-text-field>  
+        <!-- <v-text-field class="text" flat solo readonly dense v-model="item.comment"></v-text-field>   -->
     </div>
   </div>
       <div class="content">
@@ -52,11 +51,10 @@
         max="300"
       ></textarea>
       <button 
-        type="submit"
-        @click = "submit"
+        type="submit" 
       >등록</button>
       </div>
-    <!--의문 1) 댓글 작성자 id랑 img정보를 input hidden 태그로 보내면되낭...-->
+      <!-- @click = "submit" -->
   </v-card>
 </template>
 
@@ -67,114 +65,100 @@ import Vuetify from 'vuetify/lib'
 import http from '../../http/http-common'
 
 export default {
-     data: () => ({
-      articles: {},
-      errored: false,
-      loading: true,
-      content: '',
-      page: 1,
-      isedit:true,
+    props: {
+        commentId: String,
+    },
+    data: () => ({
+        comment: {},
     }),
-
     methods: {
-      async getComment(commentId){
+        async getComment(commentId){
+        console.log('getComment')
         await http
-            .post('/board', {
-              params: { 'commentId': commentId }})
+            .get('/comment', {
+            params: { 'commentId': commentId }})
             .then(response => {
-                this.articles = response.data;
-                console.log(this.articles)
+                console.log(response.data)
+                this.comment = response.data;
             })
-            .catch(() => {
-              this.errored = true
-            })
-            .finally(() => this.loading = false)
-          },
-      async created(){
-      console.log("mounted")
-      this.getComment("1")
-      },
+        }
+    },
+    async created(){
+    console.log("mounted")
+    this.getComment()
+    },
 
-      delete2(i){
-        this.items.splice(i,1)
-        await http
-        .post('/comment', {
-          params: { 'commentId': commentId }})
-        .then(response => {
-            this.articles = response.data;
-            console.log(this.articles)
-        })
-        .catch(() => {
-          this.errored = true
-        })
-        .finally(() => this.loading = false)
-      },
+      // delete2(i){
+      //   this.items.splice(i,1)
+      // },
 
-      editMemo3(index){
-            const textarea = document.getElementsByClassName('text')
-            this.isedit = false
-            for(var i=0; i<textarea.length; i++){
-                if(i === index){
-                    //console.log(i)
-                    const textareaId = textarea[i].children[0].children[0].children[0].children[0].id
-                    //console.log(textareaId)
-                    const element = document.getElementById(textareaId)
-                    element.readOnly = false
-                    document.getElementById(textareaId)?.focus()
-                }
-            }
-      },
+      // editMemo3(index){
+      //       const textarea = document.getElementsByClassName('text')
+      //       this.isedit = false
+      //       for(var i=0; i<textarea.length; i++){
+      //           if(i === index){
+      //               //console.log(i)
+      //               const textareaId = textarea[i].children[0].children[0].children[0].children[0].id
+      //               //console.log(textareaId)
+      //               const element = document.getElementById(textareaId)
+      //               element.readOnly = false
+      //               document.getElementById(textareaId)?.focus()
+      //           }
+      //       }
+      // },
       
-      confirm(index){
-            const textarea = document.getElementsByClassName('text')
-            this.isedit = true
-            for(var i=0; i<textarea.length; i++){
-                if(i === index){
-                    //console.log(i)
-                    const textareaId = textarea[i].children[0].children[0].children[0].children[0].id
-                    //console.log(textareaId)
-                    const element = document.getElementById(textareaId)
-                    element.readOnly = true
-                }
-            }
-      },
+      // confirm(index){
+      //       const textarea = document.getElementsByClassName('text')
+      //       this.isedit = true
+      //       for(var i=0; i<textarea.length; i++){
+      //           if(i === index){
+      //               //console.log(i)
+      //               const textareaId = textarea[i].children[0].children[0].children[0].children[0].id
+      //               //console.log(textareaId)
+      //               const element = document.getElementById(textareaId)
+      //               element.readOnly = true
+      //           }
+      //       }
+      // },
 
-      async submit() {
-        const commentId = document.getElementById("commentId").value
-        const articleResponse = await http.post('/comment', {
-          params: { 'commentId': commentId }})
+      // async submit() {
+      //   const commentId = document.getElementById("commentId").value
+      //   const articleResponse = await http.post('/comment', {
+      //     params: { 'commentId': commentId }})
 
         
-        if(newcomment) {
-          const dateEL = document.createElement('div')
-          dateEL.classList.add("modDatetime")
-          const dateString = dateToString(new Date())
-          dateEL.innerText = dateString
+      //   if(newcomment) {
+      //     const dateEL = document.createElement('div')
+      //     dateEL.classList.add("modDatetime")
+      //     const dateString = dateToString(new Date())
+      //     dateEL.innerText = dateString
 
-          const contentEL = document.createElement('div')
-          contentEL.classList.add('comment-box')
-          contentEL.innerText = newcomment
+      //     const contentEL = document.createElement('div')
+      //     contentEL.classList.add('comment-box')
+      //     contentEL.innerText = newcomment
 
-          const commentEL = document.createElement('div')
-          commentEL.classList.add('content')
-          commentEL.append(contentEL)
-          commentEL.append(contentEL)
+      //     const commentEL = document.createElement('div')
+      //     commentEL.classList.add('content')
+      //     commentEL.append(contentEL)
+      //     commentEL.append(contentEL)
 
-          document.getElementsByClassName("comment-box").append(commentEL)
-          newcommentEL.value=""
+      //     document.getElementsByClassName("comment-box").append(commentEL)
+      //     newcommentEL.value=""
 
-        }else{
-           alert("댓글은 2글자이상 작성해주세요!");
-        }
+      //   }else{
+      //      alert("댓글은 2글자이상 작성해주세요!");
+      //   }
 
-      }
+      // }
      
   
-    }
 }
 </script>
 
 <style>
+#comment{
+
+}
 .comment-box{
   margin-top: 10px;
   width: 96%;
