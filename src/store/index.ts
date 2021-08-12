@@ -31,9 +31,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    findUser: function(){
+    findUser: async function(){
       try{
-        Auth.currentAuthenticatedUser()
+        await Auth.currentAuthenticatedUser()
           .then(user => {
                 this.state.user.signedIn = !!user;
                 this.state.user.userAccount = user;
@@ -54,16 +54,7 @@ export default new Vuex.Store({
           console.log('not signed in', error);
       }
     },
-    // setUserInfo: function(){
-    //   if(this.state.user.userAccount){
-    //     http
-    //         .get('/users/'+this.state.user.userAccount.attributes.email)
-    //         .then(response => {
-    //             this.state.user.userInfo = response.data
-    //             console.log(this.state.user.userInfo)
-    //         })
-    //   }
-    // }
+    // setU
   },
   modules: {
   }

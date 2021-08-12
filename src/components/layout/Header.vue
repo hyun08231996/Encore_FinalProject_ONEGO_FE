@@ -42,7 +42,7 @@
 				<div class="side-itms">
 					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
-						<img src="https://randomuser.me/api/portraits/women/82.jpg">
+						<img :src="$store.state.user.userInfo.profileImage">
 					</v-list-item-avatar>
 					</a>
 				</div>

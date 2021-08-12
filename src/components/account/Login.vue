@@ -70,7 +70,7 @@ import http from '../../http/http-common'
                         this.loading = false
                     })  
             },
-            login(){
+            async login(){
                 if(validateEmail(this.email)==false){
                     alert("이메일 형식이 올바르지 않습니다.");
                     this.reset();
@@ -81,7 +81,7 @@ import http from '../../http/http-common'
                     return;
                 }
                 try {
-                    Auth.signIn(this.email, this.password)
+                    await Auth.signIn(this.email, this.password)
                             .then(user => {
                                 this.$store.commit('changeSignedInState', user);
                                 router.push({ name: 'Main'})
