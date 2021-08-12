@@ -7,7 +7,7 @@
           max-height="600"
           tile
         >
-          <div class="card">
+          <div class="card" @click="articlePage(article.id)">
             <v-card-text class="text newest-article">
               <h2 v-html="article.title"></h2><br>
               <!-- <h3 style="font-weight: normal" v-html="article.subtitle"></h3> -->
@@ -71,7 +71,7 @@ import http from '../http/http-common'
         },
         async getScrapId(){
            await http
-            .get('/users/'+this.$store.state.user.userInfo.attributes.email)
+            .get('/users/'+this.$store.state.user.userAccount.attributes.email)
               .then(response => {
                   this.scrapId = response.data.scraps
                   console.log("scrapId")
@@ -93,7 +93,10 @@ import http from '../http/http-common'
               const temp = new Date(time)
               const date = temp.getFullYear()+". "+temp.getMonth()+". "+temp.getDate()
               return date
-          }
+          },
+          articlePage(boardId){
+            window.open("/content/"+boardId,"_self");
+          },
 
           // changePage(value){
           //   this.page = value

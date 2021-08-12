@@ -136,6 +136,11 @@ const routes: Array<RouteConfig> = [
 		path:"/content2",
 		name: "Content-writer",
 		component: Content2,
+	},
+	{
+		path:"/content/:boardId",
+		name: "Content",
+		component: Content1,
 	}
 ]
 
