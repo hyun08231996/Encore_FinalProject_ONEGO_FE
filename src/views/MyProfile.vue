@@ -125,14 +125,12 @@
 			},
 			followingList(email: string){
 				this.$store.commit('setFollowingUser', email);
-				console.log(this.$store.state.followingUser)
 				this.$router.push({
 					name: "Following",
 				});
 			},
 			followerList(email: string){
 				this.$store.commit('setFollowerUser', email);
-				console.log(this.$store.state.followerUser)
 				this.$router.push({
 					name: "Follower"
 				});
@@ -140,8 +138,6 @@
 			}
 		},
 		async created(){
-			console.log(this.$store.state.followerUser)
-			console.log("porp "+this.emailProp)
 			this.email = (this.emailProp.length == 0 ? this.$store.state.user.userAccount.attributes.email : this.emailProp)
 			// Own Profile
 			if(this.email == this.$store.state.user.userAccount.attributes.email){

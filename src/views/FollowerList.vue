@@ -61,29 +61,22 @@ export default Vue.extend({
             });
         },
         async getUserInfo(userEmail){
-          console.log("getUserInfo")
             await http
                     .get('/users/'+userEmail)
                     .then(response => {
                         if(this.$store.state.user.userInfo.email == response.data.email){
                           response.data['flag']="me"
                         }else{
-                          console.log("else")
                           for(var i=0; i<this.$store.state.user.userInfo.followers.length; i++){
-                            console.log("i: "+i)
-                            console.log(this.$store.state.user.userInfo.followings[i])
-                            console.log(response.data.email)
                             if(this.$store.state.user.userInfo.followings[i] == response.data.email){
                               response.data['flag']="true"
+                              break
                             }else{
                               response.data['flag']="false"
                             }
                           }
                         }
-                        console.log(response.data)
                         this.followerInfoList.push(response.data)
-                        console.log("followerInfoList")
-                        console.log(this.followInfoList)
                     })
                     .catch(() => this.errored = true )
                     .finally(() => {
@@ -129,7 +122,6 @@ export default Vue.extend({
             await http
               .get('/users/'+this.email)
               .then(response => {
-                  console.log(response.data)
                   this.nickname = response.data.nickName
                   this.followeridList = response.data.followers;
               })

@@ -77,7 +77,6 @@ import http from '../http/http-common'
               .then(response => {
                   this.scrapId = response.data.scraps
                   for(let i = 0; i< this.scrapId.length; i++){
-                    console.log(this.scrapId[i])
                     this.getContents(this.scrapId[i])
                   }
                   this.totalPageNum = Math.floor(this.scrapId.length / 5) + 1
@@ -99,7 +98,6 @@ import http from '../http/http-common'
 
       },
       created(){
-        console.log("mounted")
         this.getScrapId()
         
       }

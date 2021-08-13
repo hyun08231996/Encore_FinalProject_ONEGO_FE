@@ -58,12 +58,10 @@ export default Vue.extend({
      }),
      methods: {
        async getArticles(pageNum: number){
-         console.log('getArticles')
          await http
              .get('/board', {
                params: { 'pageNumber': pageNum }})
              .then(response => {
-                 console.log(response.data)
                  response.data.forEach((d: any) => {
                    if(d.contents.length != 0){
                      if(d.contents[0].content.length > 150){
@@ -127,7 +125,6 @@ export default Vue.extend({
             
      },
      async created(){
-       console.log("mounted")
        this.getArticles(1)
        this.boardCount()
      }

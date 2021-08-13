@@ -151,7 +151,6 @@
 					})
 					.catch(error => {
 						this.errored = true
-						console.log(error)
 					} )
 					.finally(() => {
 						this.loading = false
@@ -168,7 +167,6 @@
 				this.user.profileImgFile = file
 				const url = URL.createObjectURL(file)
 				this.user.profileImg = url
-				// console.log(e.target.result)
 			}
 		},
 		async created(){

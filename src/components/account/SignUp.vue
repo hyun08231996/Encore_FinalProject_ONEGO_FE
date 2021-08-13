@@ -92,14 +92,11 @@ import http from '../../http/http-common'
                         }
                     })
                     .then(user =>{
-                        console.log('else '+this.registerEmail+' '+this.nickname)
                         this.$set(this.$parent.$parent.$data.info, 'email', this.registerEmail)
                         this.$set(this.$parent.$parent.$data.info, 'nickname', this.nickname)
                         this.postUser(this.registerEmail, this.nickname)
                     })
                     .catch(err => {
-                        console.log(err)
-                        console.log(err.code)
                         if(err.code === "UsernameExistsException"){
                             this.reset();
                             alert("이미 등록된 이메일입니다. 다른 이메일을 입력해주세요.");   

@@ -96,7 +96,6 @@
 				.get('/users/'+this.email)
 				.then(response => {
 					this.user = response.data
-					console.log(this.user)
 					
 				})
 		}

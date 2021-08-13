@@ -61,7 +61,6 @@ export default Vue.extend({
             });
         },
         async getUserInfo(userEmail){
-          console.log(userEmail)
             await http
                     .get('/users/'+userEmail)
                     .then(response => {
@@ -125,7 +124,6 @@ export default Vue.extend({
             await http
               .get('/users/'+this.email)
               .then(response => {
-                  console.log(response.data)
                   this.nickname = response.data.nickName
                   this.followidList = response.data.followings;
               })

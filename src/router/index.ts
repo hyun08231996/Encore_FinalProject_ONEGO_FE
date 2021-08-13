@@ -24,7 +24,6 @@ const requireAuth = () => (to: any, from: any, next: any) => {
 	Auth.currentAuthenticatedUser()
 		.then(user => {
 			if (user) {
-				console.log(user)
 				next();
 			}
 		})
