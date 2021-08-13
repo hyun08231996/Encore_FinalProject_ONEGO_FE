@@ -55,6 +55,7 @@ import http from '../http/http-common'
             .get('/board', {
                 params: { 'boardId': boardId }})
               .then(response => {
+                if(response.data.length !=0){
                   response.data.forEach((d) => {
                     if(d.contents.length != 0){
                       if(d.contents[0].content.length > 150){
@@ -67,6 +68,7 @@ import http from '../http/http-common'
                     }
                   })
                   this.articles.push(response.data[0])
+                }
               })
         },
         async getScrapId(){
@@ -74,14 +76,11 @@ import http from '../http/http-common'
             .get('/users/'+this.$store.state.user.userAccount.attributes.email)
               .then(response => {
                   this.scrapId = response.data.scraps
-                  console.log("scrapId")
-                  console.log(this.scrapId)
                   for(let i = 0; i< this.scrapId.length; i++){
+                    console.log(this.scrapId[i])
                     this.getContents(this.scrapId[i])
                   }
-                  console.log(this.scrapId)
                   this.totalPageNum = Math.floor(this.scrapId.length / 5) + 1
-                  console.log("totalPage: "+ this.totalPageNum)
               })
               .catch(() => this.errored = true )
               .finally(() => {
@@ -98,12 +97,6 @@ import http from '../http/http-common'
             window.open("/content/"+boardId,"_self");
           },
 
-          // changePage(value){
-          //   this.page = value
-          //   console.log("changePage click")
-          //   console.log("page: "+this.page)
-          //   this.getArticles(this.page)
-          // },
       },
       created(){
         console.log("mounted")

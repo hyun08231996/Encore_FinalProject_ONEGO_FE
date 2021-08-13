@@ -62,14 +62,10 @@ import http from '../../http/http-common'
                 this.$refs.registerEmail.focus();
             },
             async postUser(email, nickName){
-                console.log('postUser')
-                console.log("email: "+email)
-                console.log("nickName: "+nickName)
                 await http
                     .post('/users', {'email': email, 'nickName': nickName })
                     .then(response => {
-                        console.log("SUCCESS")
-                        console.log(response.data)
+                        console.log(response)
                     })
             },
             signUpCheck(){

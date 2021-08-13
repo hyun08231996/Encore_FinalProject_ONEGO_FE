@@ -85,9 +85,6 @@ import http from '../../http/http-common'
                             .then(user => {
                                 this.$store.commit('changeSignedInState', user);
                                 router.push({ name: 'Main'})
-                                console.log("current Session")
-                                console.log("store token before")
-                                console.log(this.$store.state.accessToken)
                                 Auth.currentSession()
                                     .then(result => {
                                         console.log(result)

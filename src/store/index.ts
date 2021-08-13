@@ -11,7 +11,9 @@ export default new Vuex.Store({
       userAccount: new Object(),
       userInfo: new Object()
     },
-    accessToken: ''
+    accessToken: '',
+    followerUser: '',
+    followingUser: ''
   },
   mutations: {
     changeSignedInState: function(state, user){
@@ -23,6 +25,12 @@ export default new Vuex.Store({
     },
     setUserInfo: function(state, user){
       Vue.set(state.user, 'userInfo', user)
+    },
+    setFollowerUser: function(state, user){
+      Vue.set(state, 'followerUser', user)
+    },
+    setFollowingUser: function(state, user){
+      Vue.set(state, 'followingUser', user)
     }
   },
   getters: {
