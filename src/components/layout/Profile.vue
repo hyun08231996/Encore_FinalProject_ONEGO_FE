@@ -35,15 +35,22 @@
 import Vue from 'vue'
 import http from '../../http/http-common'
 
-export default { 
+declare interface User{
+    name:string,
+    email:string,
+	intro:string,
+	profileImage:string
+}
+
+export default Vue.extend({
     props: {
-        id: String,
+     id: String
     },
     data: () => ({
-        user: {},
+        user: {} as User,
     }),
     methods: {
-        getUserInfo(id : string){
+        getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email
             http
             .get('/users/'+id)
             .then(response => {
@@ -57,13 +64,13 @@ export default {
             this.getUserInfo(this.id)
         }
     },
-}
+})
 </script>
 
 <style>
 #profile{
-    margin-top: 80px;
-    width: 100%;
+    margin: auto;
+    width: 70%;
     box-shadow: 3px 3px 8px lightgray;
 }
 .profile-text{

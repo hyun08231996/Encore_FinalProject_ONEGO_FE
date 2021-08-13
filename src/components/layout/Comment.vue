@@ -4,22 +4,20 @@
     flat
     id="comment"
   >
-  <div class="comment-box" v-for="(comment, i) in comment.comments" :key="i">
-    <div class="img-box">
+    <div class="comment-box" v-for="(item, i) in commentList" :key="i">   
+    <!-- <div class="img-box">
       <img class="img" :src="comment.img">
-    </div>
-
+    </div> -->
+    
     <div class="content">
-        <span class="nickname"
-          v-html="comment.nickname">  
-        </span>
-        <span class="modDatetime" v-html="comment.modDatetime"></span>
+        <span class="nickname"> {{ item.nickname }}</span>
+        <span class="modDatetime">{{ item.modDatetime }}</span>
 
         <!-- <span class="comment-btn">
           <v-btn 
           small
           depressed
-          @click = "delete2($event,i)"
+          @click = "delete2"
           >
         삭제</v-btn></span>
 
@@ -27,7 +25,7 @@
           <v-btn 
           depressed
           small
-          @click = "editMemo3($event,i)"
+          @click = "editMemo3"
           >
         수정</v-btn></span>
 
@@ -35,15 +33,16 @@
           <v-btn 
           depressed
           small
-          @click = "confirm($event,i)"
+          @click = "confirm"
           >
           확인</v-btn></span> -->
 
-        <!-- <v-text-field class="text" flat solo readonly dense v-model="item.comment"></v-text-field>   -->
+        <v-text-field class="text" flat solo readonly dense>{{ item.comment }}</v-text-field>
     </div>
-  </div>
+  </div >
       <div class="content">
       <textarea
+        v-model="message"
         class="new_comment"
         id="new_comment"
         name="new_comment"
@@ -52,41 +51,91 @@
       ></textarea>
       <button 
         type="submit" 
+        @click = "submit"
       >등록</button>
       </div>
-      <!-- @click = "submit" -->
   </v-card>
 </template>
 
 
-<script>
-import Vue from 'vue'
-import Vuetify from 'vuetify/lib'
-import http from '../../http/http-common'
+<script lang="ts">
 
-export default {
+import Vue from 'vue'
+import http from '../../http/http-common'
+// import { Store } from '../../store/index';
+
+declare interface CommentList{
+	comment:string,
+	id:string,
+	modDatetime:Date,
+	nickName:string,
+	userId:string
+}
+
+export default Vue.extend({
+
     props: {
-        commentId: String,
+        boardId: String,
     },
     data: () => ({
-        comment: {},
+        commentList: [] as CommentList[],
+        nickName: '',
+        message: '',
+        pageNumber: '',
+        userEmail: ''
     }),
+
     methods: {
-        async getComment(commentId){
+        //댓글 불러오기
+        async getComment(boardId: string, pageNumber: number){
         console.log('getComment')
         await http
             .get('/comment', {
-            params: { 'commentId': commentId }})
+            params: { 'boardId': boardId, 'pageNumber': pageNumber }})
             .then(response => {
                 console.log(response.data)
-                this.comment = response.data;
+                this.commentList = response.data
             })
-        }
+        },
+
+        //댓글 산입하기
+        submit(){
+            if(this.$store.state.user.signedIn==true){
+                this.insertComment(
+                  this.$route.params.boardId, this.$store.state.user.userAccount.attributes.nickname,
+                  this.message, this.$store.state.user.userAccount.attributes.email
+                )
+                console.log(this.$route.params.boardId)
+                console.log(this.message)
+                console.log(this.$store.state.user.userAccount.attributes.nickname)
+                console.log(this.$store.state.user.userAccount.attributes.email)
+              }
+            else{
+              alert("로그인부터 해주세요!")
+            }
+        },
+
+        insertComment(boardId: string, nickName: string, message:string, userEmail:string){
+            console.log('insertComment')
+                    http
+                    .post('/comment', {
+                    params: { 'boardId': boardId, 'nickName': nickName, 'comment': message, 'userEmail': userEmail}})
+                    .then(response => {
+                        console.log(response.data)
+                        this.commentList = response.data;
+                    })
+            }
+        },
+
+        //댓글 수정하기
+
+
+    created(){
+		console.log("mounted")
+		this.getComment(this.$route.params.boardId, 1)
     },
-    async created(){
-    console.log("mounted")
-    this.getComment()
-    },
+})
+
 
       // delete2(i){
       //   this.items.splice(i,1)
@@ -106,7 +155,7 @@ export default {
       //           }
       //       }
       // },
-      
+
       // confirm(index){
       //       const textarea = document.getElementsByClassName('text')
       //       this.isedit = true
@@ -126,7 +175,7 @@ export default {
       //   const articleResponse = await http.post('/comment', {
       //     params: { 'commentId': commentId }})
 
-        
+
       //   if(newcomment) {
       //     const dateEL = document.createElement('div')
       //     dateEL.classList.add("modDatetime")
@@ -150,14 +199,14 @@ export default {
       //   }
 
       // }
-     
-  
-}
+
+
+// }
 </script>
 
 <style>
 #comment{
-
+  margin: auto;
 }
 .comment-box{
   margin-top: 10px;

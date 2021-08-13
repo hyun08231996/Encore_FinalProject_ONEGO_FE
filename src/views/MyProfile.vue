@@ -5,7 +5,7 @@
 		<div class="image-container">
 			<img src="@/assets/images/beach.jpg" width="100%" height="auto">
 			<v-list-item-avatar id="prof-pic" absolute elevation="4" size=100>
-				<img :src="user.pic">
+				<img :src="$store.state.user.userInfo.profileImage">
 			</v-list-item-avatar>
 			<v-btn id="myprof-write-btn" href="/write" absolute rounded outlined color="#00d5aa">
 				글쓰기
@@ -36,7 +36,7 @@
 	  </div>
 	  <div class="spacing">
 		  <div><label style="font-size:1.4em;font-weight:bold;">{{$store.state.user.userAccount.attributes.nickname}}</label></div>
-		  <div><label style="font-size:0.95em;opacity:75%;">{{user.intro}}</label></div>
+		  <div><label style="font-size:0.95em;opacity:75%;">{{$store.state.user.userInfo.intro}}</label></div>
 	  </div>
 	  <div class="spacing">
 	    <div class="follow">

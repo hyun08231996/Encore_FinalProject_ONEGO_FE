@@ -42,7 +42,7 @@
 				<div class="side-itms">
 					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
-						<img src="https://randomuser.me/api/portraits/women/82.jpg">
+						<img :src="$store.state.user.userInfo.profileImage">
 					</v-list-item-avatar>
 					</a>
 				</div>
@@ -113,7 +113,7 @@
 						v-for="item in categories"
 						:key="item.title">
 							<v-list-item-content>
-								<v-btn text :href="item.link"><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
+								<v-btn text><v-list-item-title>{{ item.title }}</v-list-item-title></v-btn>
 							</v-list-item-content>
 						</v-list-item>
 					</div>
@@ -149,6 +149,7 @@
 	import PreviewBtn from '@/components/buttons/write/PreviewBtn.vue'
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import SearchModal from '@/views/SearchModal.vue'
+  import http from "@/http/http-common";
 	export default Vue.extend({
 		data: () => ({
 			drawer: false,
@@ -167,8 +168,8 @@
 				{ title: '스크랩', link: '/scrap'},
 			],
 			categories:[
-				{title:'일상', link: '/content'},
-				{title:'시사·이슈', link: '/myContent'},
+				{title:'일상'},
+				{title:'시사·이슈'},
 				{title:'IT 트렌드'},
 				{title:'요리·레시피'},
 				{title:'운동·건강'},

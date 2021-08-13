@@ -13,8 +13,7 @@ import UserProfile from '@/views/UserProfile.vue'
 import SignUpPage from '@/views/SignupPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
-import Content2 from '@/views/Content-writer.vue'
-import Content1 from '@/views/Content-user.vue'
+import Content from '@/views/Content.vue'
 import { Auth } from 'aws-amplify'
 Vue.use(VueRouter)
 
@@ -128,19 +127,9 @@ const routes: Array<RouteConfig> = [
 		beforeEnter: requireAuth()
 	},
 	{
-		path:"/content1",
-		name: "Content-user",
-		component: Content1,
-	},
-	{
-		path:"/content2",
-		name: "Content-writer",
-		component: Content2,
-	},
-	{
 		path:"/content/:boardId",
 		name: "Content",
-		component: Content1,
+		component: Content,
 	}
 ]
 
