@@ -13,7 +13,6 @@ import UserProfile from '@/views/UserProfile.vue'
 import SignUpPage from '@/views/SignupPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
-import MyContent from '@/views/MyContent.vue'
 import Content from '@/views/Content.vue'
 import FollowingList from '@/views/FollowingList.vue'
 import FollowerList from '@/views/FollowerList.vue'
@@ -130,11 +129,6 @@ const routes: Array<RouteConfig> = [
 		component: Write,
 		meta:{ showFooter: false, showHeader: false },
 		beforeEnter: requireAuth()
-	},
-	{
-		path:"/myContent",
-		name: "MyContent",
-		component: MyContent,
 	},
 	{
 		path:"/content/:boardId",
