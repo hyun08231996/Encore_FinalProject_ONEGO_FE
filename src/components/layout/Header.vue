@@ -21,7 +21,8 @@
 		<v-spacer></v-spacer>
 		<!-- write page -->
 		<div v-if="$route.meta.showHeader == false">
-			<div style="float:right;"><post-btn/></div>
+			<div v-if="$route.meta.showEdit" style="float:right;"><update-btn/></div>
+			<div v-else style="float:right;"><post-btn/></div>
 			<div style="float:right;"><save-btn/></div>
 			<div style="float:right;"><delete-btn/></div>
 			<div style="float:right;"><preview-modal/></div>
@@ -47,7 +48,7 @@
 				<div class="side-itms">
 					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
-						<img src="https://randomuser.me/api/portraits/women/82.jpg">
+						<img src="@/assets/profile/peter.jpg">
 					</v-list-item-avatar>
 					</a>
 				</div>
@@ -112,8 +113,8 @@
 				</div>
 			</v-list>
 			<div id="cate-height">
-			<v-list dense v-if="showCate">
-					<div >
+			  <v-list dense v-if="showCate">
+					<div class="side-itms">
 						<v-list-item
 						v-for="item in categories"
 						:key="item.title">
@@ -122,7 +123,7 @@
 							</v-list-item-content>
 						</v-list-item>
 					</div>
-			</v-list>
+			  </v-list>
 			</div>
 			<div id="side-footer">
 				<div v-if="this.$store.state.user.signedIn==true" class="side-footer-btns">
@@ -146,6 +147,7 @@
 	import SettingBtn from '@/components/buttons/SettingBtn.vue'
 	import DeleteBtn from '@/components/buttons/write/DeleteBtn.vue'
 	import PostBtn from '@/components/buttons/write/PostBtn.vue'
+	import UpdateBtn from '@/components/buttons/write/UpdateBtn.vue'
 	import PreviewModal from '@/views/PreviewModal.vue'
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import DarkModeSwitch from '@/components/buttons/write/DarkModeSwitch.vue'
@@ -189,7 +191,7 @@
 		name: "Header",
 		components:{
 			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,
-			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-modal':PreviewModal, 'save-btn':SaveBtn,
+			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-modal':PreviewModal, 'save-btn':SaveBtn, 'update-btn':UpdateBtn,
 			'dark-switch':DarkModeSwitch, 'search-modal':SearchModal
 		},
 		methods:{

@@ -23,7 +23,7 @@
 		<div style="margin-top:8px;width:100%;height:44vh;overflow-y:auto;">
 		  <draggable v-model="draggableCards" delay=0 animation=300 handle=".memo-delete-margin">
 			<transition-group type="transition" name="flip-list">
-			  <div style="margin-top:2px;" id="memo-list" v-for="(memo,i) in memoList" :key="i">
+			  <div style="margin-top:2px;" id="memo-list" v-for="(memo,i) in memoList" :key="memo.no">
 				<div class="memo-margin" >
 					<v-card elevation="3" height="11vh">
 						<div class="memo-delete-margin">
@@ -35,8 +35,10 @@
 							:key="i"
 							flat solo
 							no-resize
-							readonly
-							height="8vh">
+							:readonly="isReadonly"
+							autofocus
+							height="8vh"
+							@keypress.enter="finishEdit(i)">
 						</v-textarea>
 					</v-card>
 				</div>
@@ -53,7 +55,7 @@
 	import { namespace } from 'vuex-class';
 	import draggable from "vuedraggable";
 
-	const WriteStoreModule = namespace('WriteStore')
+	const WriteStoreModule = namespace('writeStore')
 
 	@Component({
 		components:{
@@ -62,6 +64,7 @@
 	})
 	export default class Memo extends Vue {
 		toggleSignMemo = true
+		isReadonly = true
 
 		@WriteStoreModule.Getter('getMemoList')
 		private memoList!:any[]
@@ -72,20 +75,42 @@
 		}
 
 		public set draggableCards(val:unknown){
-			this.setMemoList(val)
+			this.dragMemoList(val)
 		}
 
-		@WriteStoreModule.Mutation('addMemo')
-		private addMemo!:()=>void
+		// @WriteStoreModule.Mutation('addMemo')
+		// private addMemo!:()=>void
 
 		@WriteStoreModule.Mutation('deleteMemo')
 		private deleteMemo!:(index:number)=>void
 
-		@WriteStoreModule.Mutation('setMemoList')
-		private setMemoList!:(val:unknown)=>void
+		@WriteStoreModule.Mutation('dragMemoList')
+		private dragMemoList!:(val:unknown)=>void
+
+		// @WriteStoreModule.State('isDrag')
+		// private isDrag!:boolean
 
 		showMemo():void{
 			this.toggleSignMemo = !this.toggleSignMemo
+			this.isReadonly = true
+		}
+
+		addMemo():void{
+			if(this.memoList.length ===0){
+				this.memoList.push({no:1,text:''})
+			}else{
+				const numList : number[] = []
+				for(let i=0;i<this.memoList.length;i++){
+					numList.push(this.memoList[i].no)
+				}
+				let maxNum : number = numList[0]
+				for(let i=0;i<numList.length;i++){
+					if(maxNum < numList[i]) maxNum = numList[i]
+				}
+				this.memoList.push({no:maxNum+1,text:''})
+			}
+			//console.log(this.memoList[this.memoList.length-1].no)
+			this.isReadonly = false
 		}
 
 		editMemo(index:number):void{
@@ -94,35 +119,38 @@
 			for(var i=0; i<textarea.length; i++){
 				if(i === index){
 					//console.log(i)
-					const editIcon = document.getElementsByClassName('memo-delete-margin')[i].children[0].children[0].children[0]
+					// const editIcon = document.getElementsByClassName('memo-delete-margin')[i].children[0].children[0].children[0]
 					const textareaId = textarea[i].children[0].children[0].children[0].children[0].id
 					//console.log(textareaId)
 					const element = document.getElementById(textareaId) as HTMLInputElement
 
-					if(editIcon.classList.contains('mdi-check')){
-						element.readOnly = true
-						editIcon.classList.remove('mdi-check')
-						editIcon.classList.add('mdi-pencil')
-					}
+					// if(editIcon.classList.contains('mdi-check')){
+					// 	element.readOnly = true
+						// editIcon.classList.remove('mdi-check')
+						// editIcon.classList.add('mdi-pencil')
+					// }
 
-					else{
+					// else{
 						element.readOnly = false
-						editIcon.classList.remove('mdi-pencil')
-						editIcon.classList.add('mdi-check')
+						// editIcon.classList.remove('mdi-pencil')
+						// editIcon.classList.add('mdi-check')
 						document.getElementById(textareaId)?.focus()
-					}
-
-					element.addEventListener('keypress', (e)=>{
-						if(e.key === 'Enter') {
-							element.readOnly = true
-							editIcon.classList.remove('mdi-check')
-							editIcon.classList.add('mdi-pencil')
-						}
-					})
+					//}
 
 				}
 			}
 
+		}
+
+		finishEdit(index:number){
+			const textarea = document.getElementsByClassName('memo-text-area')
+			// const editIcon = document.getElementsByClassName('memo-delete-margin')[index].children[0].children[0].children[0]
+			const textareaId = textarea[index].children[0].children[0].children[0].children[0].id
+			const element = document.getElementById(textareaId) as HTMLInputElement
+
+			element.readOnly = true
+			// editIcon.classList.remove('mdi-check')
+			// editIcon.classList.add('mdi-pencil')
 		}
 
 	}

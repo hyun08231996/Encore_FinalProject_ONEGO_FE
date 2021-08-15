@@ -27,7 +27,6 @@
 			:items="itemList"
 			activatable
 			transition
-			:active.sync="active"
 			@update:active="setActiveVal"
 			open-all
 			dense
@@ -86,15 +85,17 @@
 </template>
 
 <script lang="ts">
-	import { Component, Vue } from 'vue-property-decorator';
+	import { Component, Vue, Prop } from 'vue-property-decorator';
 	import { namespace } from 'vuex-class';
+	import { eventBus } from '@/main'
 
-	const WriteStoreModule = namespace('WriteStore')
+	const WriteStoreModule = namespace('writeStore')
 
 	@Component
 	export default class Treeview extends Vue {
+		@Prop({ type: String }) readonly tempBoardId!: string
+
 		tree = []
-		active = []
 		showTree = false
 		toggleSignIndex = true
 		isMenu = false
@@ -103,8 +104,8 @@
 		x = 0
 		y = 0
 
-		@WriteStoreModule.Mutation('setTitle')
-		private setTitle!:(title:string)=>void
+		@WriteStoreModule.Mutation('sendTreeTitle')
+		private sendTreeTitle!:(title:string)=>void
 
 		@WriteStoreModule.Getter('getActiveVal')
 		private activeVal!:number
@@ -115,9 +116,6 @@
 		@WriteStoreModule.Mutation('setActiveVal')
 		private setActiveVal!:(val:any)=>void
 
-		@WriteStoreModule.State('contentArr')
-		private contentArr!:string[]
-
 		@WriteStoreModule.Mutation('sendContent')
 		private sendContent!:(itemId:number)=>void
 
@@ -125,6 +123,15 @@
 		private itemList!:any[]
 
 		mounted () {
+			eventBus.$on("clickFirstTree",this.clickFirstTree)
+			//console.log(this.tempBoardId)
+			if(this.tempBoardId===undefined){
+				let element: HTMLElement = document.getElementsByClassName('v-treeview-node__label')[0].children[0].children[0] as HTMLElement
+				element.click()
+			}
+		}
+
+		clickFirstTree():void{
 			//console.log(this.itemList[0].title)
 			let element: HTMLElement = document.getElementsByClassName('v-treeview-node__label')[0].children[0].children[0] as HTMLElement
 			element.click()
@@ -167,7 +174,7 @@
 								const element = document.getElementById(inputId) as HTMLInputElement
 								const title = element.value
 								//console.log(typeof(title))
-								this.setTitle(title)
+								this.sendTreeTitle(title)
 							}
 							element.readOnly = true
 						}

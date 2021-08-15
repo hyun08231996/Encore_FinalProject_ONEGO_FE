@@ -1,7 +1,7 @@
 <template>
-	<v-btn id="post-btn" class="ma-2" rounded outlined color="#00d5aa"
-	@click="postDraft">
-		글 올리기
+	<v-btn id="update-btn" class="ma-2" rounded outlined color="#00d5aa"
+	@click="updatePost">
+		수정
 	</v-btn>
 </template>
 
@@ -27,8 +27,8 @@
 		@WriteStoreModule.State('titleImage')
 		private titleImage!:File
 
-		async postDraft():Promise<void>{
-			if(!confirm("발행 하시겠습니까?")){
+		async updatePost():Promise<void>{
+			if(!confirm("수정 하시겠습니까?")){
 				return
 			}else{
 				const date = new Date()
@@ -76,7 +76,7 @@
 				form.append('titleImageFile',this.titleImage)
 
 				await http.
-					post('/board',form,{
+					put('/board',form,{
 						headers:{
 							'Content-Type': "multipart/form-data"
 						}

@@ -1,7 +1,7 @@
 <template>
   <div class="align-center member-card">
     <v-container>
-      
+
       <v-row no-gutters >
         <!-- col 1 -->
         <v-col>
@@ -103,7 +103,7 @@
 
             <v-divider class="mx-4"></v-divider>
           </v-card>
-          
+
         </v-col>
         <!-- col 3 -->
         <v-col>
@@ -114,7 +114,7 @@
 
             <v-avatar>
               <img
-                src="@/assets/profile/dogKang.jpeg"
+                src="@/assets/profile/peter.jpg"
                 alt="남승현"
               >
             </v-avatar>
@@ -155,7 +155,7 @@
 
             <v-divider class="mx-4"></v-divider>
           </v-card>
-          
+
         </v-col>
         <!-- col 4 -->
         <v-col>
@@ -207,13 +207,13 @@
 
             <v-divider class="mx-4"></v-divider>
           </v-card>
-          
+
         </v-col>
       </v-row>
 
     </v-container>
 
-    
+
   </div>
 </template>
 <script>

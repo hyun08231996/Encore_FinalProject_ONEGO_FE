@@ -34,7 +34,7 @@
   }
   
   .tiptap-vuetify-editor__content {
-      height: 78vh;
+      height: 72vh;
       overflow-y: auto !important;
   }
   
@@ -110,3 +110,39 @@
   /* .v-treeview-node__toggle {
       pointer-events: all;
   } */
+  
+  #img-btn {
+      margin-right: 500px;
+  }
+  
+  #text-editor .v-sheet.v-card {
+      border-radius: 4px 4px 0px 0px;
+  }
+  
+  .title-card.v-sheet.v-card {
+      border-radius: 4px 4px 0px 0px;
+  }
+  
+  .title-card .v-label {
+      font-style: italic;
+      opacity: 65%;
+  }
+  
+  .title-card .v-text-field--outlined.v-input--dense .v-label {
+      top: auto !important;
+  }
+  
+  .v-text-field--full-width.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__prepend-outer,
+  .v-text-field--full-width.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__prepend-inner,
+  .v-text-field--full-width.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner,
+  .v-text-field--full-width.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-outer,
+  .v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__prepend-outer,
+  .v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__prepend-inner,
+  .v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner,
+  .v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-outer {
+      /* margin-top: auto; */
+      margin: auto !important;
+      padding-bottom: 4px;
+      padding-left: 4px;
+      margin-right: -4px !important;
+  }

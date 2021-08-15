@@ -12,7 +12,8 @@
 	  <template v-slot:activator="{ on, attrs }">
 		<v-btn icon
 			v-bind="attrs"
-          	v-on="on">
+          	v-on="on"
+			@click="getUsersAndBoards">
 			<v-icon>mdi-magnify</v-icon>
 		</v-btn>
 	  </template>
@@ -93,6 +94,7 @@
 <script lang="ts">
 	import Vue from 'vue'
 	import '@/assets/css/SearchModal.css'
+	import http from '@/http/http-common'
 
 	export default Vue.extend({
 
@@ -152,6 +154,10 @@
 				}) && title.replace(new RegExp(searchWord2, "gi"), match => {
 					return '<span class="highlight">' + match + '</span>';
 				});
+			},
+			async getUsersAndBoards(){
+				// await http.
+				//     get('/users', )
 			}
 		},
 		computed:{

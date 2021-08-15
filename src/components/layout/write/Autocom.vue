@@ -15,7 +15,7 @@
 		  <template v-slot:activator="{ on, attrs }">
 			<v-btn icon v-bind="attrs" v-on="on" @click="autoComplete"><v-icon>mdi-motion-play-outline</v-icon></v-btn>
 		  </template>
-		  <span>AI자동완성</span>
+		  <span>문장 자동완성</span>
 		</v-tooltip></span>
 		<span style="position:absolute;right:4px;"><v-btn @click="showAutocom" icon><v-icon>mdi-chevron-down</v-icon></v-btn></span>
 		<div style="margin-left:8px;margin-right:14px;margin-top:10px;">

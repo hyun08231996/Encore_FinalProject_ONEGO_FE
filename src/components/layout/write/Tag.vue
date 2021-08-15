@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top:0px;">
 	<div style="width:85%;float:left;">
-	<v-card class="pt-1 tag-card" height="7.5vh" elevation="3">
+	<v-card class="pt-1 tag-card" height="7.5vh" elevation="2">
 	  <!-- 태그 입력 -->
 	  <div v-if="toggleSignTag" style="margin-top:-8px;margin-left:-2px;float:left;" class="v-combobox-tag" id="toggle-sign-tag">
 		<v-tooltip right>
@@ -13,7 +13,7 @@
 	  </div>
 	  <div v-else style="width:100%;float:left;" class="v-combobox-tag">
 		<div style="float:left;margin-top:-8px;margin-left:-2px;"><v-btn @click="showTag" icon><v-icon small>mdi-chevron-down</v-icon></v-btn></div>
-		  <div style="float:left; width:93%; padding-top:4px;">
+		  <div style="float:left; width:88%; padding-top:4px;padding-right:4px;">
 			<v-combobox
 			:search-input.sync="search"
 			v-model="tagList"
@@ -22,14 +22,22 @@
 			multiple
 			outlined
 			small-chips
-			clearable
 			deletable-chips
 			single-line
 			dense
+			label="태그 입력 후 Enter를 누르세요"
 			placeholder="태그 입력 후 Enter를 누르세요"
 			@input.native="word=$event.srcElement.value"
-			><!--@keyup.enter="addTag(word)"-->
+			>
 			</v-combobox></div>
+		  <div style="float:left;width:3%;">
+			  <v-tooltip top>
+				<template v-slot:activator="{ on, attrs }">
+					<v-btn icon height="6.5vh" v-bind="attrs" v-on="on" @click="generateTag"><v-icon>mdi-tag-plus-outline</v-icon></v-btn>
+				</template>
+				<span>태그 자동생성</span>
+		      </v-tooltip>
+		  </div>
 	  </div>
 
 	  <!-- 이미지 추가 -->
@@ -65,7 +73,7 @@
 	</v-card>
 	</div>
 	<div style="width:15%;float:left;">
-	  <v-card height="7.5vh" elevation="3" class="wordcount-card">
+	  <v-card height="7.5vh" elevation="2" class="wordcount-card">
 		<!-- 글자수 -->
 		<div style="float:right;padding-right:8px;padding-top:4px;">
 			<label style="opacity:70%;font-size:0.9em;">글자수: {{wordCount}}자</label>
@@ -79,7 +87,7 @@
 	import { Component, Vue, Watch } from 'vue-property-decorator';
 	import { namespace } from 'vuex-class';
 
-	const WriteStoreModule = namespace('WriteStore')
+	const WriteStoreModule = namespace('writeStore')
 
 	@Component
 	export default class Tag extends Vue {
@@ -168,6 +176,10 @@
 
 		}
 
+		generateTag():void{
+			this.tagList.push('고구마')
+		}
+
 	}
 </script>
 
@@ -177,6 +189,7 @@
 }
 .v-combobox-tag .v-input__icon{
 	height:3.5vh;
+	margin-right: 12px !important;
 }
 .tag-card.v-sheet.v-card {
     border-radius: 0px 0px 0px 4px;
@@ -185,5 +198,8 @@
 .wordcount-card.v-sheet.v-card {
     border-radius: 0px 0px 4px 0px;
 	border-left:none;
+}
+.v-combobox-tag .v-text-field--outlined.v-input--dense .v-label {
+    top: auto;
 }
 </style>
