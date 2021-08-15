@@ -12,6 +12,8 @@ interface authStore {
 		userInfo: any
 	};
 	accessToken:string;
+	followerUser:string;
+	followingUser:string;
 }
 
 const authModule:Module<authStore,RootState>={
@@ -22,7 +24,9 @@ const authModule:Module<authStore,RootState>={
       userAccount: new Object(),
       userInfo: new Object()
     },
-    accessToken: ''
+    accessToken: '',
+	followerUser: '',
+    followingUser: ''
   },
   mutations: {
     changeSignedInState: function(state, user){
@@ -34,7 +38,13 @@ const authModule:Module<authStore,RootState>={
     },
     setUserInfo: function(state, user){
       Vue.set(state.user, 'userInfo', user)
-    }
+    },
+	setFollowerUser: function(state, user){
+	  Vue.set(state, 'followerUser', user)
+	},
+	setFollowingUser: function(state, user){
+	  Vue.set(state, 'followingUser', user)
+	}
 
   },
   getters: {
@@ -43,9 +53,9 @@ const authModule:Module<authStore,RootState>={
     }
   },
   actions: {
-    findUser: function(){
+    findUser: async function(){
       try{
-        Auth.currentAuthenticatedUser()
+        await Auth.currentAuthenticatedUser()
           .then(user => {
                 this.state.user.signedIn = !!user;
                 this.state.user.userAccount = user;
@@ -66,16 +76,7 @@ const authModule:Module<authStore,RootState>={
           console.log('not signed in', error);
       }
     },
-    // setUserInfo: function(){
-    //   if(this.state.user.userAccount){
-    //     http
-    //         .get('/users/'+this.state.user.userAccount.attributes.email)
-    //         .then(response => {
-    //             this.state.user.userInfo = response.data
-    //             console.log(this.state.user.userInfo)
-    //         })
-    //   }
-    // }
+    // setU
   },
   modules: {
   }

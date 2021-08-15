@@ -43,7 +43,6 @@
 			fluid style="height: 100vh; width: 250px;"
 			app
 			>
-			<br><br>
 			<div v-if="this.$store.state.user.signedIn==true">
 				<div class="side-itms">
 					<a href="/myprofile">
@@ -91,7 +90,8 @@
 			<br>
 			<v-divider></v-divider>
 
-			<v-list dense v-if="showMenu">
+			<div id="scroll-height">
+			  <v-list dense v-if="showMenu">
 				<div class="side-itms">
 					<v-list-item
 					v-for="item in menusBL"
@@ -111,8 +111,7 @@
 						</v-list-item-content>
 					</v-list-item>
 				</div>
-			</v-list>
-			<div id="cate-height">
+			  </v-list>
 			  <v-list dense v-if="showCate">
 					<div class="side-itms">
 						<v-list-item
@@ -182,7 +181,6 @@
 				{title:'요리·레시피'},
 				{title:'운동·건강'},
 				{title:'사랑·이별'},
-				{title:'정치'},
 				{title:'기타'}
 			],
 			user:{
@@ -266,7 +264,7 @@
 	.v-navigation-drawer {
 		z-index: 999999 !important;
 	}
-	#cate-height{
+	#scroll-height{
 		height:43vh;
 		overflow-y:auto;
 	}
