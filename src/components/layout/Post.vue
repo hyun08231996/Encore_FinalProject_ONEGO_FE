@@ -6,14 +6,23 @@
       flat 
       class="post"
       >
-        <!-- Title Image -->
+        <!-- Title Image 'LikeBtn':LikeBtn,'BookmarkBtn':BookmarkBtn,'PostDeleteBtn':PostDeleteBtn,'PublishBtn':PublishBtn -->
         <v-card tile class="mb-12" id="image-card">
             <v-img height="50vh" :src="article.titleImage">
               <v-flex id="title-preview-margin" class="mx-auto">
+                <template v-if="$store.state.user.userInfo.email === article.userId">
+                  <span class="postbtn"><PostDeleteBtn/></span> 
+                  <span class="postbtn"><PublishBtn/></span>
+                </template>
+                <template v-else>
+                  <span class="postbtn"><BookmarkBtn/></span> 
+                  <span class="postbtn"><LikeBtn @click="getlike(userEmail)"/></span>
+                </template>
               <h1 style="font-size:40px; padding-left:1px;">{{ article.title }}</h1>
+              
               <div style="opacity:80%;"><h3>{{ article.subtitle }}</h3></div>
-              <div style="opacity:60%;margin-top:50px;">
-                <h5> {{ article.nickName }}· {{ article.modDatetime }}</h5>
+              <div style="opacity:60%;margin-top:30px;">
+                <span><h5> {{ article.nickName }}· {{ article.modDatetime }} </h5></span>
               </div>
               </v-flex>
             </v-img>
@@ -33,11 +42,12 @@
           <v-chip outlined small color="#00d5aa" class="mr-2">{{ tag }}</v-chip>
         </span>
       </v-flex>
-      <div>
-        <comment />
-      </div>
-      <br/><br/>
-      <Profile />
+
+      <!-- <div style="height: 60px;"></div> -->
+      <Comment :boardId = "article.id"/>   
+      
+      <!-- <div style="height: 60px;"></div> -->
+      <Profile :id = "article.userEmail"/>
    </v-card>
   </v-container>
  </v-row>
@@ -46,15 +56,17 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Vuetify from 'vuetify/lib'
 import Profile from '@/components/layout/Profile.vue'
 import Comment from '@/components/layout/Comment.vue'
 import http from '../../http/http-common'
+import LikeBtn from '@/components/buttons/LikeBtn.vue'
+import BookmarkBtn from '@/components/buttons/BookmarkBtn.vue'
+import PostDeleteBtn from '@/components/buttons/PostDeleteBtn.vue'
+import PublishBtn from '@/components/buttons/PublishBtn.vue'
 
 
 export default Vue.extend({
 
-    name: 'Mypost',
     data: () => ({
           errored: false,
           loading: true,
@@ -66,22 +78,29 @@ export default Vue.extend({
           userId : ''
     }),
     components:{
-      Profile, Comment
+      Profile, Comment,
+      'LikeBtn':LikeBtn, 'BookmarkBtn':BookmarkBtn, 'PostDeleteBtn':PostDeleteBtn, 'PublishBtn':PublishBtn    
     },
     methods: {
         async getArticle(boardId: string){
-          console.log('getArticles')
           await http
               .get('/board', {
                 params: { 'boardId': boardId }})
               .then(response => {
-                  console.log(response.data)
                   this.article = response.data[0];
               })
+        },
+        getlike(userEmail:string){
+          console.log("like")
+          http
+          .post('/boardId', { 'userEmail': userEmail})
+          .then(response => {
+              console.log(response.data)
+              this.getlike(this.$route.params.boardId)
+          })
         }
     },
     created(){  
-      console.log(this.$route.params.boardId)
       this.getArticle(this.$route.params.boardId)
     }
 })
@@ -89,10 +108,17 @@ export default Vue.extend({
 
 
 <style >
+.mx-auto justify-center{
+  margin: 0 auto;
+}
 	.post {
 		font-family: "Noto Sans KR", sans-serif !important;
 	}
-
+  .postbtn{
+    vertical-align: middle;
+    float: right;
+    padding-left: 10px;
+  }
   #preview-btn:hover{
 	color:#757575 !important;
   }

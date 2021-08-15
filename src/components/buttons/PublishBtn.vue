@@ -4,7 +4,7 @@
 		outlined
 		color="#00d5aa"
 		class="btn">
-		발행
+		수정
 	</v-btn>
 </template>
 
