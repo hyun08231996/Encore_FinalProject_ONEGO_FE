@@ -134,7 +134,7 @@ export default Vue.extend({
         },
 
         //댓글 수정하기
-        //데이터 전송이 되었는데 왜 response.data는 비어있을까요? :/
+        //데이터 전송이 되었는데 왜 response.data는 비어있을까요? post의 userEmail값이 null이라서 그런걸까요? :/
         putComment( boardId:string, commentId:string, nickName:string, comment:string, userEmail:string){
                     console.log(boardId)
                     console.log(commentId)

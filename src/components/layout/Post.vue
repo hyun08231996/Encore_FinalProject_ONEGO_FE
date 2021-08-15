@@ -6,19 +6,19 @@
       flat 
       class="post"
       >
-        <!-- Title Image 'LikeBtn':LikeBtn,'BookmarkBtn':BookmarkBtn,'PostDeleteBtn':PostDeleteBtn,'PublishBtn':PublishBtn -->
+        <!-- Title Image -->
         <v-card tile class="mb-12" id="image-card">
             <v-img height="50vh" :src="article.titleImage">
               <v-flex id="title-preview-margin" class="mx-auto">
                 <template v-if="$store.state.user.userInfo.email === article.userId">
-                  <span class="postbtn"><PostDeleteBtn/></span> 
-                  <span class="postbtn"><PublishBtn/></span>
+                  <span class="postbtn"><v-btn icon color="#00d5aa"><i class="fas fa-trash-alt" style="font-size: 1.8em;" @click="postdelete(userEmail)"></i></v-btn></span>
+                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="postput(boardId,article.title,article.subtitle,article.titleImage,article.contents,article.tags)">수정</v-btn></span>
                 </template>
                 <template v-else>
                   <span class="postbtn"><BookmarkBtn/></span> 
-                  <span class="postbtn"><LikeBtn @click="getlike(userEmail)"/></span>
+                  <span class="postbtn"><v-btn icon color="#00d5aa"><i class="fa fa-heart" style="font-size: 1.8em;" @click="getlike(userEmail)"></i></v-btn></span>
                 </template>
-              <h1 style="font-size:40px; padding-left:1px;">{{ article.title }}</h1>
+              <span><h1 style="font-size:40px; padding-left:1px;">{{ article.title }}</h1></span>
               
               <div style="opacity:80%;"><h3>{{ article.subtitle }}</h3></div>
               <div style="opacity:60%;margin-top:30px;">
@@ -59,10 +59,10 @@ import Vue from 'vue';
 import Profile from '@/components/layout/Profile.vue'
 import Comment from '@/components/layout/Comment.vue'
 import http from '../../http/http-common'
-import LikeBtn from '@/components/buttons/LikeBtn.vue'
+// import LikeBtn from '@/components/buttons/LikeBtn.vue'
 import BookmarkBtn from '@/components/buttons/BookmarkBtn.vue'
-import PostDeleteBtn from '@/components/buttons/PostDeleteBtn.vue'
-import PublishBtn from '@/components/buttons/PublishBtn.vue'
+//import PostDeleteBtn from '@/components/buttons/PostDeleteBtn.vue'
+//import PublishBtn from '@/components/buttons/PublishBtn.vue'
 
 
 export default Vue.extend({
@@ -78,8 +78,8 @@ export default Vue.extend({
           userId : ''
     }),
     components:{
-      Profile, Comment,
-      'LikeBtn':LikeBtn, 'BookmarkBtn':BookmarkBtn, 'PostDeleteBtn':PostDeleteBtn, 'PublishBtn':PublishBtn    
+      Profile, Comment, 'BookmarkBtn':BookmarkBtn,  
+      // 'LikeBtn':LikeBtn, 'PostDeleteBtn':PostDeleteBtn,'PublishBtn':PublishBtn    
     },
     methods: {
         async getArticle(boardId: string){
@@ -93,12 +93,44 @@ export default Vue.extend({
         getlike(userEmail:string){
           console.log("like")
           http
-          .post('/boardId', { 'userEmail': userEmail})
+          .post('/boardId', {'userEmail': userEmail})
           .then(response => {
               console.log(response.data)
               this.getlike(this.$route.params.boardId)
           })
-        }
+        },
+
+        postdelete(boardId:string){
+          console.log("postdelete")
+
+          var con_test = confirm("글을 삭제하시겠습니까?");
+          if(con_test == true){
+              http
+                .delete('/boardId', {
+                data: { 'boardId': boardId}})
+                .then(response => {
+                    this.article = response.data[0];
+                })
+          }
+          else if(con_test == false){
+              http
+                .get('/board', {
+                  params: { 'boardId': boardId }})
+                .then(response => {
+                    this.article = response.data[0];
+                })
+          }
+          
+        },
+         postput( boardId:string,title:string,subtitle:string,titleImage:string,contents:string,tags:string){
+              http
+              .put('/comment', { 
+                data:{'boardId': boardId, 'title': title, 'subtitle': subtitle, 'titleImage': titleImage, 'contents': contents, 'tags':tags}})
+              .then(response => {
+                  console.log(response.data)
+                  this.article = response.data[0];
+              })
+          },
     },
     created(){  
       this.getArticle(this.$route.params.boardId)
