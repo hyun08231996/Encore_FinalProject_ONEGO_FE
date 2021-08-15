@@ -17,21 +17,13 @@
 		components:{
 			Header, Footer
 		},
-		created(){
-			this.$store.dispatch('findUser');
-			console.log(this.$store.state.user.userAccount)
-			console.log("테스트")
-			console.log(Object.keys(this.$store.state.user.userAccount).length)
-			console.log(this.$store.state.user.userAccount)
+		async created(){
+			await this.$store.dispatch('findUser');
 			if(Object.keys(this.$store.state.user.userAccount).length != 0){
-				console.log("if문")
-				console.log(this.$store.state.user.userAccount.attributes.email)
-				http
+				await http
 					.get('/users/'+this.$store.state.user.userAccount.attributes.email)
 					.then(response => {
-						console.log(response.data)
 						this.$store.commit('setUserInfo', response.data);
-						// this.$store.state.user.userInfo = response.data
 						console.log(this.$store.state.user.userInfo)
 					})
 			}

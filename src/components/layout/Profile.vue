@@ -8,7 +8,7 @@
             </span>
             <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
                 <span class="profile-name">
-                    {{ user.name }}
+                    {{ user.nickName }}
                 </span>
             </a>
             <div style="margin-top:5px; margin-bottom:14px; padding-top:20px; vertical-align: middle;"><v-btn
@@ -36,7 +36,7 @@ import Vue from 'vue'
 import http from '../../http/http-common'
 
 declare interface User{
-    name:string,
+    nickName:string,
     email:string,
 	intro:string,
 	profileImage:string
@@ -44,13 +44,14 @@ declare interface User{
 
 export default Vue.extend({
     props: {
-     id: String
+        id: String
     },
     data: () => ({
         user: {} as User,
     }),
     methods: {
-        getUserInfo(id : string){
+        getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email]
+            console.log(id)
             http
             .get('/users/'+id)
             .then(response => {
@@ -60,8 +61,9 @@ export default Vue.extend({
         },
     },
     watch: {
-        id() {
-            this.getUserInfo(this.$store.state.user.userAccount.attributes.email)
+        id(){
+            console.log(this.id)
+            this.getUserInfo(this.id)
         }
     },
 })
@@ -69,8 +71,8 @@ export default Vue.extend({
 
 <style>
 #profile{
-    margin-top: 80px;
-    width: 100%;
+    margin: auto;
+    max-width:50% !important;
     box-shadow: 3px 3px 8px lightgray;
 }
 .profile-text{

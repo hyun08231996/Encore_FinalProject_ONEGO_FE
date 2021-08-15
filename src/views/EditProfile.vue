@@ -2,23 +2,13 @@
 	<div>
 		<v-flex id="editprof-margin" class="mx-auto">
 			<div align="center" class="spacing">
-				<label id="title">프로필 수정</label>
+				<h2 id="title">프로필 수정</h2>
 			</div>
 			<!-- 프로필 이미지 파일 선택 -->
 			<div align="right">
 				<v-list-item-avatar size=90>
 					<img :src="user.profileImg">
 				</v-list-item-avatar>
-				<!-- <v-btn 
-					id="profileImg"
-					fab
-					elevation="4"
-					small
-					absolute
-					@click="selectImg"
-					>
-					<v-icon>mdi-camera</v-icon>
-				</v-btn> -->
 				<v-btn 
 					id="profileImg"
 					fab
@@ -119,6 +109,7 @@
 <script>
 	import Vue from 'vue'
 	import http from '../http/http-common'
+	import { Auth } from 'aws-amplify'
 
 	export default Vue.extend({
 		name: "EditProfile",
@@ -127,7 +118,8 @@
 				nickname:'',
 				email:'',
 				intro:'',
-				profileImg:"https://randomuser.me/api/portraits/women/82.jpg",
+				profileImg: 'null',
+				profileImgFile: null,
 				errored: false,
 				loading: true
 			},
@@ -139,33 +131,57 @@
 		}),
 		methods:{
 			async updateProfile(){
+				// form data for updating userProfile
+				const frm = new FormData();
+				frm.append('nickName', this.user.nickname);
+				frm.append('profileImageFile', this.user.profileImgFile);
+				frm.append('intro', this.user.intro);
+				
+				// updating cognito
+				const user = await Auth.currentAuthenticatedUser();
+				await Auth.updateUserAttributes(user, {
+					'nickname': this.user.nickname
+				});
+
+				// updating user table
 				await http
-					.put('/users/'+this.user.email, {'nickName': this.user.nickname})
+					.put('/users/'+this.user.email, frm)
 					.then(response => {
 							console.log(response)
 					})
-					.catch(() => this.errored = true )
+					.catch(error => {
+						this.errored = true
+					} )
 					.finally(() => {
 						this.loading = false
-              })   
-              
+            	  })    
+				
+				// 화면 새로고침
+				this.$router.go()
 			},
 			selectImg(){
 				document.getElementById("fileUpload").click();
-				this.profileImg = document.getElementById("fileUpload").files[0]
-				console.log(this.profileImg)
-				//axios file upload here (?)
 			},
 			onFileChanged(e){
 				let file = e.target.files[0];
-				console.log(file.name);
+				this.user.profileImgFile = file
+				const url = URL.createObjectURL(file)
+				this.user.profileImg = url
 			}
 		},
-		mounted(){
+		async created(){
+			if(Object.keys(this.$store.state.user.userAccount).length != 0){
+				await http
+					.get('/users/'+this.$store.state.user.userAccount.attributes.email)
+					.then(response => {
+						this.$store.commit('setUserInfo', response.data);
+					})
+			}
 			this.user.nickname = this.$store.state.user.userAccount.attributes.nickname
 			this.user.email = this.$store.state.user.userAccount.attributes.email
-			// this.user.intro = this.$store.state.user.userInfo
-		}
+			this.user.intro = this.$store.state.user.userInfo.intro
+			this.user.profileImg = this.$store.state.user.userInfo.profileImage
+		},
 	})
 </script>
 
@@ -197,7 +213,7 @@
 	color:#02bf99 !important;
 }
 #profileImg{
-	margin-top:65px;
+	margin-top:105px;
 	margin-left:-115px;
 }
 .name-input .v-input__slot,

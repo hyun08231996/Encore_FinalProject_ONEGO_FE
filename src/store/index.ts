@@ -13,6 +13,8 @@ export interface RootState {
 		userInfo: any
 	};
 	accessToken:string;
+	followerUser:string;
+	followingUser:string;
 }
 
 const index: StoreOptions<RootState> = {
@@ -21,12 +23,14 @@ const index: StoreOptions<RootState> = {
 	writeStore:writeStore,
   },
   state: {
-	  user: {
-		signedIn: false,
-		userAccount: new Object(),
-		userInfo: new Object()
-	  },
-	  accessToken: ''
+    user: {
+      signedIn: false,
+      userAccount: new Object(),
+      userInfo: new Object()
+    },
+    accessToken: '',
+    followerUser: '',
+    followingUser: ''
   },
   mutations: {
     changeSignedInState: function(state, user){
@@ -38,6 +42,12 @@ const index: StoreOptions<RootState> = {
     },
     setUserInfo: function(state, user){
       Vue.set(state.user, 'userInfo', user)
+    },
+    setFollowerUser: function(state, user){
+      Vue.set(state, 'followerUser', user)
+    },
+    setFollowingUser: function(state, user){
+      Vue.set(state, 'followingUser', user)
     }
 
   },
@@ -47,9 +57,9 @@ const index: StoreOptions<RootState> = {
     }
   },
   actions: {
-    findUser: function(){
+    findUser: async function(){
       try{
-        Auth.currentAuthenticatedUser()
+        await Auth.currentAuthenticatedUser()
           .then(user => {
                 this.state.user.signedIn = !!user;
                 this.state.user.userAccount = user;
@@ -70,16 +80,7 @@ const index: StoreOptions<RootState> = {
           console.log('not signed in', error);
       }
     },
-    // setUserInfo: function(){
-    //   if(this.state.user.userAccount){
-    //     http
-    //         .get('/users/'+this.state.user.userAccount.attributes.email)
-    //         .then(response => {
-    //             this.state.user.userInfo = response.data
-    //             console.log(this.state.user.userInfo)
-    //         })
-    //   }
-    // }
+    // setU
   },
 }
 

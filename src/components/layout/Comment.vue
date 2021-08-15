@@ -1,51 +1,59 @@
 <template>
   <v-card
-    max-width="95%"
+    max-width="50%"
     flat
     id="comment"
   >
-  <div class="comment-box" v-for="(item, i) in commentList" :key="i">
-    <!-- <div class="img-box">
-      <img class="img" :src="comment.img">
-    </div> -->
+    <h3>댓글</h3>
+    <br/><hr style="margin: auto;"><br/>
 
-    <div class="content">
-        <span class="nickname"> {{ item.nickname }}</span>
+    <div class="content" v-for="(item, i) in commentList" :key="i">
+
+        <span class="nickname"> {{ item.nickName }}</span>
         <span class="modDatetime">{{ item.modDatetime }}</span>
 
-        <!-- <span class="comment-btn">
+        <template v-if="item.edited===true">
+          <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
+          <v-btn
+          depressed
+          small
+          @click = "putComment(boardId,item.userId,item.nickName,comment,$store.state.user.userInfo.email)"
+          >
+          확인</v-btn></span>
+          <textarea
+          v-model="comment"
+          class="new_comment"
+          max="300"
+          ></textarea>
+        </template>
+
+        <template v-else>
+        <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
           <v-btn
           small
           depressed
-          @click = "delete2"
+          @click = "deleteComment(boardId,item.id)"
           >
         삭제</v-btn></span>
 
-        <span class="comment-btn" v-if="isedit">
+        <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
           <v-btn
           depressed
           small
-          @click = "editMemo3"
+          @click = "editedComment(i)"
           >
         수정</v-btn></span>
 
-        <span class="comment-btn" v-else>
-          <v-btn
-          depressed
-          small
-          @click = "confirm"
-          >
-          확인</v-btn></span> -->
+        <p class="comment">{{ item.comment }}</p>
 
-        <v-text-field class="text" flat solo readonly dense>{{ item.comment }}</v-text-field>
-    </div>
-  </div >
+        </template>
+        <!-- <v-text-field class="text" flat solo readonly dense>{{ item.comment }}</v-text-field> -->
+  </div>
+
       <div class="content">
       <textarea
-        v-model="message"
+        v-model="comment"
         class="new_comment"
-        id="new_comment"
-        name="new_comment"
         placeholder="댓글을 입력해주세요!"
         max="300"
       ></textarea>
@@ -54,7 +62,6 @@
         @click = "submit"
       >등록</button>
       </div>
-      <!-- @click = "insertComment" -->
   </v-card>
 </template>
 
@@ -63,9 +70,10 @@
 
 import Vue from 'vue'
 import http from '../../http/http-common'
-// import { Store } from '../../store/index';
+
 
 declare interface CommentList{
+  comment2:string,
 	comment:string,
 	id:string,
 	modDatetime:Date,
@@ -81,7 +89,7 @@ export default Vue.extend({
     data: () => ({
         commentList: [] as CommentList[],
         nickName: '',
-        message: '',
+        comment: '',
         pageNumber: '',
         userEmail: ''
     }),
@@ -89,12 +97,10 @@ export default Vue.extend({
     methods: {
         //댓글 불러오기
         async getComment(boardId: string, pageNumber: number){
-        console.log('getComment')
         await http
             .get('/comment', {
             params: { 'boardId': boardId, 'pageNumber': pageNumber }})
             .then(response => {
-                console.log(response.data)
                 this.commentList = response.data
             })
         },
@@ -104,33 +110,58 @@ export default Vue.extend({
             if(this.$store.state.user.signedIn==true){
                 this.insertComment(
                   this.$route.params.boardId, this.$store.state.user.userAccount.attributes.nickname,
-                  this.message, this.$store.state.user.userAccount.attributes.email
+                  this.comment, this.$store.state.user.userAccount.attributes.email
                 )
-                console.log(this.$route.params.boardId)
-                console.log(this.message)
-                console.log(this.$store.state.user.userAccount.attributes.nickname)
-                console.log(this.$store.state.user.userAccount.attributes.email)
               }
             else{
               alert("로그인부터 해주세요!")
             }
         },
 
-        insertComment(boardId: string, nickName: string, message:string, userEmail:string){
-            console.log('insertComment')
+        insertComment(boardId: string, nickName: string, comment:string, userEmail:string){
                     http
                     .post('/comment', {
-                    params: { 'boardId': boardId, 'nickName': nickName, 'comment': message, 'userEmail': userEmail}})
-                    .then(response => {
-                        console.log(response.data)
-                        this.commentList = response.data;
+                      'boardId': boardId, 'nickName': nickName, 'comment': comment, 'userEmail': userEmail
                     })
-            }
+                    .then(response => {
+                        this.getComment(this.$route.params.boardId, 1)
+                    })
+        },
+
+        editedComment(index:number){
+            this.$set(this.commentList[index],'edited',true)
+            //this.putComment(this.$route.params.boardId, this.commentList[index].userId, this.commentList[index].nickName, this.commentList[index].comment, this.commentList[index].userId)
         },
 
         //댓글 수정하기
+        //데이터 전송이 되었는데 왜 response.data는 비어있을까요? post의 userEmail값이 null이라서 그런걸까요? :/
+        putComment( boardId:string, commentId:string, nickName:string, comment:string, userEmail:string){
+                    console.log(boardId)
+                    console.log(commentId)
+                    console.log(nickName)
+                    console.log(comment)
+                    console.log(userEmail)
+                    http
+                    .put('/comment', {
+                      data:{'boardId': boardId, 'commentId': commentId, 'userEmail': userEmail, 'nickName': nickName, 'comment': comment}})
+                    .then(response => {
+                        console.log(response.data)
+                        this.getComment(this.$route.params.boardId, 1)
+                    })
+            },
+
+        //댓글 삭제하기
+        deleteComment(boardId: string, commentId: string){
+                    http
+                    .delete('/comment', {
+                    data: { 'boardId': boardId, 'commentId': commentId}})
+                    .then(response => {
+                        this.getComment(this.$route.params.boardId, 1)
+                    })
+            },
 
 
+    },
     created(){
 		console.log("mounted")
 		this.getComment(this.$route.params.boardId, 1)
@@ -170,53 +201,18 @@ export default Vue.extend({
       //           }
       //       }
       // },
-
-      // async submit() {
-      //   const commentId = document.getElementById("commentId").value
-      //   const articleResponse = await http.post('/comment', {
-      //     params: { 'commentId': commentId }})
-
-
-      //   if(newcomment) {
-      //     const dateEL = document.createElement('div')
-      //     dateEL.classList.add("modDatetime")
-      //     const dateString = dateToString(new Date())
-      //     dateEL.innerText = dateString
-
-      //     const contentEL = document.createElement('div')
-      //     contentEL.classList.add('comment-box')
-      //     contentEL.innerText = newcomment
-
-      //     const commentEL = document.createElement('div')
-      //     commentEL.classList.add('content')
-      //     commentEL.append(contentEL)
-      //     commentEL.append(contentEL)
-
-      //     document.getElementsByClassName("comment-box").append(commentEL)
-      //     newcommentEL.value=""
-
-      //   }else{
-      //      alert("댓글은 2글자이상 작성해주세요!");
-      //   }
-
-      // }
-
-
 // }
 </script>
 
 <style>
-/* #comment{
-
-} */
-.comment-box{
-  margin-top: 10px;
+#comment{
+  margin: auto;
   width: 96%;
   min-height: 100px;
 }
 .content{
+  margin: auto;
   width: 90%;
-  float: right;
   height: 100px;
 }
 .img-box{
@@ -237,16 +233,16 @@ export default Vue.extend({
 .nickname{
    font-family: Noto Sans KR;
    font-size : 1.25rem;
-   font-weight: 400;
+   font-weight: 500;
    width: 80%;
    height: 35px;
    padding-top: 10px;
-   padding-left: 10px;
 }
 .comment{
   font-family: Noto Sans KR;
   font-size : 1rem;
   font-weight: 300;
+  padding-top: 5px;
   padding-bottom: 10px;
 }
 .modDatetime{
@@ -259,15 +255,14 @@ export default Vue.extend({
 .comment-btn{
   vertical-align: middle;
   float: right;
-
 }
 .form{
   width: 100%;
   margin-left: 100px;
 }
 .new_comment{
- min-width: 800px;
- padding-left: 30px;
+ width: 94%;
+ margin-right:10px;
  height: 20px;
 }
 </style>
