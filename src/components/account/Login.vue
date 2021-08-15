@@ -62,8 +62,6 @@ import http from '../../http/http-common'
                     .get('/users/'+this.email)
                     .then(response => {
                         this.$store.commit('setUserInfo', response.data);
-                        console.log(response.data)
-                        console.log(this.$store.user.userInfo)
                     })
                     .catch(() => this.errored = true )
                     .finally(() => {
@@ -85,9 +83,6 @@ import http from '../../http/http-common'
                             .then(user => {
                                 this.$store.commit('changeSignedInState', user);
                                 router.push({ name: 'Main'})
-                                console.log("current Session")
-                                console.log("store token before")
-                                console.log(this.$store.state.accessToken)
                                 Auth.currentSession()
                                     .then(result => {
                                         console.log(result)
@@ -96,10 +91,7 @@ import http from '../../http/http-common'
                                 this.getUserInfo()
                             })
                             .catch(err => {
-                                console.log(err)
-                                console.log(err.code)
                                 this.err = err
-                                console.log(this.err.code)
                                 if(err.code === "NotAuthorizedException"){
                                         alert("이메일 혹은 비밀번호가 잘못되었습니다.");
                                         this.reset();

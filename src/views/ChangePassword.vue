@@ -101,16 +101,6 @@
 						alert("성공적으로 비밀번호를 변경하였습니다.")
 					})
 					.catch(err => console.log(err));
-				
-				// try{
-				// 	return Auth.changePassword(this.$store.state.user.userAccount, this.curPass, this.newPass);
-					
-					
-					
-				// }catch(error){
-				// 	console.log('error changing password', error)
-				// }
-				// console.log("changed password")
 			},
 
 		},

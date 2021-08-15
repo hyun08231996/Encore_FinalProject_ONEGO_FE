@@ -14,6 +14,8 @@ import SignUpPage from '@/views/SignupPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import Write from '@/views/Write.vue'
 import Content from '@/views/Content.vue'
+import FollowingList from '@/views/FollowingList.vue'
+import FollowerList from '@/views/FollowerList.vue'
 import { Auth } from 'aws-amplify'
 Vue.use(VueRouter)
 
@@ -22,7 +24,6 @@ const requireAuth = () => (to: any, from: any, next: any) => {
 	Auth.currentAuthenticatedUser()
 		.then(user => {
 			if (user) {
-				console.log(user)
 				next();
 			}
 		})
@@ -103,6 +104,7 @@ const routes: Array<RouteConfig> = [
 		path:"/myprofile",
 		name: "MyProfile",
 		component: MyProfile,
+		props: true,
 		meta: {
 			headerClass: 'myprof-header-color',
 			showFooter: true, showHeader: true
@@ -113,6 +115,7 @@ const routes: Array<RouteConfig> = [
 		path:"/userprofile",
 		name: "UserProfile",
 		component: UserProfile,
+		props: true,
 		meta:{
 			headerClass: 'myprof-header-color',
 			showFooter: true, showHeader: true
@@ -130,6 +133,20 @@ const routes: Array<RouteConfig> = [
 		path:"/content/:boardId",
 		name: "Content",
 		component: Content,
+	},
+	{
+		path:"/following",
+		name: "Following",
+		props: true,
+		component: FollowingList,
+		beforeEnter: requireAuth()
+	},
+	{
+		path:"/follower",
+		name: "Follower",
+		props: true,
+		component: FollowerList,
+		beforeEnter: requireAuth()
 	}
 ]
 
