@@ -177,7 +177,12 @@
 		}
 
 		generateTag():void{
-			this.tagList.push('고구마')
+			var flag = false
+			for(var i=0;i<this.tagList.length;i++){
+				if(this.tagList[i] === '고구마') flag = true
+			}
+			if(flag === false)
+				this.tagList.push('고구마')
 		}
 
 	}
