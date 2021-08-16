@@ -30,7 +30,7 @@
 					:placeholder="subtitlePlace"
 					:label="subtitleLabel"
 					dense outlined>
-					<template v-slot:append-outer>
+					<template v-slot:append-outer v-if="activeVal === 1">
 					  <v-hover v-slot="{ hover }">
 						<v-tooltip top>
 							<template v-slot:activator="{ on, attrs }">

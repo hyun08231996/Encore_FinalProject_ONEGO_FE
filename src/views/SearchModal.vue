@@ -59,8 +59,8 @@
 						</div>
 						<v-list-item
 							:key="i" v-for="(blog, i) in filteredSearch.slice(0,8)"><!-- shows only 8 search results from filteredSearch -->
-							<a href="#" id="blog-item" class='a-tag' v-html="highlight(blog.title)"><!-- v-html="highlight(blog.title)" -->
-								<v-list-item-content>{{blog.content}}</v-list-item-content></a>
+							<a @click="openArticle(blog.id)" id="blog-item" class='a-tag' v-html="highlight(blog.title)"><!-- v-html="highlight(blog.title)" -->
+								<v-list-item-content>{{blog.title}}</v-list-item-content></a>
 						</v-list-item>
 					</v-list>
 				</v-card>
@@ -96,9 +96,21 @@
 	import '@/assets/css/SearchModal.css'
 	import http from '@/http/http-common'
 
+	declare interface BlogList {
+		id:string,
+		title:string,
+		allText:string,
+		nickname:string,
+		content:string,
+		date:string
+	}
+
 	export default Vue.extend({
 
 		data: ()=>({
+			errored:false,
+			loading:true,
+			totalPageNum:1,
 			search: '',
 			isSearch: false,
 			isTable: true,
@@ -113,16 +125,7 @@
 				{name: 'User4', img: 'https://randomuser.me/api/portraits/men/83.jpg', intro: 'Hello everyone'},
 				{name: 'User5', img: 'https://randomuser.me/api/portraits/women/84.jpg', intro: 'Hello everyone'},
 			],//get 5 random users from db
-			blogList:[
-				{title:'고구마는 맛있다', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'호박 고구마 곡', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user2',date:'2.15.2020'},
-				{title:'겨울엔 군고구마 군', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user3',date:'2.15.2020'},
-				{title:'고구마 감자 군 고구마!', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'감자 입니다!', text:'안녕 하세요 저는 고구마 감자 입니다. 안녕 하세요 저는 고구마 감자 입니다. 안녕 하세요 저는 고구마 감자 입니다.',author:'user4',date:'2.15.2020'},
-				{title:'감자엔 소금', text:'안녕 하세요 저는 감자 입니다. 안녕 하세요 저는 감자 입니다. 안녕 하세요 저는 감자 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'통감자 맛있나 ㄱ', text:'고구마 안녕 하세요 저는 감자 입니다. 고구마 안녕 하세요 저는 감자 입니다. 고구마 안녕 하세요 저는 감자 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'호박의 효능', text:'호박은 좀 별로..밤..감자는 퍽퍽 호박은 좀 별로..밤..감자는 퍽퍽 호박은 좀 별로..밤..감자는 퍽퍽',author:'user2',date:'2.15.2020'}
-			]
+			blogList:[] as BlogList[]
 		}),
 		components: {
 		},
@@ -131,6 +134,7 @@
 				this.$emit('openDrawer', true);
 			},
 			doSearch(){
+				this.$emit("sendBlogList",this.filteredSearch)
 				if(this.search == ""){
 					alert("검색어를 입력해주세요.");
 					return;
@@ -158,6 +162,58 @@
 			async getUsersAndBoards(){
 				// await http.
 				//     get('/users', )
+				await http.
+					get('board/count')
+					.then(response => {
+                       this.totalPageNum = Math.ceil(response.data / 5)
+					   //console.log(this.totalPageNum)
+					})
+					.catch(() => this.errored = true )
+					.finally(() => this.loading = false)
+				for(var i=1;i<=this.totalPageNum;i++){
+					this.getAllBoards(i)
+				}
+			},
+			async getAllBoards(pageNum:number){
+			  await http.
+				get('/board',{
+					params:{
+						'pageNumber':pageNum
+					}
+				})
+				.then(response => {
+					//console.log(pageNum)
+					for(let i=0; i<response.data.length;i++){
+						//console.log(i)
+						const id = response.data[i].id
+						const nickname = response.data[i].nickName
+						const title = response.data[i].title
+						const content = response.data[i].contents[0].content
+						var allText = response.data[i].subtitle
+						for(let j=0;j<response.data[i].contents.length;j++){
+							allText += response.data[i].contents[j].title+response.data[i].contents[j].subtitle+response.data[i].contents[j].content
+						}
+						const dateTime = new Date(response.data[i].modDatetime)
+						var mm = dateTime.getMonth() + 1 // getMonth() is zero-based
+						var dd = dateTime.getDate()
+						const date = [dateTime.getFullYear(),
+										(mm>9 ? '' : '0') + mm,
+										(dd>9 ? '' : '0') + dd
+										].join('.')
+						//console.log(id,nickname,title,content,allText,date)
+						//console.log(i,title)
+						this.blogList.push({id:id,nickname:nickname,title:title,allText:allText,content:content,date:date})
+						//this.blogList.push({id:id,title:title,allText:allText})
+					}
+				})
+				.catch(() => this.errored = true )
+				.finally(() => {
+					this.loading = false
+				})
+			},
+			openArticle(boardId:string){
+				window.open('/content/'+boardId,'_self')
+
 			}
 		},
 		computed:{
@@ -172,21 +228,23 @@
 				return this.blogList.filter((blog)=>{
 					if(this.search != ""){
 						//console.log(this.search);
-						const titleContent = blog.title + blog.text;
+						//console.log(blog.title)
+						const title = blog.title;
+						const allText = blog.allText;
 						for(var i=0; i<searchArray.length; i++){
 							searchStr += str1 + searchArray[i] + str2;
 						}
 						//console.log(searchStr);
-						matches = titleContent.match('^.*'+searchStr+'.*$')
+						//console.log(blog.allText)
+						matches = (title.match('^.*'+searchStr+'.*$') || allText.match('^.*'+searchStr+'.*$'))
 									&& this.search.match(/[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]/gi);
+						//if(matches!==null) console.log(matches)
 						return matches !== null; //if input search matches blog title
 					}
 				});
 			}
 		},
-		filters:{
 
-		}
 	})
 </script>
 

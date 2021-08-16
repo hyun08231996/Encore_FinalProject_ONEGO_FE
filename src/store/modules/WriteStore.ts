@@ -174,16 +174,12 @@ export default class writeStore extends VuexModule{
 		public sendTreeTitle(title:string){
 			//console.log(title)
 			if(this.itemList[0].id == this.activeVal){
-				this.itemList[0].title = title
-				const content:string = '<h1>'+this.itemList[0].title+'</h1>'+'<h2>'+this.itemList[0].subtitle+'</h2>'+'<p>'+this.itemList[0].text.replace('\n','</p><p>')+'</p>'
-				this.content = content
+				this.title = title
 				//console.log(this.content)
 			}
 			for(let i=0; i<this.itemList[0].children.length; i++){
 				if(this.itemList[0].children[i].id == this.activeVal){
-					this.itemList[0].children[i].title = title
-					const content:string = '<h1>'+this.itemList[0].children[i].title+'</h1>'+'<h2>'+this.itemList[0].children[i].subtitle+'</h2>'+'<p>'+this.itemList[0].children[i].text.replace('\n','</p><p>')+'</p>'
-					this.content = content
+					this.title = title
 					//console.log(this.content)
 				}
 			}

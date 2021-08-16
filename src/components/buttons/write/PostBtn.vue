@@ -72,7 +72,7 @@
 					type: 'application/json'
 				})
 
-				form.append('boardDTO', blob)
+				form.append('board', blob)
 				form.append('titleImageFile',this.titleImage)
 
 				await http.
@@ -84,7 +84,8 @@
 					.then(response => {
 						if (response.status >=200 && response.status < 204){
 							console.log("Draft post success!")
-							//location.href="/post"??
+							//console.log(response.data)
+							location.href = '/myonego'
 						} else{
 							console.log(response)
 							console.log("Draft post fail..")

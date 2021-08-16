@@ -32,7 +32,7 @@
 			<div v-if="this.$store.state.user.signedIn==true"><logout-btn /></div>
 			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 		</div>
-		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
+		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" @sendBlogList="filteredList = $event" />
 		</v-app-bar>
 
 		<!-- sidebar -->
@@ -156,6 +156,16 @@
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import DarkModeSwitch from '@/components/buttons/write/DarkModeSwitch.vue'
 	import SearchModal from '@/views/SearchModal.vue'
+	import {searchBus} from '@/main'
+
+	declare interface BlogList {
+		id:string,
+		title:string,
+		allText:string,
+		nickname:string,
+		content:string,
+		date:string
+	}
 
 	export default Vue.extend({
 		data: () => ({
@@ -165,6 +175,7 @@
 			showCate:false,
 			showMenu:false,
 			showFooter: true,
+			filteredList:[] as BlogList[],
 			menusBL: [
 				{ title: '홈', link: '/'},
 				{ title: '최신글', link: '/article'},
@@ -183,14 +194,12 @@
 				{title:'사랑·이별'},
 				{title:'기타'}
 			],
-			user:{
-				name:'Mary Jane',
-				nickname:'Mary',
-				email:'mj123@gmail.com',
-				intro:'Hello, I am an avid writer',
-				pic:"https://randomuser.me/api/portraits/women/82.jpg"
-			},
 		}),
+		watch:{
+			filteredList: function(){
+				searchBus.$emit("sendBlogList",this.filteredList)
+			}
+		},
 		name: "Header",
 		components:{
 			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,
@@ -199,17 +208,13 @@
 		},
 		methods:{
 			openCategory(){
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('menu-btn')!.style.color = "#9E9E9E";
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('cate-btn')!.style.color = "#00d5aa";
 				this.showMenu = false;
 				this.showCate = true;
 			},
 			openMenu(){
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('menu-btn')!.style.color = "#00d5aa";
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('cate-btn')!.style.color = "#9E9E9E";
 				this.showMenu = true;
 				this.showCate = false;

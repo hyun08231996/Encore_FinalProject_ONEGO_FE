@@ -59,7 +59,7 @@ const routes: Array<RouteConfig> = [
 		name: "SearchResult",
 		component: SearchResult,
 		props: true,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true}
 	},
 	{
 		path: "/scrap",

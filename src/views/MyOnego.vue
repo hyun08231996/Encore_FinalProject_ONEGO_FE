@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 <template>
   <div>
     <v-flex id="myonego-margin" class="mx-auto">
@@ -32,7 +31,7 @@
 		</div>
 		<div v-else>
 	      <div v-for="(article,i) in postedList" :key="i">
-			<a class="edit-article">
+			<a class="edit-article" @click="openArticle(article.id)">
 			  <div>
 		      <div class="article-title" style="font-size:1.35rem;">{{article.title}}</div>
 		      <div class="article-text">{{article.text}}</div><br>
@@ -75,10 +74,18 @@
 		postedList : PostedList[] = []
 		isSaved = true
 		isPosted = false
+		savedPagenum = 1
+		postedPagenum = 1
 
 		async created(){
-			this.getAllSaved(1)
-			this.getAllPosted(1)
+			this.tempBoardCount()
+			this.boardCount()
+			for(var i=1; i<=this.savedPagenum;i++){
+				this.getAllSaved(i)
+			}
+			for(var j=1; j<=this.postedPagenum;j++){
+				this.getAllPosted(j)
+			}
 		}
 
 		showSaved(){
@@ -97,6 +104,34 @@
 			document.getElementById('posted-label')!.style.color = "#00d5aa";
 			document.getElementById('posted-label')!.style.textDecoration = "underline";
 		}
+		async tempBoardCount(){
+         await http
+             .get('/tempBoard/count', {
+				 params:{
+					 'userEmail':this.$store.state.user.userAccount.attributes.email
+				 }
+			 })
+             .then(response => {
+				 //console.log(response.data)
+				 this.savedPagenum = Math.ceil(response.data / 5)
+             })
+             .catch(() => this.errored = true )
+             .finally(() => this.loading = false)
+        }
+		async boardCount(){
+         await http
+             .get('/board/count', {
+				 params:{
+					 'userEmail':this.$store.state.user.userAccount.attributes.email
+				 }
+			 })
+             .then(response => {
+				 //console.log(response.data)
+				 this.postedPagenum = Math.ceil(response.data / 5)
+             })
+             .catch(() => this.errored = true )
+             .finally(() => this.loading = false)
+        }
 		async getAllSaved(pageNum:number){
 			await http.
 				get('/tempBoard',{
@@ -165,6 +200,10 @@
 
 		editDraft(tempBoardId:string){
 			window.open('/write/'+tempBoardId,'_self')
+		}
+
+		openArticle(boardId:string){
+			window.open('/content/'+boardId,'_self')
 		}
 	}
 </script>

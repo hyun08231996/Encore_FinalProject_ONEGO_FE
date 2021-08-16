@@ -110,7 +110,7 @@
 							console.log("Draft save success!")
 							location.href="/myonego"
 						} else{
-							console.log(response)
+							//console.log(response)
 							console.log("Draft save fail..")
 						}
 					})
