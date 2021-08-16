@@ -12,7 +12,7 @@
 
             <v-avatar>
               <img
-                src="@/assets/profile/dog.jpg"
+                src="@/assets/profile/dogKang.jpeg"
                 alt="강지원"
               >
             </v-avatar>
@@ -114,7 +114,7 @@
 
             <v-avatar>
               <img
-                src="@/assets/profile/dogKang.jpeg"
+                src="@/assets/profile/dog.jpeg"
                 alt="남승현"
               >
             </v-avatar>
