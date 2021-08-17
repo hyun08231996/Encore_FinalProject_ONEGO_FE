@@ -193,59 +193,43 @@
 			this.updateSubtitle(this.subtitle)
 		}
 
-		@WriteStoreModule.Getter('getId')
-		private getId!:string
+		@WriteStoreModule.Getter('getId') private getId!:string
 
-		@WriteStoreModule.Getter('getContent')
-		private getContent!:string
+		@WriteStoreModule.Getter('getContent') private getContent!:string
 
-		@WriteStoreModule.Mutation('setContent')
-		private setContent!:(data:string)=>void
+		@WriteStoreModule.Mutation('setContent') private setContent!:(data:string)=>void
 
-		@WriteStoreModule.Mutation('updateContent')
-		private updateContent!:(data:string)=>void
+		@WriteStoreModule.Mutation('updateContent') private updateContent!:(data:string)=>void
 
-		@WriteStoreModule.Getter('getTitle')
-		private getTitle!:string
+		@WriteStoreModule.Getter('getTitle') private getTitle!:string
 
-		@WriteStoreModule.Mutation('setTitle')
-		private setTitle!:(data:string)=>void
+		@WriteStoreModule.Mutation('setTitle') private setTitle!:(data:string)=>void
 
-		@WriteStoreModule.Mutation('updateTitle')
-		private updateTitle!:(data:string)=>void
+		@WriteStoreModule.Mutation('updateTitle') private updateTitle!:(data:string)=>void
 
-		@WriteStoreModule.Getter('getSubtitle')
-		private getSubtitle!:string
+		@WriteStoreModule.Getter('getSubtitle') private getSubtitle!:string
 
-		@WriteStoreModule.Mutation('setSubtitle')
-		private setSubtitle!:(data:string)=>void
+		@WriteStoreModule.Mutation('setSubtitle') private setSubtitle!:(data:string)=>void
 
-		@WriteStoreModule.Mutation('updateSubtitle')
-		private updateSubtitle!:(data:string)=>void
+		@WriteStoreModule.Mutation('updateSubtitle') private updateSubtitle!:(data:string)=>void
 
-		@WriteStoreModule.Getter('getActiveVal')
-		private activeVal!:number
+		@WriteStoreModule.Getter('getActiveVal') private activeVal!:number
 
-		@WriteStoreModule.Mutation('setId')
-		private setId!:(tempBoardId:string)=>void
+		@WriteStoreModule.Mutation('setId') private setId!:(tempBoardId:string)=>void
 
-		@WriteStoreModule.Mutation('setMemoList')
-		private setMemoList!:(list:any[])=>void
+		@WriteStoreModule.Mutation('setMemoList') private setMemoList!:(list:any[])=>void
 
-		@WriteStoreModule.Mutation('setTagList')
-		private setTagList!:(list:string[])=>void
+		@WriteStoreModule.Mutation('setTagList') private setTagList!:(list:string[])=>void
 
-		@WriteStoreModule.Mutation('setItemList')
-		private setItemList!:(list:any[])=>void
+		@WriteStoreModule.Mutation('setItemList') private setItemList!:(list:any[])=>void
 
-		@WriteStoreModule.Mutation('setMainTitle')
-		private setMainTitle!:(title:string)=>void
+		@WriteStoreModule.Mutation('setMainTitle') private setMainTitle!:(title:string)=>void
 
-		@WriteStoreModule.Mutation('setMainSubtitle')
-		private setMainSubtitle!:(subtitle:string)=>void
+		@WriteStoreModule.Mutation('setMainSubtitle') private setMainSubtitle!:(subtitle:string)=>void
 
-		@WriteStoreModule.Mutation('setImageUrl')
-		private setImageUrl!:(url:string)=>void
+		@WriteStoreModule.Mutation('setImageUrl') private setImageUrl!:(url:string)=>void
+
+		@WriteStoreModule.Getter('getItemList') private itemList!:any[]
 
 		created(){
 			history.pushState(null, '', document.URL)
@@ -296,7 +280,22 @@
 		}
 
 		generateSub():void{
-			this.subtitle = '소제목이 생성되었습니다'
+			var subtitle = ''
+
+			var contentList = [] as string[]
+			var contents = [] as string[]
+			contentList.push(this.itemList[0].text.replaceAll("\n"," ").replaceAll("</p><p>"," "))
+			if(this.itemList[0].children.length !== 0){
+				for(var i=0; i<this.itemList[0].children.length;i++){
+					contentList.push(this.itemList[0].children[i].text.replaceAll("\n"," ").replaceAll("</p><p>"," "))
+				}
+			}
+			contents.push(contentList.join(" "))
+			console.log(contents)
+
+			////////////////axios here///////////////////
+
+			//this.subtitle = subtitle
 		}
 
 	}

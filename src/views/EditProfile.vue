@@ -9,7 +9,7 @@
 				<v-list-item-avatar size=90>
 					<img :src="user.profileImg">
 				</v-list-item-avatar>
-				<v-btn 
+				<v-btn
 					id="profileImg"
 					fab
 					elevation="4"
@@ -18,7 +18,6 @@
 					@click="selectImg"
 					type="file"
 					ref="profileImage"
-					accept=".jpeg, .jpg, .png"
 					>
 					<v-icon>mdi-camera</v-icon>
 				</v-btn>
@@ -45,7 +44,7 @@
 					maxlength="25"
 					single-line
 					flat solo
-					autofocus 
+					autofocus
 					disabled/>
 			</div>
 			<v-divider class="divider-edit"/>
@@ -151,7 +150,7 @@
 				await Auth.updateUserAttributes(user, {
 					'nickname': this.user.nickname
 				});
-	
+
 				// updating user table
 				await http
 					.put('/users/'+this.user.email, frm,{
@@ -167,13 +166,13 @@
 					} )
 					.finally(() => {
 						this.loading = false
-            	  })    
-				
+            	  })
+
 				// local storage update
 				userInfo.intro = this.user.intro
 				userInfo.nickName = this.user.nickname
 				await http
-					.get('/users/'+this.user.email,{
+					.get('/users/'+this.user.email, {
 						headers:{
 							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}})
@@ -181,14 +180,9 @@
 						userInfo.profileImage = response.data.profileImage
 					})
 				localStorage.setItem('userInfo', JSON.stringify(userInfo))
-				
+
 				// 화면 새로고침
-				caches.keys().then(cacheNames => {
-					cacheNames.forEach(cacheName => {
-					caches.delete(cacheName);
-					});
-				});
-				window.location.reload()
+				//window.location.reload()
 			},
 			selectImg(){
 				document.getElementById("fileUpload").click();

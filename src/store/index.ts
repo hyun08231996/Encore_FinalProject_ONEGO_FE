@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex, {StoreOptions} from 'vuex'
 import authStore from '@/store/modules/authStore'
-import writeStore from '@/store/modules/WriteStore'
+import writeStore from '@/store/modules/writeStore'
 import { Auth } from 'aws-amplify'
 
 Vue.use(Vuex)

@@ -52,7 +52,7 @@
                 <v-img
                   class="avatar"
                   alt="avatar"
-                  src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                  :src="article.profileImage"
                 ></v-img>
               </v-list-item-avatar>
               <v-list-item-content class="author-date">
@@ -81,7 +81,8 @@
 		title:string,
 		allText:string,
 		content:string,
-		date:string
+		date:string,
+		profileImage:string
 	}
 
 	export default Vue.extend({
@@ -129,14 +130,15 @@
 			},
 			async getBoardCount(){
 				await http.
-					get('board/count',{
+					get('/board/count',{
 						headers:{
 							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}
 					})
 					.then(response => {
+					   console.log("ok")
                        this.totalPageNum = Math.ceil(response.data / 5)
-					   //console.log(this.totalPageNum)
+					   console.log(this.totalPageNum)
 					})
 					.catch(() => this.errored = true )
 					.finally(() => this.loading = false)
@@ -157,7 +159,7 @@
 				.then(response => {
 					//console.log(pageNum)
 					for(let i=0; i<response.data.length;i++){
-						//console.log(i)
+						//console.log(response.data[i])
 						const id = response.data[i].id
 						const nickname = response.data[i].nickName
 						const title = response.data[i].title
@@ -175,8 +177,22 @@
 										].join('.')
 						//console.log(id,nickname,title,content,allText,date)
 						//console.log(i,title)
-						this.blogList.push({id:id,nickname:nickname,title:title,allText:allText,content:content,date:date})
+						var profileImage = ''
+							http.
+								get('/users/'+response.data[i].userEmail,{
+									headers:{
+										'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+									}
+								})
+								.then(response => {
+									console.log(response.data.profileImage)
+									if(response.data.profileImage != undefined){
+										profileImage = response.data.profileImage
+									}
+								})
+						this.blogList.push({id:id,nickname:nickname,title:title,allText:allText,content:content,date:date,profileImage:profileImage})
 						//this.blogList.push({id:id,title:title,allText:allText})
+
 					}
 				})
 				.catch(() => this.errored = true )
@@ -214,8 +230,9 @@
 				});
 			}
 		},
-		mounted(){
+		async mounted(){
 			//console.log(this.search)
+			//console.log(this.filteredSearch)
 			this.getBoardCount()
 		}
 	})
