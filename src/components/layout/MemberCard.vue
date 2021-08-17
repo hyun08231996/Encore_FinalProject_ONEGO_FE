@@ -114,7 +114,7 @@
 
             <v-avatar>
               <img
-                src="@/assets/profile/dog.jpeg"
+                src="@/assets/profile/dog.jpg"
                 alt="남승현"
               >
             </v-avatar>
