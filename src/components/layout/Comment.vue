@@ -97,6 +97,9 @@ export default Vue.extend({
     methods: {
         //댓글 불러오기
         async getComment(boardId: string, pageNumber: number){
+        console.log("getComment")
+        console.log(boardId)
+        console.log(pageNumber)
         await http
             .get('/comment', {
             params: { 'boardId': boardId, 'pageNumber': pageNumber },
@@ -105,6 +108,7 @@ export default Vue.extend({
                     }})
             
             .then(response => {
+                console.log(response.data)
                 this.commentList = response.data
             })
         },

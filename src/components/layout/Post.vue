@@ -12,7 +12,7 @@
               <v-flex id="title-preview-margin">
               <template v-if="loginUser === article.userEmail">
                   <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="postdelete(article.id)">삭제</v-btn></span>
-                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="postput(article.id,article.title,article.subtitle,article.titleImage,article.contents,article.tags)">수정</v-btn></span>
+                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="postput(article.id)">수정</v-btn></span>
                 </template>
                 <template v-else>
                   <!-- <span class="postbtn"><BookmarkBtn/></span>  -->
@@ -60,10 +60,9 @@ import Vue from 'vue';
 import Profile from '@/components/layout/Profile.vue'
 import Comment from '@/components/layout/Comment.vue'
 import http from '../../http/http-common'
-// import BookmarkBtn from '@/components/buttons/BookmarkBtn.vue'
+//import BookmarkBtn from '@/components/buttons/BookmarkBtn.vue'
 //import PostDeleteBtn from '@/components/buttons/PostDeleteBtn.vue'
 //import PublishBtn from '@/components/buttons/PublishBtn.vue'
-
 
 export default Vue.extend({
 
@@ -74,14 +73,13 @@ export default Vue.extend({
           page: 1,
           article : {},
           user: {},
-          // titleImage: 'null',
           titleImageFile: new File([""], ""),
           id : '',
           userId : '',
           loginUser:''
     }),
     components:{
-      Profile, Comment
+       Comment, Profile
       // 'LikeBtn':LikeBtn, 'PostDeleteBtn':PostDeleteBtn,'PublishBtn':PublishBtn, 'BookmarkBtn':BookmarkBtn,     
     },
     methods: {
@@ -97,19 +95,15 @@ export default Vue.extend({
               })
         },
         getlike(userEmail:string){
-          console.log("like")
-          console.log(this.$route.params.boardId)
-          console.log(this.$route.params.boardId)
           http
           .post('/'+this.$route.params.boardId, {'userEmail': userEmail},{
                 headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
            }})
           .then(response => {
-            console.log(response.data)
             var con_test = confirm("스크랩 페이지로 이동하시겠습니까?");
             if(con_test == true){
-              //해야할것(1) 스크랩 페이지로 이동기능!!!! 2. 스크랩 get수정(수영님)            
-              this.getArticle(this.$route.params.boardId)
+              //해야할것(1) 스크랩페이지 get수정(수영님)            
+              location.href = '/scrap'
             }
             else if(con_test == false){
               this.getArticle(this.$route.params.boardId)
@@ -130,8 +124,7 @@ export default Vue.extend({
                         'Authorization': 'Bearer '+localStorage.getItem('accessToken')
                     }})
                 .then(response => {
-                    //해야할것(2) article 페이지로 이동!!!!
-                     this.getArticle(this.$route.params.boardId)
+                     location.href = '/article'
                 })
           }
           else if(con_test == false){
@@ -148,40 +141,9 @@ export default Vue.extend({
           }
           
         },
-        //해야할것(3) 수정 페이지를 어떻게 연결할까요..? titleImageFile오류,,
-         postput(boardId:string,title:string,subtitle:string,titleImageFile:File,contents:string,tags:string){
-            console.log(boardId)
-            console.log(title)
-            console.log(subtitle)
-            console.log(titleImageFile)
-            console.log(contents)
-            console.log(tags)
-            
-          //   const form = new FormData()
-            
-          //   				const board = JSON.stringify(
-					// 	{
-					// 		title:this.itemList[0].title,
-					// 		subtitle:this.itemList[0].subtitle,
-					// 		userEmail:this.$store.state.user.userAccount.attributes.email,
-					// 		nickName:this.$store.state.user.userAccount.attributes.nickname,
-					// 		titleImageFile:this.titleImage,
-					// 		contents:contentList,
-					// 		modDatetime:date,
-					// 		tags:tagList
-					// 	}
-					// )
-
-              http
-              .put('/board', { 
-                'boardId': boardId, 'title': title, 'subtitle': subtitle, 'titleImageFile': titleImageFile, 'contents': contents, 'tags':tags
-                },{headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                    }})
-              .then(response => {
-                  console.log(response.data)
-                  this.article = response.data[0];
-              })
-          },
+        postput(boardId:string){
+          window.open('/write/post/'+boardId,'_self')
+        },
           
     },
     created(){  

@@ -3,14 +3,12 @@
         <div class="profile-text">
             <span class="profile-img">
                 <div class="profile-avatar">
-                    <a href="/myprofile"><img class="img" :src="user.profileImage"></a>
+                    <img class="img" :src="user.profileImage" @click="writerProfile(user.email)">
                 </div>
             </span>
-            <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left; ">
-                <span class="profile-name">
-                    {{ user.nickName }}
-                </span>
-            </a>
+            <span class="profile-name" @click="writerProfile(user.email)" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
+                {{ user.nickName }}
+            </span>
             <div style="vertical-align: middle;"><v-btn
                 outlined
                 rounded
@@ -51,24 +49,42 @@ export default Vue.extend({
         user: {} as User,
     }),
     methods: {
-        getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email]
+        getUserInfo(id : string){
             http
             .get('/users/'+id,{ headers:{
                         'Authorization': 'Bearer '+localStorage.getItem('accessToken')
                     }})
             .then(response => {
-                console.log(response.data)
                 this.user=response.data
             })
         },
-        //해야할것 : 구독 버튼
-        // subscribe(){
-            
-        // }
+        subscribe(followEmail:string){
+           http
+          .post('/followings/'+this.user.email, {'followEmail': followEmail},{
+                headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+           }})
+          .then(response => {
+            var con_test = confirm(this.user.nickName+"작가님을 구독하시겠습니까?");
+            if(con_test == true){        
+              confirm("구독하셨습니다!")
+            }
+            else if(con_test == false){
+              this.getUserInfo(this.$route.params.id)
+            }  
+          })
+        },
+        //무엇이 문제일까요 ?? :/
+        writerProfile(email : string){
+            console.log("writerProfile")
+            console.log(email)
+            this.$router.push({
+                name: "MyProfile",
+                params: { emailProp: email },
+            });
+        },
     },
     watch: {
         id(){
-            console.log(this.id)
             this.getUserInfo(this.id)
         }
     },
