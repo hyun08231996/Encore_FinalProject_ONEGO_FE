@@ -26,6 +26,7 @@
 							this.$store.commit('changeSignedInState', user);
 							this.$store.commit('setAccessToken', '');
 							console.log("logout")
+							localStorage.clear()
 							window.open("/","_self");  
 						})
 						.catch(err => console.log(err))

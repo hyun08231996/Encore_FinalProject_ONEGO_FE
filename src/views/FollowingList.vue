@@ -62,7 +62,10 @@ export default Vue.extend({
         },
         async getUserInfo(userEmail){
             await http
-                    .get('/users/'+userEmail)
+                    .get('/users/'+userEmail,{
+                      headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                      }})
                     .then(response => {
                         if(this.$store.state.user.userInfo.email == response.data.email){
                           response.data['flag']="me"
@@ -98,7 +101,10 @@ export default Vue.extend({
         async subscribe(e, email){
             e.stopPropagation();
             await http
-                .post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email})
+                .post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email},{
+                  headers:{
+                    'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                  }})
                 .then(response => {
                     console.log(response)
                 })
@@ -111,18 +117,15 @@ export default Vue.extend({
     async mounted() {
         this.email = this.$store.state.followingUser
         if(this.email == this.$store.state.user.userAccount.attributes.email){
-          if(Object.keys(this.$store.state.user.userAccount).length != 0){
-            await http
-              .get('/users/'+this.email)
-              .then(response => {
-                  this.$store.commit('setUserInfo', response.data);
-                  this.nickname = this.$store.state.user.userInfo.nickName;
-                  this.followidList = this.$store.state.user.userInfo.followings;
-              })
-          }
+          var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+          this.nickname = userInfo.nickName;
+          this.followidList = userInfo.followings;
         }else{
             await http
-              .get('/users/'+this.email)
+              .get('/users/'+this.email,{
+                  headers:{
+                    'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                  }})
               .then(response => {
                   this.nickname = response.data.nickName
                   this.followidList = response.data.followings;

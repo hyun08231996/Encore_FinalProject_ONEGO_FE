@@ -53,7 +53,10 @@ import http from '../http/http-common'
         getContents(boardId){
           http
             .get('/board', {
-                params: { 'boardId': boardId }})
+                params: { 'boardId': boardId }},{
+                headers:{
+                  'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                }})
               .then(response => {
                 if(response.data.length !=0){
                   response.data.forEach((d) => {
@@ -72,29 +75,20 @@ import http from '../http/http-common'
               })
         },
         async getScrapId(){
-           await http
-            .get('/users/'+this.$store.state.user.userAccount.attributes.email)
-              .then(response => {
-                  this.scrapId = response.data.scraps
-                  for(let i = 0; i< this.scrapId.length; i++){
-                    this.getContents(this.scrapId[i])
-                  }
-                  this.totalPageNum = Math.floor(this.scrapId.length / 5) + 1
-              })
-              .catch(() => this.errored = true )
-              .finally(() => {
-                this.loading = false
-              })    
-          
-          },
-          getTime(time){
-              const temp = new Date(time)
-              const date = temp.getFullYear()+". "+temp.getMonth()+". "+temp.getDate()
-              return date
-          },
-          articlePage(boardId){
-            window.open("/content/"+boardId,"_self");
-          },
+          var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+          this.scrapId = userInfo.scraps
+          for(let i = 0; i< this.scrapId.length; i++){
+              this.getContents(this.scrapId[i])
+          }
+        },
+        getTime(time){
+            const temp = new Date(time)
+            const date = temp.getFullYear()+". "+temp.getMonth()+". "+temp.getDate()
+            return date
+        },
+        articlePage(boardId){
+          window.open("/content/"+boardId,"_self");
+        },
 
       },
       created(){

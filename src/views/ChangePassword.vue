@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<v-divider class="divider-pass"/>
-			<!-- 새 비밀번호 -->
+			<!-- 기존 비밀번호 -->
 			<div class="spacing-pass">
 				<div style="margin-bottom:20px;">
 					<label class="subtitle">기존 비밀번호</label>
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			<v-divider class="divider-pass"/>
-			<!-- 새 비밀번호 확인 -->
+			<!-- 새 확인 -->
 			<div class="spacing-pass">
 				<div style="margin-bottom:20px;">
 					<label class="subtitle">새 비밀번호</label>
@@ -50,6 +50,7 @@
 						dense
 						single-line
 						outlined
+						@keyup.enter="changePass"
 						@click:append="show3 = !show3"/>
 				</div>
 			</div>
@@ -94,6 +95,7 @@
 									this.$store.commit('changeSignedInState', user);
 									this.$store.commit('setAccessToken', '');
 									console.log("logout")
+									localStorage.clear()
 									window.open("/","_self");  
 								})
 								.catch(err => console.log(err))

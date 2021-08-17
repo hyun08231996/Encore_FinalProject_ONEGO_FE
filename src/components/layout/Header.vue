@@ -47,7 +47,7 @@
 				<div class="side-itms">
 					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
-						<img :src="$store.state.user.userInfo.profileImage">
+						<img :src="this.userPic">
 					</v-list-item-avatar>
 					</a>
 				</div>
@@ -159,6 +159,7 @@
 
 	export default Vue.extend({
 		data: () => ({
+			userPic: '',
 			drawer: false,
 			group: null,
 			isAuth: true,
@@ -203,6 +204,12 @@
 				this.showMenu = true;
 				this.showCate = false;
 			}
+		},
+		beforeMount(){
+			console.log("header")
+			var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+			this.userPic = userInfo.profileImage
+			console.log(this.userPic)
 		}
 	})
 </script>

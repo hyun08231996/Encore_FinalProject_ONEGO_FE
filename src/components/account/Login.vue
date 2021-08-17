@@ -13,7 +13,11 @@
             @click:append="show1 = !show1" @keyup.enter="login"
         ></v-text-field>
         <br>
-        <v-btn class="btn-padding-0" rounded outlined color="grey" @click="login"> 로그인 </v-btn><br>
+        <v-btn class="btn-padding-0" rounded outlined color="grey" @click="login"> 로그인 </v-btn><br><br>
+        <div id="loginPage">
+            <a href="/signup" >회원가입</a><br>
+            <a href="/forgotPassword">비밀번호 찾기</a>
+        </div>
     </v-card-text>
 </template>
 <script>
@@ -57,15 +61,16 @@ import http from '../../http/http-common'
                 this.password='';
                 this.$refs.email.focus();
             },
-            getUserInfo(){
-               http
+            async getUserInfo(){
+                await http
                     .get('/users/'+this.email,{
 						headers:{
-							'Authorization': 'Bearer '+this.$store.state.accessToken
-						}
-					})
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})
                     .then(response => {
                         this.$store.commit('setUserInfo', response.data);
+                        localStorage.setItem('userInfo', JSON.stringify(response.data))
+                        window.open("/","_self"); 
                     })
                     .catch(() => this.errored = true )
                     .finally(() => {
@@ -86,15 +91,12 @@ import http from '../../http/http-common'
                     await Auth.signIn(this.email, this.password)
                             .then(user => {
                                 this.$store.commit('changeSignedInState', user);
-                                router.push({ name: 'Main'})
                                 Auth.currentSession()
                                     .then(result => {
-                                        console.log(result)
                                         this.$store.commit('setAccessToken', result.accessToken.jwtToken);
-										localStorage.setItem('accessToken', this.$store.state.accessToken)
-										this.getUserInfo()
+                                        localStorage.setItem('accessToken', this.$store.state.accessToken)
+                                        this.getUserInfo()
                                     })
-
                             })
                             .catch(err => {
                                 this.err = err
@@ -105,6 +107,9 @@ import http from '../../http/http-common'
                                     alert("등록되지 않는 계정입니다.");
                                     this.reset();
                                 }
+                            })
+                            .finally(() => {
+                                console.log("finally") 
                             });
 
                 } catch (error) {
@@ -115,4 +120,21 @@ import http from '../../http/http-common'
 	})
 </script>
 <style>
+
+#loginPage a:link {
+  color: #757575 !important;
+  background-color: transparent;
+  text-decoration: none;
+  text-decoration: underline;
+}
+#loginPage a:visited {
+  color: #757575 !important;
+  background-color: transparent;
+  text-decoration: none;
+}
+#loginPage a:hover {
+  color: #00d5aa !important;
+  background-color: transparent;
+  text-decoration: underline;
+}
 </style>

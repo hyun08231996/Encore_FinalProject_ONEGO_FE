@@ -12,6 +12,7 @@ import MyProfile from '@/views/MyProfile.vue'
 import UserProfile from '@/views/UserProfile.vue'
 import SignUpPage from '@/views/SignupPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
+import ForgotPassword from '@/views/ForgotPasswordPage.vue'
 import Write from '@/views/Write.vue'
 import Content from '@/views/Content.vue'
 import FollowingList from '@/views/FollowingList.vue'
@@ -85,6 +86,11 @@ const routes: Array<RouteConfig> = [
 		component: ChangePassword,
 		meta:{ showFooter: true, showHeader: true },
 		beforeEnter: requireAuth()
+	},
+	{
+		path:"/forgotPassword",
+		name: "ForgotPassword",
+		component: ForgotPassword,
 	},
 	{
 		path:"/edit-prof",

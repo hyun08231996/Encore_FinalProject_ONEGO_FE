@@ -47,12 +47,13 @@
 
 <script lang="ts">
 	import Vue from 'vue'
-
+	import http from '../http/http-common'
+	import { Auth } from 'aws-amplify'
+	
 	export default Vue.extend({
 		name:"Setting",
 		data: () => ({
 			user:{
-				name:'Mary Jane',
 				nickname:'Mary',
 				email:'mj123@gmail.com',
 				intro:'Hello, I am an avid writer',
@@ -63,6 +64,14 @@
 			editProfile(){
 				location.href="/edit-prof";
 			}
+		},
+		async mounted(){
+			var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+			this.user.nickname = this.$store.state.user.userAccount.attributes.nickname
+			this.user.email = this.$store.state.user.userAccount.attributes.email
+			this.user.intro = userInfo.intro
+			this.user.pic = userInfo.profileImage
+			console.log(this.user.pic)
 		}
 	})
 </script>
@@ -100,6 +109,7 @@
 }
 #pic-btn{
 	margin-right: -8px !important;
+	margin-top: -70px;
 }
 .content-info{
 	margin-bottom:10px;
