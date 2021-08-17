@@ -58,6 +58,21 @@ import http from '../http/http-common'
                   'Authorization': 'Bearer '+localStorage.getItem('accessToken')
                 }})
               .then(response => {
+                console.log(response.data[0].userEmail)
+                http 
+                  .get('/users/'+response.data[0].userEmail,{
+                        headers:{
+                          'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                        }
+                      })
+                  .then(r => {
+                      console.log(response.data.profileImage)
+                      if(response.data.profileImage != undefined){
+                        response.data.profileImage = r.data.profileImage
+                      }else{
+                        response.data.profileImage = ''
+                      }
+                  })
                 if(response.data.length !=0){
                   response.data.forEach((d) => {
                     if(d.contents.length != 0){

@@ -20,7 +20,7 @@
                    <v-img
                      class="avatar"
                      alt="avatar"
-                     src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                     :src="article.titleImage"
                    ></v-img>
                  </v-list-item-avatar>
                  <v-list-item-content class="author-date">
@@ -49,12 +49,12 @@ import http from '../http/http-common'
 
 export default Vue.extend({
      data: () => ({
-       articles: {},
-       errored: false,
-       loading: true,
-       content: '',
-       page: 1,
-       totalPageNum: 1
+      articles: {},
+      errored: false,
+      loading: true,
+      content: '',
+      page: 1,
+      totalPageNum: 1
      }),
      methods: {
        async getArticles(pageNum: number){
@@ -62,13 +62,35 @@ export default Vue.extend({
              .get('/board', {
                params: { 'pageNumber': pageNum }})
              .then(response => {
-                 response.data.forEach((d: any) => {
+                response.data.forEach((d: any) => {
+                  console.log(d)
+                http 
+                    .get('/users/'+d.userEmail,{
+                          headers:{
+                            'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                          }
+                        })
+                    .then(response => {
+                        if(response.data.profileImage != undefined){
+                          d.titleImage = response.data.profileImage
+                        }else{
+                          d.titleImage = ''
+                        }
+                    })
                    if(d.contents.length != 0){
-                     if(d.contents[0].content.length > 150){
-                       d.contents = d.contents[0].content.substr(0,148)+"..."
-                     }else{
-                       d.contents = d.contents[0].content
-                     }
+                      if(d.contents[0].content.length != 0){
+                        if(d.contents[0].content.length > 100){
+                          d.contents = d.contents[0].content.substr(0,97)+"..."
+                        }else{
+                          d.contents = d.contents[0].content
+                        }
+                      }else{
+                        if(d.contents[1].content.length > 100){
+                          d.contents = d.contents[1].content.substr(0,97)+"..."
+                        }else{
+                          d.contents = d.contents[1].content
+                        }
+                      }
                    }else{
                      d.contents = ""
                    }
@@ -112,10 +134,10 @@ export default Vue.extend({
        async boardCount(){
          await http
              .get('/board/count',{
-				 headers:{
-					'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-				 }
-			 })
+              headers:{
+                'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+              }
+            })
              .then(response => {
                      this.totalPageNum = Math.floor(response.data / 5) + 1
                    }

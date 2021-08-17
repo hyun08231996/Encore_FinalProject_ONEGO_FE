@@ -173,7 +173,7 @@
 				userInfo.intro = this.user.intro
 				userInfo.nickName = this.user.nickname
 				await http
-					.get('/users/'+this.user.email,{
+					.get('/users/'+this.user.email, {
 						headers:{
 							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}})
@@ -183,11 +183,6 @@
 				localStorage.setItem('userInfo', JSON.stringify(userInfo))
 				
 				// 화면 새로고침
-				caches.keys().then(cacheNames => {
-					cacheNames.forEach(cacheName => {
-					caches.delete(cacheName);
-					});
-				});
 				window.location.reload()
 			},
 			selectImg(){
