@@ -9,6 +9,6 @@ export default axios.create({
         'Content-Type': 'application/json; charset = utf-8',
         'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
         'Context-Type': 'multipart/form-data',
-        'Authorization': store.state.accessToken
-    }
+        
+    },
 });

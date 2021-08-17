@@ -111,7 +111,10 @@ export default Vue.extend({
        },
        async boardCount(){
          await http
-             .get('/board/count')
+             .get('/board/count',{
+              headers:{
+                'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+              }})
              .then(response => {
                      this.totalPageNum = Math.floor(response.data / 5) + 1
                    }

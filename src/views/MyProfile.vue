@@ -100,7 +100,10 @@
 		methods: {
 			async subscribe(email: string){
 				await http
-					.post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email})
+					.post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email},{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})
 					.then(response => {
 						console.log(response)
 					})
@@ -142,22 +145,20 @@
 			// Own Profile
 			if(this.email == this.$store.state.user.userAccount.attributes.email){
 				this.myProfileFlag = true
-				if(Object.keys(this.$store.state.user.userAccount).length != 0){
-					await http
-						.get('/users/'+this.$store.state.user.userAccount.attributes.email)
-						.then(response => {
-							this.$store.commit('setUserInfo', response.data);
-							this.user = this.$store.state.user.userInfo
-						})
-				}
-				this.user.followers = this.$store.state.user.userInfo.followers.length
-				this.user.followings = this.$store.state.user.userInfo.followings.length
-				this.followList = this.$store.state.user.userInfo.followings
+				var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+				this.user = userInfo
+				console.log(userInfo)
+				this.user.followers = userInfo.followers.length
+				this.user.followings = userInfo.followings.length
+				this.followList = userInfo.followings
 				
 			// Other writer's profile
 			}else{
 				await http
-					.get('/users/'+this.emailProp)
+					.get('/users/'+this.emailProp,{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})
 					.then(response => {
 						this.user = response.data
 					})
@@ -165,8 +166,8 @@
 				this.user.followings = String(this.user.followings.length)
 			}
 			// to check the writer is in the user's following list
-			for(var i=0; i<this.$store.state.user.userInfo.followings.length; i++){
-				if(this.user.email === this.$store.state.user.userInfo.followings[i]) 
+			for(var i=0; i<parseInt(this.user.followings); i++){
+				if(this.user.email === this.followList[i]) 
 					this.follow = true
 			}
 			

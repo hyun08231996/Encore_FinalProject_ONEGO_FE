@@ -2,9 +2,25 @@
     <v-card-text>
         <p class="text-h4 text--primary">Email 확인</p><br>
         <p class="text--primary">입력하신 이메일로 전송된 메일을 확인해주세요.</p>
-        <v-text-field v-model="registerEmail" disabled></v-text-field>
-        <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail"></v-text-field>
-        <v-btn class="btn-padding-0" rounded outlined color="grey" @click="validateEmail"> 확인 </v-btn><br>
+        <v-text-field v-model="registerEmail"  v-if="this.email == ''" disabled></v-text-field>
+        <v-text-field v-model="resetEmail"  v-if="this.email != ''" disabled></v-text-field>
+        <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email == ''"></v-text-field>
+        <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email != ''"></v-text-field>
+        <v-text-field
+            v-model="password"
+            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
+            :rules="[rules.required, rules.min]"
+            :type="show1 ? 'text' : 'password'"
+            name="input-10-1"
+            label="새로운 비밀번호"
+            hint="At least 8 characters"
+            counter
+            v-if="this.email != ''"
+            @click:append="show1 = !show1"
+            @keyup.enter="validateForgotPassword"
+        ></v-text-field><br>
+        <v-btn class="btn-padding-0" rounded outlined color="grey" @click="validateEmail" v-if="this.email == ''"> 확인 </v-btn><br>
+        <v-btn class="btn-padding-0" rounded outlined color="grey" @click="validateForgotPassword"  v-if="this.email != ''"> 비밀번호 리셋 확인 </v-btn><br>
     </v-card-text>
 </template>
 <script>
@@ -16,16 +32,29 @@ import router from '../../router'
     export default Vue.extend({
         name: 'SignUp',
         props: {
-            info: Object
+            info: Object,
+            email: String
         },
         data: () => ({
+            show1: false,
+            show2: true,
+            show3: false,
+            show4: false,
             validationCode: '',
             registerEmail: '',
-            nickname: ''
+            nickname: '',
+            restEmail: '',
+            newPassword: '',
+            rules: {
+                required: value => !!value || 'Required.',
+                min: v => v.length >= 8 || 'Min 8 characters',
+                emailMatch: () => (`The email and password you entered don't match`),
+            }
         }),
         created(){
             this.registerEmail = this.info.email;
             this.nickname = this.info.nickname;
+            this.resetEmail = this.email
         },
         methods: {
             confirmSignUp(username, code, nickname) {
@@ -50,6 +79,11 @@ import router from '../../router'
             validateEmail(){
                 this.registerEmail;
                 this.confirmSignUp(this.registerEmail, this.validationCode, this.nickname);
+            },
+            validateForgotPassword(){
+                Auth.forgotPasswordSubmit(this.resetEmail, this.validationCode, this.newPassword)
+                    .then(data => console.log(data))
+                    .catch(err => console.log(err));
             }
         }
     })

@@ -20,10 +20,13 @@
     "register-service-worker": "^1.7.1",
     "tiptap-vuetify": "^2.24.0",
     "vue": "^2.6.14",
+    "vue-localstorage": "^0.6.2",
     "vue-moment": "^4.1.0",
+    "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.5.2",
     "vuetify": "^2.4.0",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "vuex-class": "^0.3.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",

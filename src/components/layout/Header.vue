@@ -42,7 +42,7 @@
 				<div class="side-itms">
 					<a href="/myprofile">
 					<v-list-item-avatar size=90 class="mx-auto">
-						<img :src="$store.state.user.userInfo.profileImage">
+						<img :src="this.user.pic">
 					</v-list-item-avatar>
 					</a>
 				</div>
@@ -149,7 +149,7 @@
 	import PreviewBtn from '@/components/buttons/write/PreviewBtn.vue'
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import SearchModal from '@/views/SearchModal.vue'
-  import http from "@/http/http-common";
+
 	export default Vue.extend({
 		data: () => ({
 			drawer: false,
@@ -206,6 +206,12 @@
 				this.showMenu = true;
 				this.showCate = false;
 			}
+		},
+		beforeMount(){
+			console.log("header")
+			var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+			this.user.pic = userInfo.profileImage
+			console.log(this.user.pic)
 		}
 	})
 </script>
