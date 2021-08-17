@@ -6,17 +6,18 @@
                     <a href="/myprofile"><img class="img" :src="user.profileImage"></a>
                 </div>
             </span>
-            <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
+            <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left; ">
                 <span class="profile-name">
                     {{ user.nickName }}
                 </span>
             </a>
-            <div style="margin-top:5px; margin-bottom:14px; padding-top:20px; vertical-align: middle;"><v-btn
+            <div style="vertical-align: middle;"><v-btn
                 outlined
                 rounded
                 text
                 width="60"
-                height="28"
+                height="30"
+                @click="subscribe()"
                 >
                 구독
             </v-btn>
@@ -51,14 +52,19 @@ export default Vue.extend({
     }),
     methods: {
         getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email]
-            console.log(id)
             http
-            .get('/users/'+id)
+            .get('/users/'+id,{ headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
             .then(response => {
                 console.log(response.data)
                 this.user=response.data
             })
         },
+        //해야할것 : 구독 버튼
+        // subscribe(){
+            
+        // }
     },
     watch: {
         id(){
@@ -81,8 +87,9 @@ export default Vue.extend({
     font-family: Noto Sans KR;
 }
 .profile-name{
-    font-size : 1.5rem;
+    font-size : 1.4rem;
     font-weight: 500;
+    padding-bottom:14px;
     padding-right: 10px;
 }
 .profile-link{
@@ -90,9 +97,11 @@ export default Vue.extend({
     text-decoration: none;
 }
 .profile-text-description{
+
     font-size : 1.1rem;
     font-weight: 300;
     color: #555555;
+    margin-top:14px; 
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;

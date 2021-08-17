@@ -6,7 +6,7 @@ import store from './store/index'
 import vuetify from './plugins/vuetify'
 import "@aws-amplify/ui-vue"
 import Amplify from "aws-amplify"
-import awsconfig from "./config/aws/aws-exports"
+import awsconfig from "./aws-exports"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
