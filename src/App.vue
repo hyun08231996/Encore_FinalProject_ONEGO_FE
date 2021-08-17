@@ -21,7 +21,11 @@
 			await this.$store.dispatch('findUser');
 			if(Object.keys(this.$store.state.user.userAccount).length != 0){
 				await http
-					.get('/users/'+this.$store.state.user.userAccount.attributes.email)
+					.get('/users/'+this.$store.state.user.userAccount.attributes.email,{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}
+					})
 					.then(response => {
 						this.$store.commit('setUserInfo', response.data);
 						console.log(this.$store.state.user.userInfo)

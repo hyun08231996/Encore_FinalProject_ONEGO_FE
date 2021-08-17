@@ -272,6 +272,9 @@
 				get('/tempBoard',{
 					params:{
 						'tempBoardId': tempBoardId
+					},
+					headers:{
+						'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 					}
 				})
 				.then(response => {

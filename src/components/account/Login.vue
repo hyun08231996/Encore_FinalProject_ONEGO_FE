@@ -22,7 +22,7 @@ import { Auth } from 'aws-amplify';
 import router from '../../router'
 import {validateEmail} from '@/utils/validation'
 import http from '../../http/http-common'
-        
+
     export default Vue.extend({
         props: {
             info: Object
@@ -41,7 +41,7 @@ import http from '../../http/http-common'
             required: value => !!value || 'Required.',
             min: v => v.length >= 8 || 'Min 8 characters',
             emailMatch: () => (`The email and password you entered don't match`),
-            
+
             }
 		}),
 		name: "LoginPage",
@@ -59,14 +59,18 @@ import http from '../../http/http-common'
             },
             getUserInfo(){
                http
-                    .get('/users/'+this.email)
+                    .get('/users/'+this.email,{
+						headers:{
+							'Authorization': 'Bearer '+this.$store.state.accessToken
+						}
+					})
                     .then(response => {
                         this.$store.commit('setUserInfo', response.data);
                     })
                     .catch(() => this.errored = true )
                     .finally(() => {
                         this.loading = false
-                    })  
+                    })
             },
             async login(){
                 if(validateEmail(this.email)==false){
@@ -87,8 +91,10 @@ import http from '../../http/http-common'
                                     .then(result => {
                                         console.log(result)
                                         this.$store.commit('setAccessToken', result.accessToken.jwtToken);
+										localStorage.setItem('accessToken', this.$store.state.accessToken)
+										this.getUserInfo()
                                     })
-                                this.getUserInfo()
+
                             })
                             .catch(err => {
                                 this.err = err
@@ -100,7 +106,7 @@ import http from '../../http/http-common'
                                     this.reset();
                                 }
                             });
-                    
+
                 } catch (error) {
                     console.log('error signing in', error);
                 }
