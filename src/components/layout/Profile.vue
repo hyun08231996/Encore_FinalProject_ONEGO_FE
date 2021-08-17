@@ -8,7 +8,7 @@
             </span>
             <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
                 <span class="profile-name">
-                    {{ user.name }}
+                    {{ user.nickName }}
                 </span>
             </a>
             <div style="margin-top:5px; margin-bottom:14px; padding-top:20px; vertical-align: middle;"><v-btn
@@ -28,7 +28,7 @@
                 {{ user.intro }}
             </div>
         </div>
-    </div>   
+    </div>
 </template>
 
 <script lang="ts">
@@ -36,7 +36,7 @@ import Vue from 'vue'
 import http from '../../http/http-common'
 
 declare interface User{
-    name:string,
+    nickName:string,
     email:string,
 	intro:string,
 	profileImage:string
@@ -44,13 +44,14 @@ declare interface User{
 
 export default Vue.extend({
     props: {
-     id: String
+        id: String
     },
     data: () => ({
         user: {} as User,
     }),
     methods: {
-        getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email
+        getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email]
+            console.log(id)
             http
             .get('/users/'+id)
             .then(response => {
@@ -60,7 +61,8 @@ export default Vue.extend({
         },
     },
     watch: {
-        id() {
+        id(){
+            console.log(this.id)
             this.getUserInfo(this.id)
         }
     },
@@ -70,7 +72,7 @@ export default Vue.extend({
 <style>
 #profile{
     margin: auto;
-    width: 70%;
+    max-width:50% !important;
     box-shadow: 3px 3px 8px lightgray;
 }
 .profile-text{
@@ -79,8 +81,8 @@ export default Vue.extend({
     font-family: Noto Sans KR;
 }
 .profile-name{
-    font-size : 1.5rem; 
-    font-weight: 500; 
+    font-size : 1.5rem;
+    font-weight: 500;
     padding-right: 10px;
 }
 .profile-link{
@@ -88,32 +90,32 @@ export default Vue.extend({
     text-decoration: none;
 }
 .profile-text-description{
-    font-size : 1.1rem; 
-    font-weight: 300; 
+    font-size : 1.1rem;
+    font-weight: 300;
     color: #555555;
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1; 
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    word-wrap:break-word; 
+    word-wrap:break-word;
     height: 1.7em; /*height는 1.7em * 3줄 = 5.1em */
   }
 
 .profile-text-info{
     color: #555555;
-    font-size : 1.1rem; 
-    line-height: 1.7em; 
-    font-weight: 300; 
+    font-size : 1.1rem;
+    line-height: 1.7em;
+    font-weight: 300;
     letter-spacing: 0;
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1; 
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    word-wrap:break-word; 
+    word-wrap:break-word;
     height: 5.1em; /*height는 1.7em * 1줄 = 5.1em */
 }
 .profile-img{
@@ -123,7 +125,7 @@ export default Vue.extend({
 }
 .profile-avatar{
   width: 150px;
-  height: 150px; 
+  height: 150px;
   border-radius: 70%;
   overflow: hidden;
 }

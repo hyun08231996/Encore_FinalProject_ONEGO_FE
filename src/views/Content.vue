@@ -16,7 +16,7 @@ Vue.use(VueRouter)
 
   export default Vue.extend({
 		data: () => ({
-      
+
 		}),
 		name: "Header",
 		components:{

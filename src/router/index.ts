@@ -21,7 +21,7 @@ import { Auth } from 'aws-amplify'
 Vue.use(VueRouter)
 
 const requireAuth = () => (to: any, from: any, next: any) => {
-	
+
 	Auth.currentAuthenticatedUser()
 		.then(user => {
 			if (user) {
@@ -60,7 +60,7 @@ const routes: Array<RouteConfig> = [
 		name: "SearchResult",
 		component: SearchResult,
 		props: true,
-		meta:{ showFooter: true, showHeader: true }
+		meta:{ showFooter: true}
 	},
 	{
 		path: "/scrap",
@@ -132,7 +132,23 @@ const routes: Array<RouteConfig> = [
 		path:"/write",
 		name: "Write",
 		component: Write,
-		meta:{ showFooter: false, showHeader: false },
+		meta:{ showFooter: false, showHeader: false, showEdit: false  },
+		beforeEnter: requireAuth()
+	},
+	{
+		path:"/write/:tempBoardId",
+		name: "WriteEdit",
+		component: Write,
+		props:true,
+		meta:{ showFooter: false, showHeader: false, showEdit: false },
+		beforeEnter: requireAuth()
+	},
+	{
+		path:"/write/:boardId",
+		name: "PostEdit",
+		component: Write,
+		props:true,
+		meta:{ showFooter: false, showHeader: false, showEdit: true },
 		beforeEnter: requireAuth()
 	},
 	{
