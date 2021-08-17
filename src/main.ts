@@ -21,7 +21,6 @@ Amplify.configure(awsconfig);
 Vue.config.productionTip = false
 
 export const eventBus = new Vue
-export const searchBus = new Vue
 
 new Vue({
   router,

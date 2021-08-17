@@ -32,7 +32,7 @@
 			<div v-if="this.$store.state.user.signedIn==true"><logout-btn /></div>
 			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 		</div>
-		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" @sendBlogList="filteredList = $event" />
+		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
 		</v-app-bar>
 
 		<!-- sidebar -->
@@ -156,16 +156,6 @@
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import DarkModeSwitch from '@/components/buttons/write/DarkModeSwitch.vue'
 	import SearchModal from '@/views/SearchModal.vue'
-	import {searchBus} from '@/main'
-
-	declare interface BlogList {
-		id:string,
-		title:string,
-		allText:string,
-		nickname:string,
-		content:string,
-		date:string
-	}
 
 	export default Vue.extend({
 		data: () => ({
@@ -175,7 +165,6 @@
 			showCate:false,
 			showMenu:false,
 			showFooter: true,
-			filteredList:[] as BlogList[],
 			menusBL: [
 				{ title: '홈', link: '/'},
 				{ title: '최신글', link: '/article'},
@@ -195,11 +184,6 @@
 				{title:'기타'}
 			],
 		}),
-		watch:{
-			filteredList: function(){
-				searchBus.$emit("sendBlogList",this.filteredList)
-			}
-		},
 		name: "Header",
 		components:{
 			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,

@@ -134,7 +134,6 @@
 				this.$emit('openDrawer', true);
 			},
 			doSearch(){
-				this.$emit("sendBlogList",this.filteredSearch)
 				if(this.search == ""){
 					alert("검색어를 입력해주세요.");
 					return;

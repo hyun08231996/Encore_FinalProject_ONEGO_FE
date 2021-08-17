@@ -73,7 +73,7 @@
 <script lang="ts">
 	import Vue from 'vue'
 	import '@/assets/css/SearchResult.css'
-	import {searchBus} from '@/main'
+	import http from '@/http/http-common'
 
 	declare interface BlogList {
 		id:string,
@@ -127,6 +127,63 @@
 					return '<span class="highlight">' + match + '</span>';
 				});
 			},
+			async getBoardCount(){
+				await http.
+					get('board/count',{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}
+					})
+					.then(response => {
+                       this.totalPageNum = Math.ceil(response.data / 5)
+					   //console.log(this.totalPageNum)
+					})
+					.catch(() => this.errored = true )
+					.finally(() => this.loading = false)
+				for(var i=1;i<=this.totalPageNum;i++){
+					this.getAllBoards(i)
+				}
+			},
+			async getAllBoards(pageNum:number){
+			  await http.
+				get('/board',{
+					params:{
+						'pageNumber':pageNum
+					},
+					headers:{
+						'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+					}
+				})
+				.then(response => {
+					//console.log(pageNum)
+					for(let i=0; i<response.data.length;i++){
+						//console.log(i)
+						const id = response.data[i].id
+						const nickname = response.data[i].nickName
+						const title = response.data[i].title
+						const content = response.data[i].contents[0].content
+						var allText = response.data[i].subtitle
+						for(let j=0;j<response.data[i].contents.length;j++){
+							allText += response.data[i].contents[j].title+response.data[i].contents[j].subtitle+response.data[i].contents[j].content
+						}
+						const dateTime = new Date(response.data[i].modDatetime)
+						var mm = dateTime.getMonth() + 1 // getMonth() is zero-based
+						var dd = dateTime.getDate()
+						const date = [dateTime.getFullYear(),
+										(mm>9 ? '' : '0') + mm,
+										(dd>9 ? '' : '0') + dd
+										].join('.')
+						//console.log(id,nickname,title,content,allText,date)
+						//console.log(i,title)
+						this.blogList.push({id:id,nickname:nickname,title:title,allText:allText,content:content,date:date})
+						//this.blogList.push({id:id,title:title,allText:allText})
+					}
+				})
+				.catch(() => this.errored = true )
+				.finally(() => {
+					this.loading = false
+				})
+			},
 			openArticle(boardId:string){
 				window.open('/content/'+boardId,'_self')
 			}
@@ -138,25 +195,28 @@
 				var str1 = "(?=.*";
 				var str2 = ")";
 				var searchStr = '';
-				return this.blogList.filter((article)=>{
+				return this.blogList.filter((blog)=>{
 					if(this.search != ""){
-						const titleContent = article.title + article.allText;
+						//console.log(this.search);
+						//console.log(blog.title)
+						const title = blog.title;
+						const allText = blog.allText;
 						for(var i=0; i<searchArray.length; i++){
 							searchStr += str1 + searchArray[i] + str2;
 						}
-						matches = titleContent.match('^.*'+searchStr+'.*$')
+						//console.log(searchStr);
+						//console.log(blog.allText)
+						matches = (title.match('^.*'+searchStr+'.*$') || allText.match('^.*'+searchStr+'.*$'))
 									&& this.search.match(/[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]/gi);
-						return matches !== null;
+						//if(matches!==null) console.log(matches)
+						return matches !== null; //if input search matches blog title
 					}
 				});
 			}
 		},
 		mounted(){
-			searchBus.$on("sendBlogList",(list:BlogList[])=>{
-				console.log("ok")
-				console.log(list)
-				this.blogList = list
-			})
+			//console.log(this.search)
+			this.getBoardCount()
 		}
 	})
 </script>
