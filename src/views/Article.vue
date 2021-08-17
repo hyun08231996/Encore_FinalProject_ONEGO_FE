@@ -14,7 +14,7 @@
                <!-- <h3 style="font-weight: normal" v-html="article.subtitle"></h3> -->
                <p v-html="article.contents ? article.contents : ''"></p>
              </v-card-text>
- 
+
              <v-card-actions class="avatar-box">
                  <v-list-item-avatar class="page-avatar" color="grey darken-3" style="width: 15px; height: 15px;">
                    <v-img
@@ -25,7 +25,7 @@
                  </v-list-item-avatar>
                  <v-list-item-content class="author-date">
                    <span class="nickname" v-html="article.nickName"></span>
-                  
+
                  </v-list-item-content>
                  <span class="right-padding">{{dateTime(article.modDatetime)}}</span>
              </v-card-actions>
@@ -34,7 +34,7 @@
          </v-card>
          <br>
        </v-flex>
-      
+
        <div class="text-center">
          <v-pagination v-model="page" :length="totalPageNum" :total-visible="7" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" @input="changePage">
          </v-pagination>
@@ -46,7 +46,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import http from '../http/http-common'
- 
+
 export default Vue.extend({
      data: () => ({
        articles: {},
@@ -72,7 +72,7 @@ export default Vue.extend({
                    }else{
                      d.contents = ""
                    }
-                  
+
                  })
                  this.articles = response.data;
              })
@@ -80,9 +80,9 @@ export default Vue.extend({
                this.errored = true
              })
              .finally(() => this.loading = false)
-            
+
            },
-       difference(date1: { getFullYear: () => number; getMonth: () => number; getDate: () => number|undefined; getHours: () => number|undefined; getMinutes: () => number|undefined; getSeconds: () => number|undefined }, date2: { getFullYear: () => number; getMonth: () => number; getDate: () => number|undefined; getHours: () => number|undefined; getMinutes: () => number|undefined; getSeconds: () => number|undefined }) { 
+       difference(date1: { getFullYear: () => number; getMonth: () => number; getDate: () => number|undefined; getHours: () => number|undefined; getMinutes: () => number|undefined; getSeconds: () => number|undefined }, date2: { getFullYear: () => number; getMonth: () => number; getDate: () => number|undefined; getHours: () => number|undefined; getMinutes: () => number|undefined; getSeconds: () => number|undefined }) {
          const date1utc = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate(), date1.getHours(), date1.getMinutes(), date1.getSeconds());
          const date2utc = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate(), date2.getHours(), date2.getMinutes(), date2.getSeconds());
          const day = 1000*60*60*24;
@@ -98,7 +98,7 @@ export default Vue.extend({
          }else{
            return Math.floor((date2utc - date1utc)/second)+"초 전"
          }
-        
+
        },
        dateTime(time: string|number|Date) {
          const articleDate =  new Date(time)
@@ -112,27 +112,28 @@ export default Vue.extend({
        async boardCount(){
          await http
              .get('/board/count',{
-              headers:{
-                'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-              }})
+				 headers:{
+					'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+				 }
+			 })
              .then(response => {
                      this.totalPageNum = Math.floor(response.data / 5) + 1
                    }
                  )
              .catch(() => this.errored = true )
-             .finally(() => this.loading = false)               
+             .finally(() => this.loading = false)
        },
        articlePage(boardId: string){
          window.open("/content/"+boardId,"_self");
        }
-            
+
      },
      async created(){
        this.getArticles(1)
        this.boardCount()
      }
    })
- 
+
 </script>
 <style>
   #item {

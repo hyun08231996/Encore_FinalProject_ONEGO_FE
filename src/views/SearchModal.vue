@@ -163,7 +163,11 @@
 				// await http.
 				//     get('/users', )
 				await http.
-					get('board/count')
+					get('board/count',{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}
+					})
 					.then(response => {
                        this.totalPageNum = Math.ceil(response.data / 5)
 					   //console.log(this.totalPageNum)
@@ -179,6 +183,9 @@
 				get('/board',{
 					params:{
 						'pageNumber':pageNum
+					},
+					headers:{
+						'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 					}
 				})
 				.then(response => {

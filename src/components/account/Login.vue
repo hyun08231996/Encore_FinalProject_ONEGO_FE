@@ -26,7 +26,7 @@ import { Auth } from 'aws-amplify';
 import router from '../../router'
 import {validateEmail} from '@/utils/validation'
 import http from '../../http/http-common'
-        
+
     export default Vue.extend({
         props: {
             info: Object
@@ -45,7 +45,7 @@ import http from '../../http/http-common'
             required: value => !!value || 'Required.',
             min: v => v.length >= 8 || 'Min 8 characters',
             emailMatch: () => (`The email and password you entered don't match`),
-            
+
             }
 		}),
 		name: "LoginPage",
@@ -75,7 +75,7 @@ import http from '../../http/http-common'
                     .catch(() => this.errored = true )
                     .finally(() => {
                         this.loading = false
-                    })  
+                    })
             },
             async login(){
                 if(validateEmail(this.email)==false){
@@ -111,7 +111,7 @@ import http from '../../http/http-common'
                             .finally(() => {
                                 console.log("finally") 
                             });
-                    
+
                 } catch (error) {
                     console.log('error signing in', error);
                 }

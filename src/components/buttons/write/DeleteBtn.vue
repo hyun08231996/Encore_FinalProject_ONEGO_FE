@@ -26,6 +26,9 @@
 					delete('/tempBoard',{
 						params:{
 							'boardIdx': this.id
+						},
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}
 					})
 					.then(response => {
