@@ -118,6 +118,9 @@
 		@WriteStoreModule.Getter('getWordCount')
 		private wordCount!:number
 
+		@WriteStoreModule.Getter('getItemList')
+		private itemList!:any[]
+
 		// @WriteStoreModule.Mutation('update')
 		// private update!:()=>void
 
@@ -178,11 +181,25 @@
 
 		generateTag():void{
 			var flag = false
-			for(var i=0;i<this.tagList.length;i++){
-				if(this.tagList[i] === '고구마') flag = true
+			var tag = ''
+			var contentList = [] as string[]
+			var contents = [] as string[]
+			contentList.push(this.itemList[0].text.replaceAll("\n"," ").replaceAll("</p><p>"," "))
+			if(this.itemList[0].children.length !== 0){
+				for(var i=0; i<this.itemList[0].children.length;i++){
+					contentList.push(this.itemList[0].children[i].text.replaceAll("\n"," ").replaceAll("</p><p>"," "))
+				}
 			}
-			if(flag === false)
-				this.tagList.push('고구마')
+			contents.push(contentList.join(" "))
+			console.log(contents)
+
+			////////////////axios here///////////////////
+
+			// for(var i=0;i<this.tagList.length;i++){
+			// 	if(this.tagList[i] === tag) flag = true
+			// }
+			// if(flag === false)
+			// 	this.tagList.push(tag)
 		}
 
 	}

@@ -134,7 +134,6 @@
 				this.$emit('openDrawer', true);
 			},
 			doSearch(){
-				this.$emit("sendBlogList",this.filteredSearch)
 				if(this.search == ""){
 					alert("검색어를 입력해주세요.");
 					return;
@@ -163,7 +162,7 @@
 				// await http.
 				//     get('/users', )
 				await http.
-					get('board/count',{
+					get('/board/count',{
 						headers:{
 							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}

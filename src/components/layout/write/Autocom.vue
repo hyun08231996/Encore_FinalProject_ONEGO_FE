@@ -34,18 +34,48 @@
 
 <script lang="ts">
 	import { Component, Vue } from 'vue-property-decorator';
+	import { namespace } from 'vuex-class';
+
+	const WriteStoreModule = namespace('writeStore')
 
 	@Component
 	export default class Autocom extends Vue {
 		toggleSignAuto = true
 		text = ''
 
+		@WriteStoreModule.Getter('getItemList')
+		private itemList!:any[]
+
+		@WriteStoreModule.Getter('getActiveVal')
+		private activeVal!:number
+
 		showAutocom():void{
 			this.toggleSignAuto = !this.toggleSignAuto
 		}
 
 		autoComplete():void{
-			this.text = '문장이 자동생성 되었습니다.'
+			var sentenceList = []
+
+			var content = ''
+			var textList = []
+			var text = ''
+
+			if(this.activeVal === 1){
+				content = this.itemList[0].text.replaceAll("\n"," ")
+			}else if(this.activeVal > 1){
+				for(var i=0; i<this.itemList[0].children.length;i++){
+					if(this.activeVal === this.itemList[0].children[i].id){
+						content = this.itemList[0].children[i].text.replaceAll("\n", " ")
+					}
+				}
+			}
+			textList = content.split(" ").slice(Math.max(content.split(" ").length - 8, 0))
+			text = textList.join(" ")
+			console.log(text)
+
+
+
+			//this.text = sentenceList
 		}
 	}
 </script>
