@@ -80,12 +80,6 @@
 		async created(){
 			this.tempBoardCount()
 			this.boardCount()
-			for(var i=1; i<=this.savedPagenum;i++){
-				this.getAllSaved(i)
-			}
-			for(var j=1; j<=this.postedPagenum;j++){
-				this.getAllPosted(j)
-			}
 		}
 
 		showSaved(){
@@ -109,11 +103,17 @@
              .get('/tempBoard/count', {
 				 params:{
 					 'userEmail':this.$store.state.user.userAccount.attributes.email
+				 },
+				 headers:{
+					'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 				 }
 			 })
              .then(response => {
-				 //console.log(response.data)
+				 //console.log('tempBoard: '+response.data)
 				 this.savedPagenum = Math.ceil(response.data / 5)
+				 for(let i=1; i<=this.savedPagenum;i++){
+					this.getAllSaved(i)
+				 }
              })
              .catch(() => this.errored = true )
              .finally(() => this.loading = false)
@@ -123,11 +123,17 @@
              .get('/board/count', {
 				 params:{
 					 'userEmail':this.$store.state.user.userAccount.attributes.email
+				 },
+				 headers:{
+					'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 				 }
 			 })
              .then(response => {
-				 //console.log(response.data)
+				 //console.log('board: '+response.data)
 				 this.postedPagenum = Math.ceil(response.data / 5)
+				 for(let j=1; j<=this.postedPagenum;j++){
+					this.getAllPosted(j)
+				 }
              })
              .catch(() => this.errored = true )
              .finally(() => this.loading = false)
@@ -138,6 +144,9 @@
 					params:{
 						'userEmail': this.$store.state.user.userAccount.attributes.email,
 						'pageNumber':pageNum
+					},
+					headers:{
+						'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 					}
 				})
 				.then(response => {
@@ -170,6 +179,9 @@
 					params:{
 						'userEmail': this.$store.state.user.userAccount.attributes.email,
 						'pageNumber':pageNum
+					},
+					headers:{
+						'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 					}
 				})
 				.then(response => {
@@ -187,7 +199,7 @@
 										(dd>9 ? '' : '0') + dd
 										].join('.')
 						//console.log(title,text,date)
-						if(response.data[i].userEmail!==null)
+						if(response.data[i].userEmail!==null && response.data[i].userEmail == this.$store.state.user.userAccount.attributes.email)
 							this.postedList.push({id:id, title:title,text:text,date:date,dateTime:dateTime})
 					}
 					this.postedList.sort((a,b)=>b.dateTime.getTime()-a.dateTime.getTime())

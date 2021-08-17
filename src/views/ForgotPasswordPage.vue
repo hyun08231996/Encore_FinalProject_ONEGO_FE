@@ -16,8 +16,8 @@
                         <v-col cols="6" md="5">
                             <div id="signup_area">
                                 <v-card class="mx-auto" max-width="400">
-                                    <SignUp :info="info" v-if="info.nickname==''"/>
-                                    <EmailValidation :info="info" :email="email" v-if="info.nickname!=''"/>
+                                    <ForgotPassword v-if="this.email==''"/>
+                                    <EmailValidation :email="email" :info="info" v-if="this.email!=''"/>
                                 </v-card>
                             </div>
                         </v-col>
@@ -29,21 +29,21 @@
 </template>
 <script>
     import Vue from 'vue'
-    import SignUp from '../components/account/SignUp.vue'
+    import ForgotPassword from '../components/account/ForgotPassword.vue'
     import EmailValidation from '../components/account/EmailValidation.vue'
 
   export default Vue.extend({
         
 		data: () => ({
+            email: '',
             info: {
                 email: '',
                 nickname: '',
                 signedIn: false
             },
-            email: ''
 		}),
 		components:{
-            SignUp,
+            ForgotPassword,
             EmailValidation
 		},
 	})

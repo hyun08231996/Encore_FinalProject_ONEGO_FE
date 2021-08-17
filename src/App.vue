@@ -10,7 +10,6 @@
 	import Vue from 'vue'
 	import Header from '@/components/layout/Header.vue'
 	import Footer from '@/components/layout/Footer.vue'
-	import http from '@/http/http-common'
 
 	export default Vue.extend({
 		name: "App",
@@ -19,14 +18,7 @@
 		},
 		async created(){
 			await this.$store.dispatch('findUser');
-			if(Object.keys(this.$store.state.user.userAccount).length != 0){
-				await http
-					.get('/users/'+this.$store.state.user.userAccount.attributes.email)
-					.then(response => {
-						this.$store.commit('setUserInfo', response.data);
-						console.log(this.$store.state.user.userInfo)
-					})
-			}
+			var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 		},
 	})
 </script>

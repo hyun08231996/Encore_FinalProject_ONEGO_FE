@@ -110,7 +110,7 @@
 	import Vue from 'vue'
 	import http from '../http/http-common'
 	import { Auth } from 'aws-amplify'
-
+	var userInfo = JSON.parse(localStorage.getItem('userInfo'))
 	export default Vue.extend({
 		name: "EditProfile",
 		data: () => ({
@@ -119,7 +119,7 @@
 				email:'',
 				intro:'',
 				profileImg: 'null',
-				profileImgFile: null,
+				profileImgFile: new File([""], ""),
 				errored: false,
 				loading: true
 			},
@@ -133,31 +133,62 @@
 			async updateProfile(){
 				// form data for updating userProfile
 				const frm = new FormData();
-				frm.append('nickName', this.user.nickname);
+
+				const info = JSON.stringify(
+					{
+						nickName: this.user.nickname,
+						intro: this.user.intro
+					}
+				)
+				const blob = new Blob([info], {
+					type: 'application/json'
+				})
+				frm.append('user', blob)
 				frm.append('profileImageFile', this.user.profileImgFile);
-				frm.append('intro', this.user.intro);
-				
+
 				// updating cognito
 				const user = await Auth.currentAuthenticatedUser();
 				await Auth.updateUserAttributes(user, {
 					'nickname': this.user.nickname
 				});
-
+	
 				// updating user table
 				await http
-					.put('/users/'+this.user.email, frm)
+					.put('/users/'+this.user.email, frm,{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})
 					.then(response => {
 							console.log(response)
 					})
 					.catch(error => {
+						console.log(error)
 						this.errored = true
 					} )
 					.finally(() => {
 						this.loading = false
             	  })    
 				
+				// local storage update
+				userInfo.intro = this.user.intro
+				userInfo.nickName = this.user.nickname
+				await http
+					.get('/users/'+this.user.email,{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})
+					.then(response => {
+						userInfo.profileImage = response.data.profileImage
+					})
+				localStorage.setItem('userInfo', JSON.stringify(userInfo))
+				
 				// 화면 새로고침
-				this.$router.go()
+				caches.keys().then(cacheNames => {
+					cacheNames.forEach(cacheName => {
+					caches.delete(cacheName);
+					});
+				});
+				window.location.reload()
 			},
 			selectImg(){
 				document.getElementById("fileUpload").click();
@@ -169,18 +200,12 @@
 				this.user.profileImg = url
 			}
 		},
-		async created(){
-			if(Object.keys(this.$store.state.user.userAccount).length != 0){
-				await http
-					.get('/users/'+this.$store.state.user.userAccount.attributes.email)
-					.then(response => {
-						this.$store.commit('setUserInfo', response.data);
-					})
-			}
+		async mounted(){
+			// var userInfo = JSON.parse(localStorage.getItem('userInfo'))
 			this.user.nickname = this.$store.state.user.userAccount.attributes.nickname
 			this.user.email = this.$store.state.user.userAccount.attributes.email
-			this.user.intro = this.$store.state.user.userInfo.intro
-			this.user.profileImg = this.$store.state.user.userInfo.profileImage
+			this.user.intro = userInfo.intro
+			this.user.profileImg = userInfo.profileImage
 		},
 	})
 </script>
