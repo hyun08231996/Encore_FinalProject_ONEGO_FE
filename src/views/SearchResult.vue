@@ -39,12 +39,12 @@
 		elevation="3"
 		:key="i" v-for="(article, i) in filteredSearch"
       >
-	  	<a href='#' id="list-item" >
+	  	<a id="list-item" @click="openArticle(article.id)">
         <div class="card">
           <v-card-text class="text" >
             <div id="article-title" v-html="highlightTitle(article.title)">{{article.title}}</div>
             <br/>
-            <div class="text-post" v-html="highlightTitle(article.text)">{{article.text}}</div>
+            <div class="text-post" v-html="highlightTitle(article.content)">{{article.content}}</div>
           </v-card-text>
 
           <v-card-actions class="avatar-box">
@@ -56,7 +56,7 @@
                 ></v-img>
               </v-list-item-avatar>
               <v-list-item-content class="author-date">
-                <span class="author">{{article.author}}</span>
+                <span class="author">{{article.nickname}}</span>
                 <span class="date">{{article.date}}</span>
               </v-list-item-content>
           </v-card-actions>
@@ -73,6 +73,16 @@
 <script lang="ts">
 	import Vue from 'vue'
 	import '@/assets/css/SearchResult.css'
+	import {searchBus} from '@/main'
+
+	declare interface BlogList {
+		id:string,
+		nickname:string,
+		title:string,
+		allText:string,
+		content:string,
+		date:string
+	}
 
 	export default Vue.extend({
 		name:"SearchResult",
@@ -82,16 +92,10 @@
 			}
 		},
 		data: ()=>({
-			blogList:[
-				{title:'고구마는 맛있다', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'호박 고구마 곡', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user2',date:'2.15.2020'},
-				{title:'겨울엔 군고구마 군', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user3',date:'2.15.2020'},
-				{title:'고구마 감자 군 고구마!', text:'안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다. 안녕 하세요 저는 고구마 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'감자 입니다!', text:'안녕 하세요 저는 고구마 감자 입니다. 안녕 하세요 저는 고구마 감자 입니다. 안녕 하세요 저는 고구마 감자 입니다.',author:'user4',date:'2.15.2020'},
-				{title:'감자엔 소금', text:'안녕 하세요 저는 감자 입니다. 안녕 하세요 저는 감자 입니다. 안녕 하세요 저는 감자 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'통감자 맛있나 ㄱ', text:'고구마 안녕 하세요 저는 감자 입니다. 고구마 안녕 하세요 저는 감자 입니다. 고구마 안녕 하세요 저는 감자 입니다.',author:'user1',date:'2.15.2020'},
-				{title:'호박의 효능', text:'호박은 좀 별로..밤..감자는 퍽퍽 호박은 좀 별로..밤..감자는 퍽퍽 호박은 좀 별로..밤..감자는 퍽퍽',author:'user2',date:'2.15.2020'}
-			],
+			errored:false,
+			loading:true,
+			totalPageNum:1,
+			blogList:[] as BlogList[],
 			newSearch:''
 		}),
 		components:{
@@ -122,6 +126,9 @@
 				}) && text.replace(new RegExp(searchWord2, "gi"), match => {
 					return '<span class="highlight">' + match + '</span>';
 				});
+			},
+			openArticle(boardId:string){
+				window.open('/content/'+boardId,'_self')
 			}
 		},
 		computed:{
@@ -133,7 +140,7 @@
 				var searchStr = '';
 				return this.blogList.filter((article)=>{
 					if(this.search != ""){
-						const titleContent = article.title + article.text;
+						const titleContent = article.title + article.allText;
 						for(var i=0; i<searchArray.length; i++){
 							searchStr += str1 + searchArray[i] + str2;
 						}
@@ -143,6 +150,13 @@
 					}
 				});
 			}
+		},
+		mounted(){
+			searchBus.$on("sendBlogList",(list:BlogList[])=>{
+				console.log("ok")
+				console.log(list)
+				this.blogList = list
+			})
 		}
 	})
 </script>

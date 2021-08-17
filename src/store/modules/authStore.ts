@@ -1,12 +1,11 @@
+import Vuex, {Module} from 'vuex'
 import Vue from 'vue'
-import Vuex, {StoreOptions} from 'vuex'
-import authStore from '@/store/modules/authStore'
-import writeStore from '@/store/modules/WriteStore'
+import {RootState} from '@/store/index'
 import { Auth } from 'aws-amplify'
 
 Vue.use(Vuex)
 
-export interface RootState {
+interface authStore {
 	user:{
 		signedIn: boolean,
 		userAccount: any,
@@ -17,11 +16,8 @@ export interface RootState {
 	followingUser:string;
 }
 
-const index: StoreOptions<RootState> = {
-  modules: {
-    authStore:authStore,
-	writeStore:writeStore,
-  },
+const authModule:Module<authStore,RootState>={
+  namespaced:true,
   state: {
     user: {
       signedIn: false,
@@ -29,7 +25,7 @@ const index: StoreOptions<RootState> = {
       userInfo: new Object()
     },
     accessToken: '',
-    followerUser: '',
+	followerUser: '',
     followingUser: ''
   },
   mutations: {
@@ -43,12 +39,12 @@ const index: StoreOptions<RootState> = {
     setUserInfo: function(state, user){
       Vue.set(state.user, 'userInfo', user)
     },
-    setFollowerUser: function(state, user){
-      Vue.set(state, 'followerUser', user)
-    },
-    setFollowingUser: function(state, user){
-      Vue.set(state, 'followingUser', user)
-    }
+	setFollowerUser: function(state, user){
+	  Vue.set(state, 'followerUser', user)
+	},
+	setFollowingUser: function(state, user){
+	  Vue.set(state, 'followingUser', user)
+	}
 
   },
   getters: {
@@ -82,6 +78,8 @@ const index: StoreOptions<RootState> = {
     },
     // setU
   },
+  modules: {
+  }
 }
 
-export default new Vuex.Store(index)
+export default authModule

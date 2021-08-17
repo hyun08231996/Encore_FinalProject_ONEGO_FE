@@ -28,7 +28,7 @@
                 {{ user.intro }}
             </div>
         </div>
-    </div>   
+    </div>
 </template>
 
 <script lang="ts">
@@ -81,8 +81,8 @@ export default Vue.extend({
     font-family: Noto Sans KR;
 }
 .profile-name{
-    font-size : 1.5rem; 
-    font-weight: 500; 
+    font-size : 1.5rem;
+    font-weight: 500;
     padding-right: 10px;
 }
 .profile-link{
@@ -90,32 +90,32 @@ export default Vue.extend({
     text-decoration: none;
 }
 .profile-text-description{
-    font-size : 1.1rem; 
-    font-weight: 300; 
+    font-size : 1.1rem;
+    font-weight: 300;
     color: #555555;
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1; 
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    word-wrap:break-word; 
+    word-wrap:break-word;
     height: 1.7em; /*height는 1.7em * 3줄 = 5.1em */
   }
 
 .profile-text-info{
     color: #555555;
-    font-size : 1.1rem; 
-    line-height: 1.7em; 
-    font-weight: 300; 
+    font-size : 1.1rem;
+    line-height: 1.7em;
+    font-weight: 300;
     letter-spacing: 0;
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1; 
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    word-wrap:break-word; 
+    word-wrap:break-word;
     height: 5.1em; /*height는 1.7em * 1줄 = 5.1em */
 }
 .profile-img{
@@ -125,7 +125,7 @@ export default Vue.extend({
 }
 .profile-avatar{
   width: 150px;
-  height: 150px; 
+  height: 150px;
   border-radius: 70%;
   overflow: hidden;
 }

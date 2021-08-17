@@ -14,7 +14,7 @@
 				구독
 			</v-btn>
 			<v-btn id="myprof-unsubscribe-btn" value="" @click="unsubscribe(user.email)" absolute rounded outlined color="#00d5aa" v-if="this.myProfileFlag==false && this.follow==true">
-				
+
 			</v-btn>
 			<v-menu bottom left offset-y content-class="elevation-0"  v-if="this.myProfileFlag==true">
 				<template v-slot:activator="{ on, attrs }">
@@ -134,7 +134,7 @@
 				this.$router.push({
 					name: "Follower"
 				});
-				
+
 			}
 		},
 		async created(){
@@ -153,7 +153,7 @@
 				this.user.followers = this.$store.state.user.userInfo.followers.length
 				this.user.followings = this.$store.state.user.userInfo.followings.length
 				this.followList = this.$store.state.user.userInfo.followings
-				
+
 			// Other writer's profile
 			}else{
 				await http
@@ -166,10 +166,10 @@
 			}
 			// to check the writer is in the user's following list
 			for(var i=0; i<this.$store.state.user.userInfo.followings.length; i++){
-				if(this.user.email === this.$store.state.user.userInfo.followings[i]) 
+				if(this.user.email === this.$store.state.user.userInfo.followings[i])
 					this.follow = true
 			}
-			
+
 			if(this.user.followings == '0'){
 				this.disabledFollowing = true;
 			}
@@ -228,7 +228,7 @@
 	opacity:120%;
 }
 #edit-hover:hover .v-list{
-	background-color:#FAFAFA !important;
+	background-color:#89e7d418 !important;
 }
 .link-hover:hover .label{
 	cursor:pointer !important;

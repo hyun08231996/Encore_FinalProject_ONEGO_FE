@@ -6,15 +6,15 @@
   >
     <h3>댓글</h3>
     <br/><hr style="margin: auto;"><br/>
-    
+
     <div class="content" v-for="(item, i) in commentList" :key="i">
-      
+
         <span class="nickname"> {{ item.nickName }}</span>
         <span class="modDatetime">{{ item.modDatetime }}</span>
-        
+
         <template v-if="item.edited===true">
           <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
-          <v-btn 
+          <v-btn
           depressed
           small
           @click = "putComment(boardId,item.userId,item.nickName,comment,$store.state.user.userInfo.email)"
@@ -29,7 +29,7 @@
 
         <template v-else>
         <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
-          <v-btn 
+          <v-btn
           small
           depressed
           @click = "deleteComment(boardId,item.id)"
@@ -37,7 +37,7 @@
         삭제</v-btn></span>
 
         <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
-          <v-btn 
+          <v-btn
           depressed
           small
           @click = "editedComment(i)"
@@ -45,7 +45,7 @@
         수정</v-btn></span>
 
         <p class="comment">{{ item.comment }}</p>
-        
+
         </template>
         <!-- <v-text-field class="text" flat solo readonly dense>{{ item.comment }}</v-text-field> -->
   </div>
@@ -57,8 +57,8 @@
         placeholder="댓글을 입력해주세요!"
         max="300"
       ></textarea>
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         @click = "submit"
       >등록</button>
       </div>
@@ -106,8 +106,8 @@ export default Vue.extend({
         },
 
         //댓글 산입하기
-        submit(){ 
-            if(this.$store.state.user.signedIn==true){             
+        submit(){
+            if(this.$store.state.user.signedIn==true){
                 this.insertComment(
                   this.$route.params.boardId, this.$store.state.user.userAccount.attributes.nickname,
                   this.comment, this.$store.state.user.userAccount.attributes.email
@@ -142,7 +142,7 @@ export default Vue.extend({
                     console.log(comment)
                     console.log(userEmail)
                     http
-                    .put('/comment', { 
+                    .put('/comment', {
                       data:{'boardId': boardId, 'commentId': commentId, 'userEmail': userEmail, 'nickName': nickName, 'comment': comment}})
                     .then(response => {
                         console.log(response.data)
@@ -159,14 +159,13 @@ export default Vue.extend({
                         this.getComment(this.$route.params.boardId, 1)
                     })
             },
-        
+
 
     },
     created(){
 		console.log("mounted")
 		this.getComment(this.$route.params.boardId, 1)
     },
-
 })
 
 
@@ -218,7 +217,7 @@ export default Vue.extend({
 }
 .img-box{
   width: 60px;
-  height: 60px; 
+  height: 60px;
   border-radius: 70%;
   overflow: hidden;
   float:left;
@@ -232,18 +231,18 @@ export default Vue.extend({
   object-fit: cover;
 }
 .nickname{
-   font-family: Noto Sans KR; 
-   font-size : 1.25rem; 
+   font-family: Noto Sans KR;
+   font-size : 1.25rem;
    font-weight: 500;
    width: 80%;
    height: 35px;
-   padding-top: 10px; 
+   padding-top: 10px;
 }
 .comment{
-  font-family: Noto Sans KR; 
-  font-size : 1rem; 
+  font-family: Noto Sans KR;
+  font-size : 1rem;
   font-weight: 300;
-  padding-top: 5px; 
+  padding-top: 5px;
   padding-bottom: 10px;
 }
 .modDatetime{
@@ -258,8 +257,8 @@ export default Vue.extend({
   float: right;
 }
 .form{
-  width: 100%; 
-  margin-left: 100px; 
+  width: 100%;
+  margin-left: 100px;
 }
 .new_comment{
  width: 94%;

@@ -79,7 +79,7 @@
 <script lang="ts">
 	import { Component, Vue } from 'vue-property-decorator';
 	import { namespace } from 'vuex-class';
-	
+
 	const WriteStoreModule = namespace('writeStore')
 
 	@Component
@@ -135,7 +135,7 @@
 	left:25% !important;
 }
 #image-card .v-image__image{
-	opacity:80% !important;
+	opacity:60% !important;
 }
 #title-content-preview-margin,
 #content-preview-margin,

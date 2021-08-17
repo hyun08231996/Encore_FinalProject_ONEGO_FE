@@ -13,20 +13,26 @@
 			width="120px" height="43.2px"
 			style="vertical-align:middle;"></a>
 
+		<!-- write page -->
+		<div v-if="$route.meta.showHeader == false" >
+			<dark-switch />
+		</div>
+
 		<v-spacer></v-spacer>
 		<!-- write page -->
 		<div v-if="$route.meta.showHeader == false">
-			<preview-btn/>
-			<delete-btn/>
-			<save-btn/>
-			<post-btn/>
+			<div v-if="$route.meta.showEdit" style="float:right;"><update-btn/></div>
+			<div v-else style="float:right;"><post-btn/></div>
+			<div style="float:right;"><save-btn/></div>
+			<div style="float:right;"><delete-btn/></div>
+			<div style="float:right;"><preview-modal/></div>
 		</div>
 		<!-- other pages -->
 		<div v-else>
 			<div v-if="this.$store.state.user.signedIn==true"><logout-btn /></div>
 			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
 		</div>
-		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
+		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" @sendBlogList="filteredList = $event" />
 		</v-app-bar>
 
 		<!-- sidebar -->
@@ -37,7 +43,6 @@
 			fluid style="height: 100vh; width: 250px;"
 			app
 			>
-			<br><br>
 			<div v-if="this.$store.state.user.signedIn==true">
 				<div class="side-itms">
 					<a href="/myprofile">
@@ -85,7 +90,8 @@
 			<br>
 			<v-divider></v-divider>
 
-			<v-list dense v-if="showMenu">
+			<div id="scroll-height">
+			  <v-list dense v-if="showMenu">
 				<div class="side-itms">
 					<v-list-item
 					v-for="item in menusBL"
@@ -105,10 +111,9 @@
 						</v-list-item-content>
 					</v-list-item>
 				</div>
-			</v-list>
-
-			<v-list dense v-if="showCate" class="side-itms">
-					<div>
+			  </v-list>
+			  <v-list dense v-if="showCate">
+					<div class="side-itms">
 						<v-list-item
 						v-for="item in categories"
 						:key="item.title">
@@ -117,8 +122,8 @@
 							</v-list-item-content>
 						</v-list-item>
 					</div>
-			</v-list>
-
+			  </v-list>
+			</div>
 			<div id="side-footer">
 				<div v-if="this.$store.state.user.signedIn==true" class="side-footer-btns">
 				  <div><setting-btn /><logout-btn @logout="isAuth = $event"/></div>
@@ -145,11 +150,23 @@
 	// import PublishBtn from '@/components/buttons/PublishBtn.vue'
 	// import Comment from '@/components/buttons/Comment.vue'
 	import PostBtn from '@/components/buttons/write/PostBtn.vue'
+	import UpdateBtn from '@/components/buttons/write/UpdateBtn.vue'
+	import PreviewModal from '@/views/PreviewModal.vue'
 	import DeleteBtn from '@/components/buttons/write/DeleteBtn.vue'
-	import PreviewBtn from '@/components/buttons/write/PreviewBtn.vue'
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
+	import DarkModeSwitch from '@/components/buttons/write/DarkModeSwitch.vue'
 	import SearchModal from '@/views/SearchModal.vue'
-  import http from "@/http/http-common";
+	import {searchBus} from '@/main'
+
+	declare interface BlogList {
+		id:string,
+		title:string,
+		allText:string,
+		nickname:string,
+		content:string,
+		date:string
+	}
+
 	export default Vue.extend({
 		data: () => ({
 			drawer: false,
@@ -158,6 +175,7 @@
 			showCate:false,
 			showMenu:false,
 			showFooter: true,
+			filteredList:[] as BlogList[],
 			menusBL: [
 				{ title: '홈', link: '/'},
 				{ title: '최신글', link: '/article'},
@@ -173,35 +191,30 @@
 				{title:'IT 트렌드'},
 				{title:'요리·레시피'},
 				{title:'운동·건강'},
-				{title:'사랑·이별'}
+				{title:'사랑·이별'},
+				{title:'기타'}
 			],
-			user:{
-				name:'Mary Jane',
-				nickname:'Mary',
-				email:'mj123@gmail.com',
-				intro:'Hello, I am an avid writer',
-				pic:"https://randomuser.me/api/portraits/women/82.jpg"
-			},
 		}),
+		watch:{
+			filteredList: function(){
+				searchBus.$emit("sendBlogList",this.filteredList)
+			}
+		},
 		name: "Header",
 		components:{
 			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,
-			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-btn':PreviewBtn, 'save-btn':SaveBtn,
-			'search-modal':SearchModal
+			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-modal':PreviewModal, 'save-btn':SaveBtn, 'update-btn':UpdateBtn,
+			'dark-switch':DarkModeSwitch, 'search-modal':SearchModal
 		},
 		methods:{
 			openCategory(){
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('menu-btn')!.style.color = "#9E9E9E";
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('cate-btn')!.style.color = "#00d5aa";
 				this.showMenu = false;
 				this.showCate = true;
 			},
 			openMenu(){
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('menu-btn')!.style.color = "#00d5aa";
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				document.getElementById('cate-btn')!.style.color = "#9E9E9E";
 				this.showMenu = true;
 				this.showCate = false;
@@ -233,6 +246,7 @@
 		color:#02bf99 !important;
 	}
 	#side-footer{
+		height:72px;
 		width:250px;
 	}
 	.side-footer-btns{
@@ -241,7 +255,7 @@
 		margin-right: auto;
 		left: 0;
 		right: 0;
-		bottom: 3%;
+		bottom: 20px;
 		text-align: center;
 	}
 	#menu-btn{
@@ -254,5 +268,9 @@
 	}
 	.v-navigation-drawer {
 		z-index: 999999 !important;
+	}
+	#scroll-height{
+		height:43vh;
+		overflow-y:auto;
 	}
 </style>
