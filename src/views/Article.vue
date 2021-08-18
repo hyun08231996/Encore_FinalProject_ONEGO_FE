@@ -71,10 +71,10 @@ export default Vue.extend({
                params: { 'pageNumber': pageNum }})
              .then(response => {
                 response.data.forEach((d: any) => {
-                  console.log(d)
                 http 
                     .get('/users/'+d.userEmail)
                     .then(response => {
+                        d.nickName = response.data.nickName
                         if(response.data.profileImage != undefined){
                           d.titleImage = response.data.profileImage
                         }else{
@@ -139,7 +139,12 @@ export default Vue.extend({
          await http
              .get('/board/count')
              .then(response => {
-                     this.totalPageNum = Math.floor(response.data / 5) + 1
+                    console.log(response)
+                    if(response.data%5==0){
+                      this.totalPageNum = Math.floor(response.data / 5)
+                    }else{
+                      this.totalPageNum = Math.floor(response.data / 5) + 1
+                    }
                    }
                  )
              .catch(() => this.errored = true )

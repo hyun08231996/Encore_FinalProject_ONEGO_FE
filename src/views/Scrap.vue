@@ -68,7 +68,7 @@ import http from '../http/http-common'
                 http 
                   .get('/users/'+response.data[0].userEmail)
                   .then(r => {
-                      console.log(r.data.profileImage)
+                      response.data[0].nickName = r.data.nickName
                       if(r.data.profileImage != undefined){
                         response.data[0].titleImage = r.data.profileImage
                       }else{
