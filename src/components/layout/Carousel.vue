@@ -10,7 +10,7 @@
       <v-slide-item
         v-for="article in articles"
         :key="article.id"
-        v-slot="{ active, toggle }"
+        v-slot="{ active }"
       >
       
         <v-card
@@ -18,7 +18,6 @@
           class="ma-0"
           height="600"
           width="800"
-          @click="toggle"
           style="padding: 1px"
         >
         
@@ -53,20 +52,33 @@
 		components:{
 		},
         methods: {
-            async getArticles(){
+            async getArticles(idx){
                 await http
                     .get('/board', {
-                        params: { 'pageNumber': 1 }})
+                        params: { 'pageNumber': idx }})
                     .then(response => {
-                        console.log(response.data)
-                        this.articles = response.data
+                        response.data.forEach((d) => {
+                          if(d.titleImage != null){
+                            if(d.titleImage.length != 0){
+                              this.articles.push(d)
+                            }
+                          }
+                        })
+                        // 최신순으로 정렬
+                        this.articles = this.articles.sort((a, b) => new Date(b.modDatetime) - new Date(a.modDatetime))
                     })
             },
         },
-        created() {
+        mounted() {
             // console.log('main user: '+this.$store.state.user.signedIn);
             // console.log(this.$store.state.user.userAccount);
-            this.getArticles()
+            var i = 1
+            console.log(this.articles.length)
+            for(i; i<10; i++){
+              this.getArticles(i)
+              if(this.articles.length > 6)
+                break;
+            }
         }
   }
 </script>

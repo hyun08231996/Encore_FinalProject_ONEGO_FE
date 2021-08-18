@@ -19,7 +19,7 @@
                   <v-img
                     class="avatar"
                     alt="avatar"
-                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                    :src="article.titleImage"
                   ></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content class="author-date">
@@ -58,7 +58,6 @@ import http from '../http/http-common'
                   'Authorization': 'Bearer '+localStorage.getItem('accessToken')
                 }})
               .then(response => {
-                console.log(response.data[0].userEmail)
                 http 
                   .get('/users/'+response.data[0].userEmail,{
                         headers:{
@@ -66,11 +65,10 @@ import http from '../http/http-common'
                         }
                       })
                   .then(r => {
-                      console.log(response.data.profileImage)
                       if(response.data.profileImage != undefined){
-                        response.data.profileImage = r.data.profileImage
+                        response.data.titleImage = r.data.profileImage
                       }else{
-                        response.data.profileImage = ''
+                        response.data.titleImage = ''
                       }
                   })
                 if(response.data.length !=0){

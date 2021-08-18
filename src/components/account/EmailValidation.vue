@@ -7,7 +7,7 @@
         <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email == ''"></v-text-field>
         <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email != ''"></v-text-field>
         <v-text-field
-            v-model="password"
+            v-model="newPassword"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
             :rules="[rules.required, rules.min]"
             :type="show1 ? 'text' : 'password'"
@@ -82,7 +82,11 @@ import router from '../../router'
             },
             validateForgotPassword(){
                 Auth.forgotPasswordSubmit(this.resetEmail, this.validationCode, this.newPassword)
-                    .then(data => console.log(data))
+                    .then(response => {
+                        console.log(response)
+                        alert("비밀번호 변경을 완료했습니다.")
+                        router.push({ name: 'login'})
+                    })
                     .catch(err => console.log(err));
             }
         }
