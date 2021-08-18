@@ -107,6 +107,7 @@
 	})
 	export default class Write extends Vue {
 		@Prop({ type: String }) readonly tempBoardId!: string
+		@Prop({ type: String }) readonly boardId!: string
 
 		extensions : unknown = [
 			History,
@@ -238,6 +239,7 @@
 				history.pushState(null, '', document.URL)
 			}
 			if(this.tempBoardId !== undefined) this.editTempBoard(this.tempBoardId)
+			if(this.boardId !== undefined) this.editBoard(this.boardId)
 			//this.content = this.getContent
 			//console.log(this.getId)
 		}
@@ -279,6 +281,35 @@
 				})
 		}
 
+		async editBoard(boardId:string):Promise<void>{
+			//console.log(tempBoardId)
+			await http.
+				get('/board',{
+					params:{
+						'boardId': boardId
+					},
+					headers:{
+						'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+					}
+				})
+				.then(response => {
+					console.log(response.data)
+					this.setId(response.data[0].id)
+					this.setMainTitle(response.data[0].title)
+					this.setMainSubtitle(response.data[0].subtitle)
+					this.setItemList(response.data[0].contents)
+					this.setTagList(response.data[0].tags)
+					// this.setMemoList(response.data[0].memos)
+					this.setImageUrl(response.data[0].titleImage)
+					//console.log(this.getId)
+					eventBus.$emit("clickFirstTree")
+				})
+				.catch(() => this.errored = true )
+				.finally(() => {
+					this.loading = false
+				})
+		}
+
 		generateSub():void{
 			var subtitle = ''
 
@@ -302,5 +333,7 @@
 </script>
 
 <style>
-
+/* .v-application .write-header-color .white{
+	background-color:#282828 !important;
+} */
 </style>

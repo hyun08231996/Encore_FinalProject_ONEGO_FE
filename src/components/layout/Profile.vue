@@ -3,20 +3,19 @@
         <div class="profile-text">
             <span class="profile-img">
                 <div class="profile-avatar">
-                    <a href="/myprofile"><img class="img" :src="user.profileImage"></a>
+                    <img class="img" :src="user.profileImage" @click="writerProfile(user.email)">
                 </div>
             </span>
-            <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
-                <span class="profile-name">
-                    {{ user.nickName }}
-                </span>
-            </a>
-            <div style="margin-top:5px; margin-bottom:14px; padding-top:20px; vertical-align: middle;"><v-btn
+            <span class="profile-name" @click="writerProfile(user.email)" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
+                {{ user.nickName }}
+            </span>
+            <div style="vertical-align: middle;"><v-btn
                 outlined
                 rounded
                 text
                 width="60"
-                height="28"
+                height="30"
+                @click="subscribe()"
                 >
                 구독
             </v-btn>
@@ -50,19 +49,46 @@ export default Vue.extend({
         user: {} as User,
     }),
     methods: {
-        getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email]
-            console.log(id)
+        getUserInfo(id : string){
+        console.log(id)
             http
-            .get('/users/'+id)
+            .get('/users/'+id,{ headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
             .then(response => {
-                console.log(response.data)
                 this.user=response.data
             })
+        },
+        subscribe(followEmail:string){
+           http
+          .post('/followings/'+this.user.email, {'followEmail': followEmail},{
+                headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+           }})
+          .then(response => {
+            var con_test = confirm(this.user.nickName+"작가님을 구독하시겠습니까?");
+            if(con_test == true){        
+              confirm("구독하셨습니다!")
+               console.log(this.$route.params.id)
+              this.getUserInfo(this.$route.params.id)
+            }
+            else if(con_test == false){
+             console.log(this.$route.params.id)
+              this.getUserInfo(this.$route.params.id)
+            }  
+          })
+        },
+        //무엇이 문제일까요 ?? :/
+        writerProfile(email : string){
+            console.log("writerProfile")
+            console.log(email)
+            this.$router.push({
+                name: "MyProfile",
+                params: { emailProp: email },
+            });
         },
     },
     watch: {
         id(){
-            console.log(this.id)
             this.getUserInfo(this.id)
         }
     },
@@ -81,8 +107,9 @@ export default Vue.extend({
     font-family: Noto Sans KR;
 }
 .profile-name{
-    font-size : 1.5rem;
+    font-size : 1.4rem;
     font-weight: 500;
+    padding-bottom:14px;
     padding-right: 10px;
 }
 .profile-link{
@@ -90,9 +117,11 @@ export default Vue.extend({
     text-decoration: none;
 }
 .profile-text-description{
+
     font-size : 1.1rem;
     font-weight: 300;
     color: #555555;
+    margin-top:14px; 
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;

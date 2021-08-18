@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-	import { Component, Vue } from 'vue-property-decorator';
+	import { Component, Vue, Prop } from 'vue-property-decorator';
 	import { namespace } from 'vuex-class';
 	import http from '@/http/http-common'
 
@@ -14,6 +14,7 @@
 
 	@Component
 	export default class PostBtn extends Vue {
+		commentList:string[] = []
 
 		@WriteStoreModule.State('itemList')
 		private itemList!:any[]
@@ -27,14 +28,27 @@
 		@WriteStoreModule.State('titleImage')
 		private titleImage!:File
 
+		@WriteStoreModule.Getter('getId')
+		private id!:string
+
 		async updatePost():Promise<void>{
+			await http
+				.get('/comment', {
+				params: { 'boardId': this.id, 'pageNumber': 1 },
+				headers:{
+					'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+				}})
+				.then(response => {
+					console.log(response.data)
+					this.commentList = response.data
+				})
 			if(!confirm("수정 하시겠습니까?")){
 				return
 			}else{
-				const date = new Date()
-				const form = new FormData()
-				const contentList : any[] = []
-				const tagList :string[] = []
+				var date = new Date()
+				var form = new FormData()
+				var contentList : any[] = []
+				var tagList :string[] = []
 				//const memoList : any[] = []
 
 				const firstContent = {no:this.itemList[0].id,title:'',subtitle:'',content:this.itemList[0].text};
@@ -53,14 +67,17 @@
                 // }
 
 				this.tagList.forEach((item) => tagList.push(item))
+				console.log(this.commentList)
 
 				const board = JSON.stringify(
 						{
-							title:this.itemList[0].title,
-							subtitle:this.itemList[0].subtitle,
+							boardId:this.id,
 							userEmail:this.$store.state.user.userAccount.attributes.email,
 							nickName:this.$store.state.user.userAccount.attributes.nickname,
+							title:this.itemList[0].title,
+							subtitle:this.itemList[0].subtitle,
 							titleImageFile:this.titleImage,
+							comments:this.commentList,
 							contents:contentList,
 							modDatetime:date,
 							tags:tagList
@@ -72,7 +89,7 @@
 					type: 'application/json'
 				})
 
-				form.append('boardDTO', blob)
+				form.append('board', blob)
 				form.append('titleImageFile',this.titleImage)
 
 				await http.
@@ -85,7 +102,7 @@
 					.then(response => {
 						if (response.status >=200 && response.status < 204){
 							console.log("Draft post success!")
-							//location.href="/post"??
+							window.open('/content/'+this.id,'_self')
 						} else{
 							console.log(response)
 							console.log("Draft post fail..")
@@ -93,6 +110,26 @@
 					})
 			}
 		}
+
+		// async created(){
+		// 	this.getCommentList()
+		// }
+
+		// async getCommentList():Promise<void>{
+		// 	console.log("getCommentList")
+		// 	await http
+		// 			.get('/comment', {
+		// 			params: { 'boardId': this.id, 'pageNumber': 1 },
+		// 			headers:{
+        //               'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+        //             }})
+		// 			.then(response => {
+		// 				console.log(response.data)
+		// 				this.commentList = response.data
+		// 			})
+				
+		// }
+		
 	}
 </script>
 

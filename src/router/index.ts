@@ -144,7 +144,7 @@ const routes: Array<RouteConfig> = [
 		beforeEnter: requireAuth()
 	},
 	{
-		path:"/write/:boardId",
+		path:"/write/post/:boardId",
 		name: "PostEdit",
 		component: Write,
 		props:true,

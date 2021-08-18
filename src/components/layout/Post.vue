@@ -9,17 +9,18 @@
         <!-- Title Image -->
         <v-card tile class="mb-12" id="image-card">
             <v-img height="50vh" :src="article.titleImage">
-              <v-flex id="title-preview-margin" class="mx-auto">
-                <template v-if="$store.state.user.userInfo.email === article.userId">
-                  <span class="postbtn"><v-btn icon color="#00d5aa"><i class="fas fa-trash-alt" style="font-size: 1.8em;" @click="postdelete(userEmail)"></i></v-btn></span>
-                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="postput(boardId,article.title,article.subtitle,article.titleImage,article.contents,article.tags)">수정</v-btn></span>
+              <v-flex id="title-preview-margin">
+              <template v-if="loginUser === article.userEmail">
+                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="postdelete(article.id)">삭제</v-btn></span>
+                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="postput(article.id)">수정</v-btn></span>
                 </template>
                 <template v-else>
-                  <span class="postbtn"><BookmarkBtn/></span> 
-                  <span class="postbtn"><v-btn icon color="#00d5aa"><i class="fa fa-heart" style="font-size: 1.8em;" @click="getlike(userEmail)"></i></v-btn></span>
-                </template>
-              <span><h1 style="font-size:40px; padding-left:1px;">{{ article.title }}</h1></span>
-              
+                  <!-- <span class="postbtn"><BookmarkBtn/></span>  -->
+                  <span class="postbtn"><p class="likescount">{{article.likes}} 번</p></span>
+                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" @click="getlike(article.userEmail)">스크랩</v-btn></span>
+                  <!-- <span class="postbtn"><v-btn icon color="#00d5aa" @click="getlike(article.userEmail)"><span style="font-size: 1.8em;"><i class="fa fa-heart"></i></span></v-btn></span>  -->
+              </template>  
+              <span><h1 style="font-size:40px; padding-left:1px; max-width:80%;">{{ article.title }}</h1></span>  
               <div style="opacity:80%;"><h3>{{ article.subtitle }}</h3></div>
               <div style="opacity:60%;margin-top:30px;">
                 <span><h5> {{ article.nickName }}· {{ article.modDatetime }} </h5></span>
@@ -59,11 +60,9 @@ import Vue from 'vue';
 import Profile from '@/components/layout/Profile.vue'
 import Comment from '@/components/layout/Comment.vue'
 import http from '../../http/http-common'
-// import LikeBtn from '@/components/buttons/LikeBtn.vue'
-import BookmarkBtn from '@/components/buttons/BookmarkBtn.vue'
+//import BookmarkBtn from '@/components/buttons/BookmarkBtn.vue'
 //import PostDeleteBtn from '@/components/buttons/PostDeleteBtn.vue'
 //import PublishBtn from '@/components/buttons/PublishBtn.vue'
-
 
 export default Vue.extend({
 
@@ -74,65 +73,82 @@ export default Vue.extend({
           page: 1,
           article : {},
           user: {},
+          titleImageFile: new File([""], ""),
           id : '',
-          userId : ''
+          userId : '',
+          loginUser:''
     }),
     components:{
-      Profile, Comment, 'BookmarkBtn':BookmarkBtn,  
-      // 'LikeBtn':LikeBtn, 'PostDeleteBtn':PostDeleteBtn,'PublishBtn':PublishBtn    
+       Comment, Profile
+      // 'LikeBtn':LikeBtn, 'PostDeleteBtn':PostDeleteBtn,'PublishBtn':PublishBtn, 'BookmarkBtn':BookmarkBtn,     
     },
     methods: {
         async getArticle(boardId: string){
           await http
               .get('/board', {
-                params: { 'boardId': boardId }})
+                params: { 'boardId': boardId }, 
+                headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
               .then(response => {
+                  console.log(response.data)
                   this.article = response.data[0];
               })
         },
         getlike(userEmail:string){
-          console.log("like")
           http
-          .post('/boardId', {'userEmail': userEmail})
+          .post('/'+this.$route.params.boardId, {'userEmail': userEmail},{
+                headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+           }})
           .then(response => {
-              console.log(response.data)
-              this.getlike(this.$route.params.boardId)
+            var con_test = confirm("스크랩 페이지로 이동하시겠습니까?");
+            if(con_test == true){
+              //해야할것(1) 스크랩페이지 get수정(수영님)            
+              location.href = '/scrap'
+            }
+            else if(con_test == false){
+              this.getArticle(this.$route.params.boardId)
+            }  
           })
         },
 
         postdelete(boardId:string){
           console.log("postdelete")
-
+          console.log(boardId)
           var con_test = confirm("글을 삭제하시겠습니까?");
           if(con_test == true){
+              console.log(true)
               http
-                .delete('/boardId', {
-                data: { 'boardId': boardId}})
+                .delete('/board', {
+                data: {'boardId': boardId}, 
+                headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
                 .then(response => {
-                    this.article = response.data[0];
+                     location.href = '/article'
                 })
           }
           else if(con_test == false){
+            console.log(false)
               http
                 .get('/board', {
-                  params: { 'boardId': boardId }})
+                  params: { 'boardId': boardId }, 
+                  headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
                 .then(response => {
-                    this.article = response.data[0];
+                     this.getArticle(this.$route.params.boardId)
                 })
           }
           
         },
-         postput( boardId:string,title:string,subtitle:string,titleImage:string,contents:string,tags:string){
-              http
-              .put('/comment', { 
-                data:{'boardId': boardId, 'title': title, 'subtitle': subtitle, 'titleImage': titleImage, 'contents': contents, 'tags':tags}})
-              .then(response => {
-                  console.log(response.data)
-                  this.article = response.data[0];
-              })
-          },
+        postput(boardId:string){
+          window.open('/write/post/'+boardId,'_self')
+        },
+          
     },
     created(){  
+      var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+      this.loginUser = userInfo.email
       this.getArticle(this.$route.params.boardId)
     }
 })
@@ -140,9 +156,9 @@ export default Vue.extend({
 
 
 <style >
-.mx-auto justify-center{
-  margin: 0 auto;
-}
+  .mx-auto justify-center{
+    margin: 0 auto;
+  }
 	.post {
 		font-family: "Noto Sans KR", sans-serif !important;
 	}
@@ -150,17 +166,21 @@ export default Vue.extend({
     vertical-align: middle;
     float: right;
     padding-left: 10px;
+    padding-bottom: 30px;
   }
   #preview-btn:hover{
 	color:#757575 !important;
   }
-
   #image-card{
     position:relative !important;
   }
-
+  .likescount{
+    padding-top: 5px;
+    color: #00d5aa;
+    font-size: 1.1rem;
+  }
   #title-preview-margin{
-    max-width:50% !important;
+    width:50% !important;
     position:absolute !important;
     bottom:10% !important;
     left:25% !important;
