@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-    // baseURL: "http://onego.click",
+    // baseURL: "onego.click/api",
     baseURL: "/api",
     headers: {
         'Access-Control-Allow-Origin': '*',

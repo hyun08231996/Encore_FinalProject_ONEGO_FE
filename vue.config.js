@@ -3,7 +3,7 @@ module.exports = {
     //     proxy: "http://onegodev.ddns.net:8080"
     // },
     devServer: {
-        proxy: "http://localhost:80"
+        proxy: "http://onego.click"
     },
     transpileDependencies: [
         'vuetify'
