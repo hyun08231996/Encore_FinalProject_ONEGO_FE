@@ -42,7 +42,7 @@
 <script>
 import Vue from 'vue'
 import http from '../http/http-common'
-var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+
 
 export default Vue.extend({
     data: () => ({
@@ -62,6 +62,7 @@ export default Vue.extend({
             });
         },
         async getUserInfo(userEmail){
+          var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
             await http
                     .get('/users/'+userEmail)
                     .then(response => {
@@ -85,6 +86,7 @@ export default Vue.extend({
                     })  
         },
         async unsubscribe(e, email){
+          var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
             e.stopPropagation();
             await http
                 .delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email},
@@ -93,7 +95,7 @@ export default Vue.extend({
                   }})
                 .then(response => {
                     //update local storage
-                    userInfo.followings.pop(email)
+                    userInfo.followings = userInfo.followings.filter((element) => element !== email)
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                 })
                 .catch(() => this.errored = true )
@@ -102,6 +104,7 @@ export default Vue.extend({
                 })
         },
         async subscribe(e, email){
+          var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
             e.stopPropagation();
             await http
                 .post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email},{
