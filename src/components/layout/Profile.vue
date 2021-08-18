@@ -11,23 +11,24 @@
                 {{ user.nickName }}
             </span> 
 
-            <template v-if="loginUser != user.email">
-                <div style="vertical-align: middle; padding-top: 5px;">
-                    <template v-if="this.follow==false">
+            <template v-if="loginUser != user.email && loginUser != undefined">
+                <div style="vertical-align: middle;">
+                    <template v-if="this.followFlag==false">
                         <v-btn id="profile-subscribe-btn" width="60" height="30" rounded outlined color="#00d5aa" @click="subscribe(user.email)">
                             구독
                         </v-btn>
                     </template>
-                    <template v-else>
-                        <v-btn id="profile-unsubscribe-btn" width="60" height="30" value="" rounded outlined color="#00d5aa" @click="unsubscribe(user.email)">
+                    <template v-if="this.followFlag==true">
+                        <v-btn id="profile-unsubscribe-btn" value="" height="30" @click="unsubscribe(user.email)" absolute rounded outlined color="#00d5aa">
                         </v-btn>
+                        <br>
                     </template>
                 </div>
             </template>
             <template v-else>
                 <div style="vertical-align: middle; width: 60px; height: 30px;"></div>
             </template>  
-
+            
             <div class="profile-text-description">
                 {{ user.email }}
             </div>
@@ -60,46 +61,65 @@ export default Vue.extend({
         disabledFollower:false,
         errored: false,
         loading: true,
-        follow: false
+        follow: false,
+        followFlag: false,
+        myProfileFlag: false,
+        autherEmail: ''
     }),
     methods: {
-        getUserInfo(id : string){
-            http
-            .get('/users/'+id)
-            .then(response => {
-                this.user=response.data
-            })
+        async getUserInfo(id : string){
+            var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+            if(id === userInfo.email){
+                this.myProfileFlag == true
+            }
+            await http
+                .get('/users/'+id)
+                .then(response => {
+                    if(Object.keys(userInfo).length != 0){
+                        for(var i=0; i<userInfo.followings.length; i++){
+                            if(id === userInfo.followings[i]){
+                                this.followFlag = true
+                                break
+                            }
+                        }
+                    }
+                    
+                    this.user=response.data
+                })
         },
         async subscribe(email: string){
+                var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 				await http
 					.post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email},{
 						headers:{
 							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}})
 					.then(response => {
-						console.log(response.data)
+                        userInfo.followings.push(email)
+                        localStorage.setItem('userInfo', JSON.stringify(userInfo))
 					})
 					.catch(() => this.errored = true )
 					.finally(() => {
 						this.loading = false
 					})
-				this.follow = true
+				this.followFlag = true
 			},
 			async unsubscribe(email: string){
+                var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 				await http
 					.delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email},
                         headers:{
 							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}})					
                     .then(response => {
-						console.log(response.data)
+                        userInfo.followings = userInfo.followings.filter((element: any) => element !== email)
+                        localStorage.setItem('userInfo', JSON.stringify(userInfo))
 					})
 					.catch(() => this.errored = true )
 					.finally(() => {
 						this.loading = false
 					})
-					this.follow = true
-				this.follow = false
+				    this.followFlag = false
 			},
         writerProfile(email : string){
             this.$router.push({
@@ -109,13 +129,13 @@ export default Vue.extend({
         },
     },
     watch: {
-        id(){
-            this.getUserInfo(this.id)
+        async id(){
+            await this.getUserInfo(this.id)
         }
     },
     created(){ 
-    var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-    this.loginUser = userInfo.email
+        var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+        this.loginUser = userInfo.email
     }
 })
 </script>

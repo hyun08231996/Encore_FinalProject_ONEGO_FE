@@ -123,8 +123,7 @@
 				await http
 					.delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email}})
 					.then(response => {
-						console.log(response)
-						userInfo.followings.pop(email)
+						userInfo.followings = userInfo.followings.filter((element: any) => element !== email)
 						this.user.followers = (parseInt(this.user.followers) - 1).toString()
 						localStorage.setItem('userInfo', JSON.stringify(userInfo))
 					})

@@ -10,26 +10,28 @@
         <v-card tile class="mb-12" id="image-card">
             <v-img height="50vh" :src="article.titleImage">
               <v-flex id="title-preview-margin">
-              <template v-if="loginUser === article.userEmail">
-                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" @click="postdelete(article.id)">삭제</v-btn></span>
-                  <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" @click="postput(article.id)">수정</v-btn></span>
-                </template>
-                <template v-else>
-                  <!-- <span class="postbtn"><p class="likescount">{{article.likes}} 번</p></span> -->
-                   <template v-if="this.scraps==false">
-                        <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" id="post-scrap-btn" @click="getlike()">
-                          스크랩
-                        </v-btn></span>
-                    </template>
-                    <template v-else>
-                        <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" value="" id="post-unscrap-btn" @click="getunlike()">                        
-                        </v-btn></span>
-                    </template>
-              </template>  
+              <template v-if="loginUser != undefined">
+                <template v-if="loginUser === article.userEmail">
+                    <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" @click="postdelete(article.id)">삭제</v-btn></span>
+                    <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" @click="postput(article.id)">수정</v-btn></span>
+                  </template>
+                  <template v-else>
+                    <!-- <span class="postbtn"><p class="likescount">{{article.likes}} 번</p></span> -->
+                    <template v-if="this.scraps==false">
+                          <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" id="post-scrap-btn" @click="getlike()">
+                            스크랩
+                          </v-btn></span>
+                      </template>
+                      <template v-else>
+                          <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" value="" id="post-unscrap-btn" @click="getunlike()">                        
+                          </v-btn></span>
+                      </template>
+                </template>  
+              </template>
               <span><h1 style="font-size:40px; padding-left:1px; max-width:80%;">{{ article.title }}</h1></span>  
               <div style="opacity:80%;"><h3>{{ article.subtitle }}</h3></div>
               <div style="opacity:60%;margin-top:30px;">
-                <span><h5> {{ article.nickName }}· {{ article.modDatetime }} </h5></span>
+                <span><h5> {{ article.nickName }}· {{getTime(article.modDatetime)}} </h5></span>
               </div>
               </v-flex>
             </v-img>
@@ -86,44 +88,62 @@ export default Vue.extend({
        Comment, Profile
     },
     methods: {
+        getTime(time: any){
+            const temp = new Date(time)
+            const date = temp.getFullYear()+". "+temp.getMonth()+". "+temp.getDate()
+            return date
+        },
         async getArticle(boardId: string){
+          var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
           await http
               .get('/board', {
                 params: { 'boardId': boardId }, 
                 })
               .then(response => {
                   this.article = response.data[0];
+                  if(this.loginUser != undefined){
+                    for(var i=0; i<userInfo.likes.length; i++){
+                        if(boardId === userInfo.likes[i]){
+                            this.scraps = true
+                            break
+                        }
+                    }
+                  }
               })
         },
         async getlike(){
+            var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
             await http
                 .post('/'+this.$route.params.boardId, {"userEmail":this.$store.state.user.userAccount.attributes.email},{
                       headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
                 }})
                 .then(response => {
-                  console.log(response.data)
-                  this.getArticle(this.$route.params.boardId)
+                  // this.getArticle(this.$route.params.boardId)
+                  userInfo.likes.push(this.$route.params.boardId)
+                  localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                  this.scraps = true
                 })
                 .catch(() => this.errored = true )
                 .finally(() => {
                   this.loading = false
                 })
-                this.scraps = true
         },
         async getunlike(){
+            var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
             await http
                 .post('/'+this.$route.params.boardId, {"userEmail":this.$store.state.user.userAccount.attributes.email},{
                       headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
                 }})
                 .then(response => {
-                   console.log(response.data)
-                  this.getArticle(this.$route.params.boardId)
+                  // this.getArticle(this.$route.params.boardId)
+                  userInfo.likes = userInfo.likes.filter((element: any) => element !== this.$route.params.boardId)
+                  localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                  this.scraps = false
                 })
                 .catch(() => this.errored = true )
                 .finally(() => {
                   this.loading = false
                 })
-                this.scraps = false
         },
 
         postdelete(boardId:string){
