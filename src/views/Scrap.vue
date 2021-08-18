@@ -14,7 +14,7 @@
               <p v-html="article.contents ? article.contents : ''"></p>
             </v-card-text>
 
-            <v-card-actions class="avatar-box">
+            <v-card-actions class="avatar-box"  @click="writerProfile($event, article.userEmail)">
                 <v-list-item-avatar class="page-avatar" color="grey darken-3" style="width: 15px; height: 15px;">
                   <v-img
                     class="avatar"
@@ -50,6 +50,13 @@ import http from '../http/http-common'
         scrapId: {},
 		  }),
       methods: {
+        writerProfile(e, writerEmail){
+            e.stopPropagation()
+            this.$router.push({
+                name: "MyProfile",
+                params: { emailProp: writerEmail },
+            });
+        },
         getContents(boardId){
           http
             .get('/board', {
@@ -59,16 +66,13 @@ import http from '../http/http-common'
                 }})
               .then(response => {
                 http 
-                  .get('/users/'+response.data[0].userEmail,{
-                        headers:{
-                          'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                        }
-                      })
+                  .get('/users/'+response.data[0].userEmail)
                   .then(r => {
-                      if(response.data.profileImage != undefined){
-                        response.data.titleImage = r.data.profileImage
+                      console.log(r.data.profileImage)
+                      if(r.data.profileImage != undefined){
+                        response.data[0].titleImage = r.data.profileImage
                       }else{
-                        response.data.titleImage = ''
+                        response.data[0].titleImage = ''
                       }
                   })
                 if(response.data.length !=0){
@@ -84,12 +88,14 @@ import http from '../http/http-common'
                     }
                   })
                   this.articles.push(response.data[0])
+                  console.log("article")
+                  console.log(this.articles)
                 }
               })
         },
         async getScrapId(){
           var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-          this.scrapId = userInfo.scraps
+          this.scrapId = userInfo.likes
           for(let i = 0; i< this.scrapId.length; i++){
               this.getContents(this.scrapId[i])
           }

@@ -49,7 +49,7 @@
 		  <a @click="followerList(user.email)" id="follower-hover" class="link-hover">
 			<div>
 		    <div><label class="label label-follow" style="font-size:0.80em;opacity:60%;">구독자</label></div>
-		    <div><label class="label label-number" style="font-size:1.2em;opacity:55%;">{{this.user.followers}}</label></div>
+		    <div><label class="label label-number" style="font-size:1.2em;opacity:55%;" >{{this.user.followers}}</label></div>
 			</div>
 		  </a>
 		</div>
@@ -98,14 +98,19 @@
 			follow: false
 		}),
 		methods: {
+			
 			async subscribe(email: string){
+				var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 				await http
 					.post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email},{
 						headers:{
 							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
 						}})
 					.then(response => {
-						console.log(response)
+						// local storage update
+						userInfo.followings.push(email)
+						this.user.followers = (parseInt(this.user.followers) + 1).toString()
+						localStorage.setItem('userInfo', JSON.stringify(userInfo))
 					})
 					.catch(() => this.errored = true )
 					.finally(() => {
@@ -114,10 +119,14 @@
 				this.follow = true
 			},
 			async unsubscribe(email: string){
+				var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 				await http
 					.delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email}})
 					.then(response => {
 						console.log(response)
+						userInfo.followings.pop(email)
+						this.user.followers = (parseInt(this.user.followers) - 1).toString()
+						localStorage.setItem('userInfo', JSON.stringify(userInfo))
 					})
 					.catch(() => this.errored = true )
 					.finally(() => {
@@ -141,34 +150,33 @@
 			}
 		},
 		async created(){
+			var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+			var i = 0
 			this.email = (this.emailProp.length == 0 ? this.$store.state.user.userAccount.attributes.email : this.emailProp)
 			// Own Profile
 			if(this.email == this.$store.state.user.userAccount.attributes.email){
 				this.myProfileFlag = true
-				var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 				this.user = userInfo
-				console.log(userInfo)
 				this.user.followers = userInfo.followers.length
 				this.user.followings = userInfo.followings.length
 				this.followList = userInfo.followings
-				
 			// Other writer's profile
 			}else{
 				await http
-					.get('/users/'+this.emailProp,{
-						headers:{
-							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-						}})
+					.get('/users/'+this.emailProp)
 					.then(response => {
 						this.user = response.data
 					})
 				this.user.followers = String(this.user.followers.length)
 				this.user.followings = String(this.user.followings.length)
 			}
-			// to check the writer is in the user's following list
-			for(var i=0; i<parseInt(this.user.followings); i++){
-				if(this.user.email === this.followList[i]) 
+			// to check if the writer is in the user's following list
+			for(i; i<userInfo.followings.length; i++){
+				if(this.user.email === userInfo.followings[i]){
 					this.follow = true
+					break
+				}
+				console.log("follow? " +this.follow)
 			}
 
 			if(this.user.followings == '0'){

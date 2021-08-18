@@ -172,10 +172,7 @@
 				userInfo.intro = this.user.intro
 				userInfo.nickName = this.user.nickname
 				await http
-					.get('/users/'+this.user.email, {
-						headers:{
-							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-						}})
+					.get('/users/'+this.user.email)
 					.then(response => {
 						userInfo.profileImage = response.data.profileImage
 					})

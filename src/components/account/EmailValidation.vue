@@ -4,8 +4,8 @@
         <p class="text--primary">입력하신 이메일로 전송된 메일을 확인해주세요.</p>
         <v-text-field v-model="registerEmail"  v-if="this.email == ''" disabled></v-text-field>
         <v-text-field v-model="resetEmail"  v-if="this.email != ''" disabled></v-text-field>
-        <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email == ''"></v-text-field>
-        <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email != ''"></v-text-field>
+        <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email == ''" color="#00d5aa"></v-text-field>
+        <v-text-field label="확인코드" v-model="validationCode" @keyup.enter="validateEmail" v-if="this.email != ''" color="#00d5aa"></v-text-field>
         <v-text-field
             v-model="newPassword"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
@@ -15,6 +15,7 @@
             label="새로운 비밀번호"
             hint="At least 8 characters"
             counter
+            color="#00d5aa"
             v-if="this.email != ''"
             @click:append="show1 = !show1"
             @keyup.enter="validateForgotPassword"

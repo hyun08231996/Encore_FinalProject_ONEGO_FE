@@ -42,6 +42,7 @@
 <script>
 import Vue from 'vue'
 import http from '../http/http-common'
+var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 
 export default Vue.extend({
     data: () => ({
@@ -62,16 +63,13 @@ export default Vue.extend({
         },
         async getUserInfo(userEmail){
             await http
-                    .get('/users/'+userEmail,{
-                      headers:{
-                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                      }})
+                    .get('/users/'+userEmail)
                     .then(response => {
-                        if(this.$store.state.user.userInfo.email == response.data.email){
+                        if(this.$store.state.user.userInfo.email == userEmail){
                           response.data['flag']="me"
                         }else{
-                          for(var i=0; i<this.$store.state.user.userInfo.followings.length; i++){
-                            if(this.$store.state.user.userInfo.followings[i] == userEmail){
+                          for(var i=0; i<userInfo.followings.length; i++){
+                            if(userInfo.followings[i] == userEmail){
                               response.data['flag']="true"
                               break
                             }else{
@@ -89,9 +87,14 @@ export default Vue.extend({
         async unsubscribe(e, email){
             e.stopPropagation();
             await http
-                .delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email}})
+                .delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email},
+                  headers:{
+                    'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                  }})
                 .then(response => {
-                    console.log(response)
+                    //update local storage
+                    userInfo.followings.pop(email)
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
                 })
                 .catch(() => this.errored = true )
                 .finally(() => {
@@ -106,7 +109,9 @@ export default Vue.extend({
                     'Authorization': 'Bearer '+localStorage.getItem('accessToken')
                   }})
                 .then(response => {
-                    console.log(response)
+                    //update local storage
+                    userInfo.followings.push(email)
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
                 })
                 .catch(() => this.errored = true )
                 .finally(() => {
@@ -122,10 +127,7 @@ export default Vue.extend({
           this.followidList = userInfo.followings;
         }else{
             await http
-              .get('/users/'+this.email,{
-                  headers:{
-                    'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                  }})
+              .get('/users/'+this.email)
               .then(response => {
                   this.nickname = response.data.nickName
                   this.followidList = response.data.followings;

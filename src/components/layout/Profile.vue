@@ -52,9 +52,7 @@ export default Vue.extend({
         getUserInfo(id : string){
         console.log(id)
             http
-            .get('/users/'+id,{ headers:{
-                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                    }})
+            .get('/users/'+id)
             .then(response => {
                 this.user=response.data
             })
@@ -66,15 +64,13 @@ export default Vue.extend({
            }})
           .then(response => {
             var con_test = confirm(this.user.nickName+"작가님을 구독하시겠습니까?");
-            if(con_test == true){        
+            if(con_test == true){
               confirm("구독하셨습니다!")
-               console.log(this.$route.params.id)
-              this.getUserInfo(this.$route.params.id)
+              this.getUserInfo(this.user.email)
             }
             else if(con_test == false){
-             console.log(this.$route.params.id)
-              this.getUserInfo(this.$route.params.id)
-            }  
+              this.getUserInfo(this.user.email)
+            }
           })
         },
         //무엇이 문제일까요 ?? :/

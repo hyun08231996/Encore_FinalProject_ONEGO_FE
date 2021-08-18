@@ -15,18 +15,19 @@
                <p v-html="article.contents ? article.contents : ''"></p>
              </v-card-text>
 
-             <v-card-actions class="avatar-box">
-                 <v-list-item-avatar class="page-avatar" color="grey darken-3" style="width: 15px; height: 15px;">
-                   <v-img
-                     class="avatar"
-                     alt="avatar"
-                     :src="article.titleImage"
-                   ></v-img>
-                 </v-list-item-avatar>
-                 <v-list-item-content class="author-date">
-                   <span class="nickname" v-html="article.nickName"></span>
-
-                 </v-list-item-content>
+             <v-card-actions class="avatar-box" @click="writerProfile($event, article.userEmail)">
+                <!-- <div id="userProfile" @click="writerProfile($event, article.email)"> -->
+                  <v-list-item-avatar class="page-avatar" color="grey darken-3" style="width: 15px; height: 15px;">
+                    <v-img
+                      class="avatar"
+                      alt="avatar"
+                      :src="article.titleImage"
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content class="author-date">
+                    <span class="nickname" v-html="article.nickName"></span>
+                  </v-list-item-content>
+                 <!-- </div> -->
                  <span class="right-padding">{{dateTime(article.modDatetime)}}</span>
              </v-card-actions>
              <br/>
@@ -57,6 +58,13 @@ export default Vue.extend({
       totalPageNum: 1
      }),
      methods: {
+       writerProfile(e: any, writerEmail: string){
+            e.stopPropagation()
+            this.$router.push({
+                name: "MyProfile",
+                params: { emailProp: writerEmail },
+            });
+        },
        async getArticles(pageNum: number){
          await http
              .get('/board', {
@@ -65,11 +73,7 @@ export default Vue.extend({
                 response.data.forEach((d: any) => {
                   console.log(d)
                 http 
-                    .get('/users/'+d.userEmail,{
-                          headers:{
-                            'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                          }
-                        })
+                    .get('/users/'+d.userEmail)
                     .then(response => {
                         if(response.data.profileImage != undefined){
                           d.titleImage = response.data.profileImage
@@ -133,11 +137,7 @@ export default Vue.extend({
        },
        async boardCount(){
          await http
-             .get('/board/count',{
-              headers:{
-                'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-              }
-            })
+             .get('/board/count')
              .then(response => {
                      this.totalPageNum = Math.floor(response.data / 5) + 1
                    }
