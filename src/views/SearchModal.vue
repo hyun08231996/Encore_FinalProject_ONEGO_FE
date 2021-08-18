@@ -190,7 +190,8 @@
 						const nickname = response.data[i].nickName
 						const title = response.data[i].title
 						const content = response.data[i].contents[0].content
-						var allText = response.data[i].subtitle
+						let allText:string
+						allText = response.data[i].subtitle
 						for(let j=0;j<response.data[i].contents.length;j++){
 							allText += response.data[i].contents[j].title+response.data[i].contents[j].subtitle+response.data[i].contents[j].content
 						}
