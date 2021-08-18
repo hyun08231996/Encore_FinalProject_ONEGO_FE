@@ -3,24 +3,31 @@
         <div class="profile-text">
             <span class="profile-img">
                 <div class="profile-avatar">
-                    <a href="/myprofile"><img class="img" :src="user.profileImage"></a>
+                    <img class="img" :src="user.profileImage" @click="writerProfile(user.email)">
                 </div>
             </span>
-            <a href="/myprofile" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
-                <span class="profile-name">
-                    {{ user.nickName }}
-                </span>
-            </a>
-            <div style="margin-top:5px; margin-bottom:14px; padding-top:20px; vertical-align: middle;"><v-btn
-                outlined
-                rounded
-                text
-                width="60"
-                height="28"
-                >
-                구독
-            </v-btn>
-            </div>
+            
+            <span class="profile-name" @click="writerProfile(user.email)" style="height: 25px; color: #555555; text-decoration: none; vertical-align: middle; float:left;">
+                {{ user.nickName }}
+            </span> 
+
+            <template v-if="loginUser != user.email">
+                <div style="vertical-align: middle; padding-top: 5px;">
+                    <template v-if="this.follow==false">
+                        <v-btn id="profile-subscribe-btn" width="60" height="30" rounded outlined color="#00d5aa" @click="subscribe(user.email)">
+                            구독
+                        </v-btn>
+                    </template>
+                    <template v-else>
+                        <v-btn id="profile-unsubscribe-btn" width="60" height="30" value="" rounded outlined color="#00d5aa" @click="unsubscribe(user.email)">
+                        </v-btn>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <div style="vertical-align: middle; width: 60px; height: 30px;"></div>
+            </template>  
+
             <div class="profile-text-description">
                 {{ user.email }}
             </div>
@@ -48,28 +55,88 @@ export default Vue.extend({
     },
     data: () => ({
         user: {} as User,
+        loginUser:'',
+        disabledFollowing:false,
+        disabledFollower:false,
+        errored: false,
+        loading: true,
+        follow: false
     }),
     methods: {
-        getUserInfo(id : string){//userEmail을 넣어야하는거 아닌가요? this.$store.state.user.userAccount.attributes.email]
-            console.log(id)
+        getUserInfo(id : string){
             http
             .get('/users/'+id)
             .then(response => {
-                console.log(response.data)
                 this.user=response.data
             })
+        },
+        async subscribe(email: string){
+				await http
+					.post('/followings/'+this.$store.state.user.userAccount.attributes.email, {'followEmail': email},{
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})
+					.then(response => {
+						console.log(response.data)
+					})
+					.catch(() => this.errored = true )
+					.finally(() => {
+						this.loading = false
+					})
+				this.follow = true
+			},
+			async unsubscribe(email: string){
+				await http
+					.delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email},
+                        headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})					
+                    .then(response => {
+						console.log(response.data)
+					})
+					.catch(() => this.errored = true )
+					.finally(() => {
+						this.loading = false
+					})
+					this.follow = true
+				this.follow = false
+			},
+        writerProfile(email : string){
+            this.$router.push({
+                name: "MyProfile",
+                params: { emailProp: email },
+            });
         },
     },
     watch: {
         id(){
-            console.log(this.id)
             this.getUserInfo(this.id)
         }
     },
+    created(){ 
+    var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+    this.loginUser = userInfo.email
+    }
 })
 </script>
 
 <style>
+#profile-unsubscribe-btn{
+	background-color: #00d5aa !important;
+    color: white !important;
+}
+#profile-unsubscribe-btn::after{
+	content: "구독중 ✓";
+}
+#profile-unsubscribe-btn:hover{
+	color: #00d5aa !important;
+	border-color: #00d5aa !important;
+	background-color: white !important;
+}
+#profile-unsubscribe-btn:hover:after{
+	content: "구독해지";
+}
+
 #profile{
     margin: auto;
     max-width:50% !important;
@@ -81,8 +148,9 @@ export default Vue.extend({
     font-family: Noto Sans KR;
 }
 .profile-name{
-    font-size : 1.5rem;
+    font-size : 1.4rem;
     font-weight: 500;
+    padding-bottom:14px;
     padding-right: 10px;
 }
 .profile-link{
@@ -93,6 +161,7 @@ export default Vue.extend({
     font-size : 1.1rem;
     font-weight: 300;
     color: #555555;
+    margin-top:14px; 
     /* 글자수 제한*/
     overflow: hidden;
     text-overflow: ellipsis;

@@ -138,7 +138,7 @@
 
             <v-avatar>
               <img
-                src="@/assets/profile/dogKang.jpeg"
+                src="@/assets/profile/dog2.jpg"
                 alt="이재호"
               >
             </v-avatar>

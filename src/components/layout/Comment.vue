@@ -13,22 +13,22 @@
         <span class="modDatetime">{{ item.modDatetime }}</span>
 
         <template v-if="item.edited===true">
-          <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
+          <span class="comment-btn" v-if="$store.state.user.userAccount.attributes.email === item.userId">
           <v-btn
           depressed
           small
-          @click = "putComment(boardId,item.userId,item.nickName,comment,$store.state.user.userInfo.email)"
+          @click = "putComment(boardId,item.id,item.userId,item.nickName,comment2)"
           >
           확인</v-btn></span>
           <textarea
-          v-model="comment"
+          v-model="comment2"
           class="new_comment"
           max="300"
           ></textarea>
         </template>
 
         <template v-else>
-        <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
+        <span class="comment-btn" v-if="$store.state.user.userAccount.attributes.email === item.userId">
           <v-btn
           small
           depressed
@@ -36,7 +36,7 @@
           >
         삭제</v-btn></span>
 
-        <span class="comment-btn" v-if="$store.state.user.userInfo.email === item.userId">
+        <span class="comment-btn" v-if="$store.state.user.userAccount.attributes.email === item.userId">
           <v-btn
           depressed
           small
@@ -47,8 +47,7 @@
         <p class="comment">{{ item.comment }}</p>
 
         </template>
-        <!-- <v-text-field class="text" flat solo readonly dense>{{ item.comment }}</v-text-field> -->
-  </div>
+       </div>
 
       <div class="content">
       <textarea
@@ -90,8 +89,9 @@ export default Vue.extend({
         commentList: [] as CommentList[],
         nickName: '',
         comment: '',
+        comment2:'',
         pageNumber: '',
-        userEmail: ''
+        userId: ''
     }),
 
     methods: {
@@ -99,7 +99,10 @@ export default Vue.extend({
         async getComment(boardId: string, pageNumber: number){
         await http
             .get('/comment', {
-            params: { 'boardId': boardId, 'pageNumber': pageNumber }})
+            params: { 'boardId': boardId, 'pageNumber': pageNumber },
+            headers:{
+                      'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }}) 
             .then(response => {
                 this.commentList = response.data
             })
@@ -118,11 +121,14 @@ export default Vue.extend({
             }
         },
 
-        insertComment(boardId: string, nickName: string, comment:string, userEmail:string){
+        insertComment(boardId: string, nickName: string, comment:string, userId:string){
                     http
                     .post('/comment', {
-                      'boardId': boardId, 'nickName': nickName, 'comment': comment, 'userEmail': userEmail
-                    })
+                      'boardId': boardId, 'nickName': nickName, 'comment': comment, 'userId': userId
+                    },
+                    {headers:{
+                      'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
                     .then(response => {
                         this.getComment(this.$route.params.boardId, 1)
                     })
@@ -130,31 +136,31 @@ export default Vue.extend({
 
         editedComment(index:number){
             this.$set(this.commentList[index],'edited',true)
-            //this.putComment(this.$route.params.boardId, this.commentList[index].userId, this.commentList[index].nickName, this.commentList[index].comment, this.commentList[index].userId)
         },
 
-        //댓글 수정하기
-        //데이터 전송이 되었는데 왜 response.data는 비어있을까요? post의 userEmail값이 null이라서 그런걸까요? :/
-        putComment( boardId:string, commentId:string, nickName:string, comment:string, userEmail:string){
-                    console.log(boardId)
-                    console.log(commentId)
-                    console.log(nickName)
-                    console.log(comment)
-                    console.log(userEmail)
+        putComment( boardId:string, commentId:string, userId:string, nickName:string, comment:string){
                     http
                     .put('/comment', {
-                      data:{'boardId': boardId, 'commentId': commentId, 'userEmail': userEmail, 'nickName': nickName, 'comment': comment}})
+                      'boardId': boardId, 'commentId': commentId, 'userId': userId, 'nickName': nickName, 'comment': comment,
+                      },
+                      {headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                      }})
                     .then(response => {
-                        console.log(response.data)
                         this.getComment(this.$route.params.boardId, 1)
-                    })
+                    }).catch(c => {
+                      console.log(c)} )
+                                 
             },
 
         //댓글 삭제하기
         deleteComment(boardId: string, commentId: string){
                     http
                     .delete('/comment', {
-                    data: { 'boardId': boardId, 'commentId': commentId}})
+                    data: { 'boardId': boardId, 'commentId': commentId}, 
+                    headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
                     .then(response => {
                         this.getComment(this.$route.params.boardId, 1)
                     })
@@ -163,45 +169,9 @@ export default Vue.extend({
 
     },
     created(){
-		console.log("mounted")
 		this.getComment(this.$route.params.boardId, 1)
     },
 })
-
-
-      // delete2(i){
-      //   this.items.splice(i,1)
-      // },
-
-      // editMemo3(index){
-      //       const textarea = document.getElementsByClassName('text')
-      //       this.isedit = false
-      //       for(var i=0; i<textarea.length; i++){
-      //           if(i === index){
-      //               //console.log(i)
-      //               const textareaId = textarea[i].children[0].children[0].children[0].children[0].id
-      //               //console.log(textareaId)
-      //               const element = document.getElementById(textareaId)
-      //               element.readOnly = false
-      //               document.getElementById(textareaId)?.focus()
-      //           }
-      //       }
-      // },
-
-      // confirm(index){
-      //       const textarea = document.getElementsByClassName('text')
-      //       this.isedit = true
-      //       for(var i=0; i<textarea.length; i++){
-      //           if(i === index){
-      //               //console.log(i)
-      //               const textareaId = textarea[i].children[0].children[0].children[0].children[0].id
-      //               //console.log(textareaId)
-      //               const element = document.getElementById(textareaId)
-      //               element.readOnly = true
-      //           }
-      //       }
-      // },
-// }
 </script>
 
 <style>

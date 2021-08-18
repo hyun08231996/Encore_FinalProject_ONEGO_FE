@@ -132,15 +132,15 @@ const routes: Array<RouteConfig> = [
 		path:"/write",
 		name: "Write",
 		component: Write,
-		meta:{ showFooter: false, showHeader: false, showEdit: false},
-		// beforeEnter: requireAuth()
+		meta:{ showFooter: false, showHeader: false, showEdit: false  },
+		beforeEnter: requireAuth()
 	},
 	{
 		path:"/write/:tempBoardId",
 		name: "WriteEdit",
 		component: Write,
 		props:true,
-		meta:{ showFooter: false, showHeader: false, showEdit: false},
+		meta:{ showFooter: false, showHeader: false, showEdit: false },
 		beforeEnter: requireAuth()
 	},
 	{

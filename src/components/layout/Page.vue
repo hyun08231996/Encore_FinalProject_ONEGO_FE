@@ -60,7 +60,9 @@ export default Vue.extend({
           console.log('getArticles')
           await http
               .get('/board', {
-                params: { 'pageNumber': pageNum }})
+                params: { 'pageNumber': pageNum },headers:{
+                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                    }})
               .then(response => {
                   console.log(response.data)
                   response.data.forEach((d: any) => {
