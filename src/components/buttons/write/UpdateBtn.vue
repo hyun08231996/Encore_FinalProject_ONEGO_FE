@@ -14,7 +14,7 @@
 
 	@Component
 	export default class PostBtn extends Vue {
-		// @Prop({ type: String }) readonly boardId!: string
+		commentList:string[] = []
 
 		@WriteStoreModule.State('itemList')
 		private itemList!:any[]
@@ -29,16 +29,26 @@
 		private titleImage!:File
 
 		@WriteStoreModule.Getter('getId')
-        private id!:string
+		private id!:string
 
 		async updatePost():Promise<void>{
+			await http
+				.get('/comment', {
+				params: { 'boardId': this.id, 'pageNumber': 1 },
+				headers:{
+					'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+				}})
+				.then(response => {
+					console.log(response.data)
+					this.commentList = response.data
+				})
 			if(!confirm("수정 하시겠습니까?")){
 				return
 			}else{
-				const date = new Date()
-				const form = new FormData()
-				const contentList : any[] = []
-				const tagList :string[] = []
+				var date = new Date()
+				var form = new FormData()
+				var contentList : any[] = []
+				var tagList :string[] = []
 				//const memoList : any[] = []
 
 				const firstContent = {no:this.itemList[0].id,title:'',subtitle:'',content:this.itemList[0].text};
@@ -57,13 +67,17 @@
                 // }
 
 				this.tagList.forEach((item) => tagList.push(item))
+				console.log(this.commentList)
 
 				const board = JSON.stringify(
 						{
 							boardId:this.id,
+							userEmail:this.$store.state.user.userAccount.attributes.email,
+							nickName:this.$store.state.user.userAccount.attributes.nickname,
 							title:this.itemList[0].title,
 							subtitle:this.itemList[0].subtitle,
 							titleImageFile:this.titleImage,
+							comments:this.commentList,
 							contents:contentList,
 							modDatetime:date,
 							tags:tagList
@@ -96,6 +110,26 @@
 					})
 			}
 		}
+
+		// async created(){
+		// 	this.getCommentList()
+		// }
+
+		// async getCommentList():Promise<void>{
+		// 	console.log("getCommentList")
+		// 	await http
+		// 			.get('/comment', {
+		// 			params: { 'boardId': this.id, 'pageNumber': 1 },
+		// 			headers:{
+        //               'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+        //             }})
+		// 			.then(response => {
+		// 				console.log(response.data)
+		// 				this.commentList = response.data
+		// 			})
+				
+		// }
+		
 	}
 </script>
 

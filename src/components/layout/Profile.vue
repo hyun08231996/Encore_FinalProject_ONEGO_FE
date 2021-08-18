@@ -50,6 +50,7 @@ export default Vue.extend({
     }),
     methods: {
         getUserInfo(id : string){
+        console.log(id)
             http
             .get('/users/'+id,{ headers:{
                         'Authorization': 'Bearer '+localStorage.getItem('accessToken')
@@ -67,8 +68,11 @@ export default Vue.extend({
             var con_test = confirm(this.user.nickName+"작가님을 구독하시겠습니까?");
             if(con_test == true){        
               confirm("구독하셨습니다!")
+               console.log(this.$route.params.id)
+              this.getUserInfo(this.$route.params.id)
             }
             else if(con_test == false){
+             console.log(this.$route.params.id)
               this.getUserInfo(this.$route.params.id)
             }  
           })
