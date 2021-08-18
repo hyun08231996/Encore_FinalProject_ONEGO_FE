@@ -157,7 +157,6 @@ export default Vue.extend({
     color: #555555;
     text-decoration: none;
 }
-
 .profile-text-description{
     font-size : 1.1rem;
     font-weight: 300;

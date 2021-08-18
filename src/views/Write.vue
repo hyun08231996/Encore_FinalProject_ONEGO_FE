@@ -8,25 +8,27 @@
 		<div id="editor-size">
 
 		  <div style="width:100%;float:left;">
-			  <v-card class="title-card" height="6.1vh" elevation="2" color="#f5f5f5">
+			  <v-card class="title-card" height="6.1vh" elevation="2" :color="isDark?'#282828':'#f5f5f5'">
 				<!-- 제목 -->
 				<div style="width:50%;height:6.1vh;padding-top:4px;padding-bottom:4px;float:left;">
 				  <v-text-field class="mx-2"
 				    v-model="title"
 				  	height="5.1vh"
 					color="#00d5aa"
-					background-color="white"
+					:background-color="isDark?'#1e1e1e':'white'"
 					:placeholder="titlePlace"
 					:label="titleLabel"
 					dense outlined/>
 				</div>
 				<!-- 소제목 -->
 				<div style="width:50%;height:6.1vh;padding-top:4px;padding-bottom:4px;float:left;">
+					
+					
 				  <v-text-field class="mx-2"
 				    v-model="subtitle"
 				  	height="5.1vh"
 					color="#00d5aa"
-					background-color="white"
+					:background-color="isDark?'#1e1e1e':'white'"
 					:placeholder="subtitlePlace"
 					:label="subtitleLabel"
 					dense outlined>
@@ -41,6 +43,11 @@
 					  </v-hover>
 					</template>
 				  </v-text-field>
+				  <v-progress-linear v-if="isLoading"
+					indeterminate
+					absolute
+					height="2"
+					color="#00d5aa"/>
 				</div>
 			  </v-card>
 		  </div>
@@ -48,6 +55,7 @@
 		  <div style="width:100%;float:left;">
 			<tiptap-vuetify id="text-editor"
 				v-model="content"
+				:toolbar-attributes="{ color: isDark?'#282828':'#f5f5f5' }"
 				:extensions="extensions"
 				:native-extensions="nativeExtensions"
 				:disabled="isActive"
@@ -136,6 +144,8 @@
 		loading = true
 		content = ''
 		isActive = false
+		isLoading = false
+		isDark = false
 
 		@Watch('activeVal')
 		watchActiveVal():void{
@@ -233,6 +243,8 @@
 		@WriteStoreModule.Getter('getItemList') private itemList!:any[]
 
 		created(){
+			eventBus.$on('toDark', (val:boolean)=>{this.isDark=val;})
+			eventBus.$on('toLight', (val:boolean)=>{this.isDark=val;})
 			history.pushState(null, '', document.URL)
 			window.onpopstate = () => {
 				this.confirmBack()
@@ -293,13 +305,13 @@
 					}
 				})
 				.then(response => {
-					console.log(response.data)
+					//console.log(response.data[0].id)
 					this.setId(response.data[0].id)
 					this.setMainTitle(response.data[0].title)
 					this.setMainSubtitle(response.data[0].subtitle)
 					this.setItemList(response.data[0].contents)
 					this.setTagList(response.data[0].tags)
-					// this.setMemoList(response.data[0].memos)
+					this.setMemoList(response.data[0].memos)
 					this.setImageUrl(response.data[0].titleImage)
 					//console.log(this.getId)
 					eventBus.$emit("clickFirstTree")
@@ -311,29 +323,49 @@
 		}
 
 		generateSub():void{
+			this.isLoading = true
+
 			var subtitle = ''
 
 			var contentList = [] as string[]
 			var contents = [] as string[]
-			contentList.push(this.itemList[0].text.replaceAll("\n"," ").replaceAll("</p><p>"," "))
+			contentList.push(this.itemList[0].text.replaceAll("\n"," ").replaceAll("</p><p>"," ")
+									.replaceAll("<strong>","").replaceAll("</strong>","")
+									.replaceAll("<em>","").replaceAll("</em>","")
+									.replaceAll("<u>","").replaceAll("</u>",""))
 			if(this.itemList[0].children.length !== 0){
 				for(var i=0; i<this.itemList[0].children.length;i++){
-					contentList.push(this.itemList[0].children[i].text.replaceAll("\n"," ").replaceAll("</p><p>"," "))
+					contentList.push(this.itemList[0].children[i].text.replaceAll("\n"," ").replaceAll("</p><p>"," ")
+												.replaceAll("<strong>","").replaceAll("</strong>","")
+												.replaceAll("<em>","").replaceAll("</em>","")
+												.replaceAll("<u>","").replaceAll("</u>",""))
 				}
 			}
 			contents.push(contentList.join(" "))
 			console.log(contents)
 
-			////////////////axios here///////////////////
+			http.
+				post('/ai/summarizer',
+					{"contents":contents}
+				)
+				.then(response=>{
+					if (response.status >=200 && response.status < 204){
+						//console.log(response)
+						console.log("success")
+						subtitle = response.data
+						this.subtitle = subtitle
+						this.isLoading = false
+					} else{
+						//console.log(response)
+						console.log("fail..")
+					}
+				})
 
-			//this.subtitle = subtitle
+			
 		}
 
 	}
 </script>
 
 <style>
-/* .v-application .write-header-color .white{
-	background-color:#282828 !important;
-} */
 </style>

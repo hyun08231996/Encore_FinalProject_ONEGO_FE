@@ -3,15 +3,21 @@
 		<!-- navbar -->
 		<v-app-bar
 		fixed
-		color="white"
+		:color="isDark ? '#121212' : 'white'"
 		elevate-on-scroll
+		tile
 		app
 		>
 		<v-app-bar-nav-icon @click="drawer = true; openMenu()"></v-app-bar-nav-icon>
 
-		<a href="/"><img src="@/assets/logo/onego_logo.jpeg"
+		<a href="/">
+		  <img v-if="darkLogo" src="@/assets/logo/onego_white.png"
 			width="120px" height="43.2px"
-			style="vertical-align:middle;"></a>
+			style="vertical-align:middle;">
+		  <img v-else src="@/assets/logo/onego_black.png"
+			width="120px" height="43.2px"
+			style="vertical-align:middle;">
+		</a>
 
 		<!-- write page -->
 		<div v-if="$route.meta.showHeader == false" >
@@ -151,6 +157,7 @@
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
 	import DarkModeSwitch from '@/components/buttons/write/DarkModeSwitch.vue'
 	import SearchModal from '@/views/SearchModal.vue'
+	import { eventBus } from '@/main'
 
 	export default Vue.extend({
 		data: () => ({
@@ -158,6 +165,8 @@
 			drawer: false,
 			group: null,
 			isAuth: true,
+			isDark: false,
+			darkLogo: false,
 			showCate:false,
 			showMenu:false,
 			showFooter: true,
@@ -199,6 +208,10 @@
 				this.showMenu = true;
 				this.showCate = false;
 			}
+		},
+		created(){
+			eventBus.$on('toDark', (val:boolean)=>{this.isDark=val; this.darkLogo=val;})
+			eventBus.$on('toLight', (val:boolean)=>{this.isDark=val; this.darkLogo=val;})
 		},
 		beforeMount(){
 			console.log("header")

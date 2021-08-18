@@ -1,8 +1,8 @@
-import store from "@/store";
 import axios from "axios";
 
 export default axios.create({
-    // baseURL: "http://ec2-18-221-186-66.us-east-2.compute.amazonaws.com/api",
+    // baseURL: "onego.click/api",
+    baseURL: "/api",
     headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',

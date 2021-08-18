@@ -44,7 +44,7 @@
           <v-card-text class="text" >
             <div id="article-title" v-html="highlightTitle(article.title)">{{article.title}}</div>
             <br/>
-            <div class="text-post" v-html="highlightTitle(article.content)">{{article.content}}</div>
+            <div id="article-content" class="text-post" v-html="highlightTitle(article.content)">{{article.content}}</div>
           </v-card-text>
 
           <v-card-actions class="avatar-box">
@@ -130,15 +130,16 @@
 			},
 			async getBoardCount(){
 				await http.
-					get('/board/count',{
-						headers:{
-							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-						}
+					get('/board/count',
+					{
+						// headers:{
+						// 	'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						// }
 					})
 					.then(response => {
-					   console.log("ok")
+					   //console.log("ok")
                        this.totalPageNum = Math.ceil(response.data / 5)
-					   console.log(this.totalPageNum)
+					   //console.log(this.totalPageNum)
 					})
 					.catch(() => this.errored = true )
 					.finally(() => this.loading = false)
@@ -161,9 +162,16 @@
 					for(let i=0; i<response.data.length;i++){
 						//console.log(response.data[i])
 						const id = response.data[i].id
-						const nickname = response.data[i].nickName
+						//const nickname = response.data[i].nickName
 						const title = response.data[i].title
-						const content = response.data[i].contents[0].content
+						let content:string
+						if(response.data[i].contents[0].content === ''){
+							content = response.data[i].contents[1].content
+							console.log(content)
+						}else{
+							content = response.data[i].contents[0].content
+						}
+						//const content = response.data[i].contents[0].content
 						var allText = response.data[i].subtitle
 						for(let j=0;j<response.data[i].contents.length;j++){
 							allText += response.data[i].contents[j].title+response.data[i].contents[j].subtitle+response.data[i].contents[j].content
@@ -185,12 +193,14 @@
 									}
 								})
 								.then(response => {
-									console.log(response.data.profileImage)
+									//console.log(response.data.profileImage)
 									if(response.data.profileImage != undefined){
 										profileImage = response.data.profileImage
 									}
+									this.blogList.push({id:id,nickname:response.data.nickName,title:title,allText:allText,content:content,date:date,profileImage:profileImage})
 								})
-						this.blogList.push({id:id,nickname:nickname,title:title,allText:allText,content:content,date:date,profileImage:profileImage})
+						
+						console.log(this.blogList)
 						//this.blogList.push({id:id,title:title,allText:allText})
 
 					}
@@ -239,5 +249,12 @@
 </script>
 
 <style>
-
+#article-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
 </style>

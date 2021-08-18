@@ -64,7 +64,11 @@ import http from '../../http/http-common'
             },
             async getUserInfo(){
                 await http
-                    .get('/users/'+this.email)
+                    .get('/users/'+this.email,{
+						// headers:{
+						// 	'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						// }
+                    })
                     .then(response => {
                         this.$store.commit('setUserInfo', response.data);
                         localStorage.setItem('userInfo', JSON.stringify(response.data))
