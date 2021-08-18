@@ -90,8 +90,7 @@ export default Vue.extend({
           await http
               .get('/board', {
                 params: { 'boardId': boardId }, 
-                headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                    }})
+                })
               .then(response => {
                   this.article = response.data[0];
               })

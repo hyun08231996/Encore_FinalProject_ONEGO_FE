@@ -15,18 +15,19 @@
                <p v-html="article.contents ? article.contents : ''"></p>
              </v-card-text>
 
-             <v-card-actions class="avatar-box">
-                 <v-list-item-avatar class="page-avatar" color="grey darken-3" style="width: 15px; height: 15px;">
-                   <v-img
-                     class="avatar"
-                     alt="avatar"
-                     src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                   ></v-img>
-                 </v-list-item-avatar>
-                 <v-list-item-content class="author-date">
-                   <span class="nickname" v-html="article.nickName"></span>
-
-                 </v-list-item-content>
+             <v-card-actions class="avatar-box" @click="writerProfile($event, article.userEmail)">
+                <!-- <div id="userProfile" @click="writerProfile($event, article.email)"> -->
+                  <v-list-item-avatar class="page-avatar" color="grey darken-3" style="width: 15px; height: 15px;">
+                    <v-img
+                      class="avatar"
+                      alt="avatar"
+                      :src="article.titleImage"
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content class="author-date">
+                    <span class="nickname" v-html="article.nickName"></span>
+                  </v-list-item-content>
+                 <!-- </div> -->
                  <span class="right-padding">{{dateTime(article.modDatetime)}}</span>
              </v-card-actions>
              <br/>
@@ -49,26 +50,51 @@ import http from '../http/http-common'
 
 export default Vue.extend({
      data: () => ({
-       articles: {},
-       errored: false,
-       loading: true,
-       content: '',
-       page: 1,
-       totalPageNum: 1
+      articles: {},
+      errored: false,
+      loading: true,
+      content: '',
+      page: 1,
+      totalPageNum: 1
      }),
      methods: {
+       writerProfile(e: any, writerEmail: string){
+            e.stopPropagation()
+            this.$router.push({
+                name: "MyProfile",
+                params: { emailProp: writerEmail },
+            });
+        },
        async getArticles(pageNum: number){
          await http
              .get('/board', {
                params: { 'pageNumber': pageNum }})
              .then(response => {
-                 response.data.forEach((d: any) => {
+                response.data.forEach((d: any) => {
+                  console.log(d)
+                http 
+                    .get('/users/'+d.userEmail)
+                    .then(response => {
+                        if(response.data.profileImage != undefined){
+                          d.titleImage = response.data.profileImage
+                        }else{
+                          d.titleImage = ''
+                        }
+                    })
                    if(d.contents.length != 0){
-                     if(d.contents[0].content.length > 150){
-                       d.contents = d.contents[0].content.substr(0,148)+"..."
-                     }else{
-                       d.contents = d.contents[0].content
-                     }
+                      if(d.contents[0].content.length != 0){
+                        if(d.contents[0].content.length > 100){
+                          d.contents = d.contents[0].content.substr(0,97)+"..."
+                        }else{
+                          d.contents = d.contents[0].content
+                        }
+                      }else{
+                        if(d.contents[1].content.length > 100){
+                          d.contents = d.contents[1].content.substr(0,97)+"..."
+                        }else{
+                          d.contents = d.contents[1].content
+                        }
+                      }
                    }else{
                      d.contents = ""
                    }

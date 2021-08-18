@@ -42,6 +42,7 @@
 <script>
 import Vue from 'vue'
 import http from '../http/http-common'
+var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 
 export default Vue.extend({
     data: () => ({
@@ -62,16 +63,13 @@ export default Vue.extend({
         },
         async getUserInfo(userEmail){
             await http
-                    .get('/users/'+userEmail,{
-                      headers:{
-                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                      }})
+                    .get('/users/'+userEmail)
                     .then(response => {
-                        if(this.$store.state.user.userInfo.email == response.data.email){
+                        if(userInfo.email == response.data.email){
                           response.data['flag']="me"
                         }else{
-                          for(var i=0; i<this.$store.state.user.userInfo.followers.length; i++){
-                            if(this.$store.state.user.userInfo.followings[i] == response.data.email){
+                          for(var i=0; i<userInfo.followers.length; i++){
+                            if(userInfo.followings[i] == response.data.email){
                               response.data['flag']="true"
                               break
                             }else{
@@ -92,6 +90,8 @@ export default Vue.extend({
                 .delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email}})
                 .then(response => {
                     console.log(response)
+                    userInfo.followings.pop(email)
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
                 })
                 .catch(() => this.errored = true )
                 .finally(() => {
@@ -107,6 +107,8 @@ export default Vue.extend({
                   }})
                 .then(response => {
                     console.log(response)
+                    userInfo.followings.push(email)
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
                 })
                 .catch(() => this.errored = true )
                 .finally(() => {
@@ -118,10 +120,7 @@ export default Vue.extend({
         this.email = this.$store.state.followerUser
         if(this.email == this.$store.state.user.userAccount.attributes.email){
             await http
-              .get('/users/'+this.email,{
-                  headers:{
-                    'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                  }})
+              .get('/users/'+this.email)
               .then(response => {
                   this.$store.commit('setUserInfo', response.data);
                   this.nickname = this.$store.state.user.userInfo.nickName;
@@ -129,10 +128,7 @@ export default Vue.extend({
               })
         }else{
             await http
-              .get('/users/'+this.email,{
-                headers:{
-                  'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                }})
+              .get('/users/'+this.email,)
               .then(response => {
                   this.nickname = response.data.nickName
                   this.followeridList = response.data.followers;
