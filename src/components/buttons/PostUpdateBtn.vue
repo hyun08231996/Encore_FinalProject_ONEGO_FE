@@ -1,7 +1,7 @@
 <template>
     <v-btn rounded outlined color="#00d5aa" class="ma-2 px-8" id="scrap-btn" 
-    @click="postdelete(article.id)">
-        삭제
+    @click="postput(article.id)">
+        수정
     </v-btn>
 </template>
 
@@ -10,7 +10,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-    name:"PostDeleteBtn",
+    name:"PostUpdateBtn",
     data: ()=>({
     }),
     methods:{

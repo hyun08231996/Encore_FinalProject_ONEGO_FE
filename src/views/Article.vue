@@ -47,6 +47,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import http from '../http/http-common'
+import { eventBus } from '@/main'
 
 export default Vue.extend({
      data: () => ({
@@ -163,6 +164,7 @@ export default Vue.extend({
        this.getArticles(1)
        this.boardCount()
      }
+     
    })
 
 </script>
