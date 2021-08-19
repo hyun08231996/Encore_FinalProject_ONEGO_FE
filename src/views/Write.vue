@@ -314,7 +314,7 @@
 					this.setMemoList(response.data[0].memos)
 					this.setImageUrl(response.data[0].titleImage)
 					//console.log(this.getId)
-					eventBus.$emit("clickFirstTree")
+					eventBus.$emit("clickFirstTreePost")
 				})
 				.catch(() => this.errored = true )
 				.finally(() => {
