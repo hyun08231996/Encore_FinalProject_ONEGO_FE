@@ -66,7 +66,7 @@ export default Vue.extend({
             await http
                     .get('/users/'+userEmail)
                     .then(response => {
-                        if(this.$store.state.user.userInfo.email == userEmail){
+                        if(this.$store.state.user.userAccount.attributes.email == userEmail){
                           response.data['flag']="me"
                         }else{
                           for(var i=0; i<userInfo.followings.length; i++){

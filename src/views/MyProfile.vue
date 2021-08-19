@@ -144,7 +144,10 @@
 			async unsubscribe(email: string){
 				var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 				await http
-					.delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email}})
+					.delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email},
+						headers:{
+							'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+						}})
 					.then(response => {
 						userInfo.followings = userInfo.followings.filter((element: any) => element !== email)
 						this.user.followers = (parseInt(this.user.followers) - 1).toString()

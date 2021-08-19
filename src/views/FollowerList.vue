@@ -68,7 +68,7 @@ export default Vue.extend({
                         if(userInfo.email == response.data.email){
                           response.data['flag']="me"
                         }else{
-                          for(var i=0; i<userInfo.followers.length; i++){
+                          for(var i=0; i<userInfo.followings.length; i++){
                             if(userInfo.followings[i] == response.data.email){
                               response.data['flag']="true"
                               break
@@ -88,7 +88,10 @@ export default Vue.extend({
             var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
             e.stopPropagation();
             await http
-                .delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email}})
+                .delete('/followings/'+this.$store.state.user.userAccount.attributes.email, {data: {'followEmail': email},
+                  headers:{
+                    'Authorization': 'Bearer '+localStorage.getItem('accessToken')
+                  }})
                 .then(response => {
                     userInfo.followings = userInfo.followings.filter((element) => element !== email)
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
