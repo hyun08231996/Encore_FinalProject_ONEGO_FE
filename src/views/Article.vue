@@ -143,7 +143,6 @@ export default Vue.extend({
 				//  }
 			 })
              .then(response => {
-                    console.log(response)
                     if(response.data%5==0){
                       this.totalPageNum = Math.floor(response.data / 5)
                     }else{
