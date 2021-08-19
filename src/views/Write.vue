@@ -250,8 +250,8 @@
 				this.confirmBack()
 				history.pushState(null, '', document.URL)
 			}
-			if(this.tempBoardId !== undefined) this.editTempBoard(this.tempBoardId)
-			if(this.boardId !== undefined) this.editBoard(this.boardId)
+			if(this.tempBoardId !== undefined && this.boardId == undefined) this.editTempBoard(this.tempBoardId)
+			if(this.boardId !== undefined && this.tempBoardId == undefined) this.editBoard(this.boardId)
 			//this.content = this.getContent
 			//console.log(this.getId)
 		}
