@@ -39,6 +39,8 @@ Vue.use(VueRouter)
             //console.log(response.data[0].userEmail)
             if(this.$store.state.user.userAccount.attributes.email === response.data[0].userEmail){
               eventBus.$emit('sameAuthor',true)
+              //console.log(this.boardId)
+              eventBus.$emit('boardId',this.boardId)
             }
           })
           .catch(() => this.errored = true )

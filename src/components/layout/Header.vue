@@ -36,7 +36,7 @@
 		<!-- other pages -->
 		<div v-else>
 			<div v-if="$route.meta.showScrap && this.$store.state.user.signedIn==true">
-				<div v-if="isAuthor"><post-update-btn/><post-delete-btn/></div>
+				<div v-if="isAuthor"><post-update-btn :boardId="id"/><post-delete-btn :boardId="id"/></div>
 				<div v-else><scrap-btn/></div>
 			</div>
 			<div v-else>
@@ -172,8 +172,9 @@
 	export default Vue.extend({
 		props: {
 			boardId: String
-		},	
+		},
 		data: () => ({
+			id: '',
 			userPic: '',
 			drawer: false,
 			group: null,
@@ -225,7 +226,7 @@
 		},
 		created(){
 			eventBus.$on('sameAuthor', (val:boolean)=>{this.isAuthor=val;})
-		 	console.log(this.isAuthor)
+		 	eventBus.$on('boardId', (val:string)=>{this.id=val;})
 			eventBus.$on('toDark', (val:boolean)=>{this.isDark=val; this.darkLogo=val;})
 			eventBus.$on('toLight', (val:boolean)=>{this.isDark=val; this.darkLogo=val;})
 		},

@@ -8,9 +8,9 @@
            max-height="600"
            tile
          >
-           <div class="card" @click="articlePage(article.id)">
+           <div id="content-hover" class="card" @click="articlePage(article.id)">
              <v-card-text class="text newest-article">
-               <h2 v-html="article.title"></h2><br>
+               <h2 id="content-title" v-html="article.title"></h2><br>
                <!-- <h3 style="font-weight: normal" v-html="article.subtitle"></h3> -->
                <p v-html="article.contents ? article.contents : ''"></p>
              </v-card-text>
@@ -205,5 +205,11 @@ export default Vue.extend({
    height: 50px !important;
    min-width: 50px !important;
    width: 50px !important;
+ }
+ #content-hover:hover{
+   cursor: pointer;
+ }
+ #content-hover:hover #content-title{
+   color:#00d5aa;
  }
 </style>

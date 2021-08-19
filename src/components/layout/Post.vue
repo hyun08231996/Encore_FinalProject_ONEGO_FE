@@ -1,44 +1,28 @@
 <template>
-<v-row class="mx-auto justify-center">
-  <v-container>
-    <v-card
-      min-height="1300px"
-      flat 
-      class="post"
-      >
+  <div class="post">
+    
         <!-- Title Image -->
-        <v-card tile class="mb-12" id="image-card">
+        <v-card v-if="article.titleImage !== null" tile class="mb-12" id="post-image-card">
             <v-img height="50vh" :src="article.titleImage">
-              <v-flex id="title-preview-margin">
-              <template v-if="loginUser != undefined">
-                <template v-if="loginUser === article.userEmail">
-                    <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" @click="postdelete(article.id)">삭제</v-btn></span>
-                    <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" @click="postput(article.id)">수정</v-btn></span>
-                  </template>
-                  <template v-else>
-                    <!-- <span class="postbtn"><p class="likescount">{{article.likes}} 번</p></span> -->
-                    <template v-if="this.scraps==false">
-                          <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" id="post-scrap-btn" @click="getlike()">
-                            스크랩
-                          </v-btn></span>
-                      </template>
-                      <template v-else>
-                          <span class="postbtn"><v-btn rounded outlined color="#00d5aa" width="90" height="35" value="" id="post-unscrap-btn" @click="getunlike()">                        
-                          </v-btn></span>
-                      </template>
-                </template>  
-              </template>
-              <span><h1 style="font-size:40px; padding-left:1px; max-width:80%;">{{ article.title }}</h1></span>  
-              <div style="opacity:80%;"><h3>{{ article.subtitle }}</h3></div>
+              <v-flex id="post-title-preview-margin">
+              <span><h1 style="font-size:40px; padding-left:1px; max-width:80%;" v-html="article.title"></h1></span>  
+              <div style="opacity:80%;"><h3 v-html="article.subtitle"></h3></div>
               <div style="opacity:60%;margin-top:30px;">
-                <span><h5> {{ article.nickName }}· {{getTime(article.modDatetime)}} </h5></span>
+                <span><h5> {{ article.nickName }} · {{getTime(article.modDatetime)}} </h5></span>
               </div>
               </v-flex>
             </v-img>
         </v-card>
+
+      <!--Title content-->
+      <v-flex v-if="article.titleImage == null" id="post-title-content-preview-margin" class="mx-auto mb-16">
+        <h1 style="font-size:40px;" v-html="article.title"></h1>
+        <div style="opacity:80%;"><h3 v-html="article.subtitle"></h3></div>
+        <div style="opacity:60%;margin-top:30px;"><h5> {{ article.nickName }} · {{getTime(article.modDatetime)}} </h5></div>
+      </v-flex>
         
       <!-- Content -->
-      <v-flex id="content-preview-margin" class="mx-auto">
+      <v-flex id="post-content-preview-margin" class="mx-auto">
           <div v-for="(content,i) in article.contents" :key="i">
             <h3 v-html="content.subtitle"></h3>
             <p style="padding-top: 10px; padding-bottom: 30px; line-height:30px;" v-html="content.content"></p>
@@ -46,7 +30,7 @@
       </v-flex>
 
       <!-- Tags -->
-      <v-flex id="tag-preview-margin" class="mx-auto mt-8 pb-8">
+      <v-flex id="post-tag-preview-margin" class="mx-auto mt-8 pb-8">
         <span  v-for="tag in article.tags" :key="tag">
           <v-chip outlined small color="#00d5aa" class="mr-2">{{ tag }}</v-chip>
         </span>
@@ -57,9 +41,8 @@
       
       <!-- <div style="height: 60px;"></div> -->
       <Profile :id = "article.userEmail"/>
-   </v-card>
-  </v-container>
- </v-row>
+   
+  </div>
 </template>
 
 
@@ -101,6 +84,7 @@ export default Vue.extend({
                 })
               .then(response => {
                   this.article = response.data[0];
+                  //console.log(response.data[0].titleImage)
                   if(this.loginUser != undefined){
                     for(var i=0; i<userInfo.likes.length; i++){
                         if(boardId === userInfo.likes[i]){
@@ -110,71 +94,7 @@ export default Vue.extend({
                     }
                   }
               })
-        },
-        async getlike(){
-            var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-            await http
-                .post('/'+this.$route.params.boardId, {"userEmail":this.$store.state.user.userAccount.attributes.email},{
-                      headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                }})
-                .then(response => {
-                  // this.getArticle(this.$route.params.boardId)
-                  userInfo.likes.push(this.$route.params.boardId)
-                  localStorage.setItem('userInfo', JSON.stringify(userInfo))
-                  this.scraps = true
-                })
-                .catch(() => this.errored = true )
-                .finally(() => {
-                  this.loading = false
-                })
-        },
-        async getunlike(){
-            var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-            await http
-                .post('/'+this.$route.params.boardId, {"userEmail":this.$store.state.user.userAccount.attributes.email},{
-                      headers:{'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                }})
-                .then(response => {
-                  // this.getArticle(this.$route.params.boardId)
-                  userInfo.likes = userInfo.likes.filter((element: any) => element !== this.$route.params.boardId)
-                  localStorage.setItem('userInfo', JSON.stringify(userInfo))
-                  this.scraps = false
-                })
-                .catch(() => this.errored = true )
-                .finally(() => {
-                  this.loading = false
-                })
-        },
-
-        postdelete(boardId:string){
-          var con_test = confirm("글을 삭제하시겠습니까?");
-          if(con_test == true){
-              http
-                .delete('/board', {
-                data: {'boardId': boardId}, 
-                headers:{
-                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                    }})
-                .then(response => {
-                     location.href = '/article'
-                })
-          }
-          else if(con_test == false){
-              http
-                .get('/board', {
-                  params: { 'boardId': boardId }, 
-                  headers:{
-                        'Authorization': 'Bearer '+localStorage.getItem('accessToken')
-                    }})
-                .then(response => {
-                     this.getArticle(this.$route.params.boardId)
-                })
-          }
-          
-        },
-        postput(boardId:string){
-          window.open('/write/post/'+boardId,'_self')
-        },
+        }
           
     },
     created(){  
@@ -187,9 +107,9 @@ export default Vue.extend({
 
 
 <style >
-  .mx-auto justify-center{
+  /* .mx-auto justify-center{
     margin: 0 auto;
-  }
+  } */
 	.post {
 		font-family: "Noto Sans KR", sans-serif !important;
 	}
@@ -199,22 +119,8 @@ export default Vue.extend({
     padding-left: 10px;
     padding-top: 9.5px;
   }
- #post-unscrap-btn{
-	  background-color: #00d5aa !important;
-    color: white !important;
-  }
-  #post-unscrap-btn::after{
-    content: "스크랩 ✓";
-  }
-  #post-unscrap-btn:hover{
-    color: #00d5aa !important;
-    border-color: #00d5aa !important;
-    background-color: white !important;
-  }
-  #post-unscrap-btn:hover:after{
-    content: "스크랩취소";
-  }
-  #image-card{
+  #post-image-card{
+    margin-top:-36px !important;
     position:relative !important;
   }
   .likescount{
@@ -222,20 +128,20 @@ export default Vue.extend({
     color: #00d5aa;
     font-size: 1.1rem;
   }
-  #title-preview-margin{
+  #post-title-preview-margin{
     width:50% !important;
     position:absolute !important;
     bottom:10% !important;
     left:25% !important;
   }
 
-  #image-card .v-image__image{
-    opacity:80% !important;
+  #post-image-card .v-image__image{
+    opacity:70% !important;
   }
 
-  #title-content-preview-margin,
-  #content-preview-margin,
-  #tag-preview-margin{
+  #post-title-content-preview-margin,
+  #post-content-preview-margin,
+  #post-tag-preview-margin{
     max-width:50% !important;
   }
 </style>
