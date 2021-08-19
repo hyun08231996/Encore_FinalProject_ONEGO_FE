@@ -231,10 +231,8 @@
 			eventBus.$on('toLight', (val:boolean)=>{this.isDark=val; this.darkLogo=val;})
 		},
 		beforeMount(){
-			console.log("header")
 			var userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
 			this.userPic = userInfo.profileImage
-			console.log(this.userPic)
 		}
 	})
 </script>

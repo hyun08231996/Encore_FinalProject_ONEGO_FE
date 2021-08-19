@@ -22,10 +22,8 @@ import { Auth } from 'aws-amplify'
         },
         methods: {
             async getConfirmationCode(){
-                console.log(this.resetEmail)
                 Auth.forgotPassword(this.resetEmail)
                     .then(data => {
-                        console.log(data)
                         this.$set(this.$parent.$parent.$data, 'email', this.resetEmail)
                         })
                     .catch(err => console.log(err));

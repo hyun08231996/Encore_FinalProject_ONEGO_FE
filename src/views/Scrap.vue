@@ -88,8 +88,6 @@ import http from '../http/http-common'
                     }
                   })
                   this.articles.push(response.data[0])
-                  console.log("article")
-                  console.log(this.articles)
                 }
               })
         },
