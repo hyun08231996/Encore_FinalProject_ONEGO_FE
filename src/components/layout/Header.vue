@@ -35,8 +35,14 @@
 		</div>
 		<!-- other pages -->
 		<div v-else>
-			<div v-if="this.$store.state.user.signedIn==true"><logout-btn /></div>
-			<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
+			<div v-if="$route.meta.showScrap && this.$store.state.user.signedIn==true">
+				<div v-if="isAuthor"><post-update-btn :boardId="id"/><post-delete-btn :boardId="id"/></div>
+				<div v-else><scrap-btn/></div>
+			</div>
+			<div v-else>
+				<div v-if="this.$store.state.user.signedIn==true"><logout-btn /></div>
+				<div v-else><signup-btn /><login-btn @login="isAuth = $event" /></div>
+			</div>
 		</div>
 		<search-modal v-if="$route.meta.showHeader" @openDrawer="drawer = $event" />
 		</v-app-bar>
@@ -155,17 +161,26 @@
 	import PreviewModal from '@/views/PreviewModal.vue'
 	import DeleteBtn from '@/components/buttons/write/DeleteBtn.vue'
 	import SaveBtn from '@/components/buttons/write/SaveBtn.vue'
+	import ScrapBtn from '@/components/buttons/ScrapBtn.vue'
+	import PostDeleteBtn from '@/components/buttons/PostDeleteBtn.vue'
+	import PostUpdateBtn from '@/components/buttons/PostUpdateBtn.vue'
 	import DarkModeSwitch from '@/components/buttons/write/DarkModeSwitch.vue'
 	import SearchModal from '@/views/SearchModal.vue'
 	import { eventBus } from '@/main'
+  
 
 	export default Vue.extend({
+		props: {
+			boardId: String
+		},
 		data: () => ({
+			id: '',
 			userPic: '',
 			drawer: false,
 			group: null,
 			isAuth: true,
 			isDark: false,
+			isAuthor: false,
 			darkLogo: false,
 			showCate:false,
 			showMenu:false,
@@ -193,7 +208,7 @@
 		components:{
 			'login-btn':LoginBtn, 'logout-btn':LogoutBtn, 'signup-btn':SignupBtn, 'setting-btn':SettingBtn,
 			'delete-btn':DeleteBtn, 'post-btn':PostBtn, 'preview-modal':PreviewModal, 'save-btn':SaveBtn, 'update-btn':UpdateBtn,
-			'dark-switch':DarkModeSwitch, 'search-modal':SearchModal
+			'dark-switch':DarkModeSwitch, 'search-modal':SearchModal, 'scrap-btn':ScrapBtn, 'post-delete-btn':PostDeleteBtn, 'post-update-btn':PostUpdateBtn
 		},
 		methods:{
 			openCategory(){
@@ -210,6 +225,8 @@
 			}
 		},
 		created(){
+			eventBus.$on('sameAuthor', (val:boolean)=>{this.isAuthor=val;})
+		 	eventBus.$on('boardId', (val:string)=>{this.id=val;})
 			eventBus.$on('toDark', (val:boolean)=>{this.isDark=val; this.darkLogo=val;})
 			eventBus.$on('toLight', (val:boolean)=>{this.isDark=val; this.darkLogo=val;})
 		},
