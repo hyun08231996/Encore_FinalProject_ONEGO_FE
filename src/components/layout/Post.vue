@@ -2,7 +2,7 @@
   <div class="post">
     
         <!-- Title Image -->
-        <v-card v-if="article.titleImage !== null" tile class="mb-12" id="post-image-card">
+        <v-card v-if="article.titleImage !== null && article.titleImage !== ''" tile class="mb-12" id="post-image-card">
             <v-img height="50vh" :src="article.titleImage">
               <v-flex id="post-title-preview-margin">
               <span><h1 style="font-size:40px; padding-left:1px; max-width:80%;" v-html="article.title"></h1></span>  
@@ -13,9 +13,8 @@
               </v-flex>
             </v-img>
         </v-card>
-
       <!--Title content-->
-      <v-flex v-if="article.titleImage == null" id="post-title-content-preview-margin" class="mx-auto mb-16">
+      <v-flex v-if="article.titleImage == null || article.titleImage == ''" id="post-title-content-preview-margin" class="mx-auto mb-16">
         <h1 style="font-size:40px;" v-html="article.title"></h1>
         <div style="opacity:80%;"><h3 v-html="article.subtitle"></h3></div>
         <div style="opacity:60%;margin-top:30px;"><h5> {{ article.nickName }} · {{getTime(article.modDatetime)}} </h5></div>
