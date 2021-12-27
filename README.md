@@ -13,7 +13,14 @@ change password, saved blogs, posted blogs, and blog writing pages
 and blog preview features to the blog writing page
 - Used Vue.js, HTML, and CSS.
 
-## Live Demo of Core Features 🔗
+## Live Demo of Core Features 🎥
+🔗 Click below to watch the live demo! ⬇️<br>
+[![Watch the live demo!](https://user-images.githubusercontent.com/81090746/147498094-8204d368-bb51-488c-995d-ba23a9b9fafd.png)](https://drive.google.com/file/d/16hPcu5Fs3wCiu74AGZua9DOLsHSQ14LG/view?usp=sharing)
+<br><br>
+🔗 Demo of AI Sentence Autocompletion ⬇️ <br>
+![autocomplete](https://user-images.githubusercontent.com/81090746/147497250-dfbdfee6-8468-4da3-96fa-41439fe7b820.gif)
+
+
 
 ## Features 🌅 
 ### AI-Powered Writing Website
