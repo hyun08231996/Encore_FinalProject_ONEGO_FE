@@ -7,7 +7,7 @@
 Developed a writing/blogging website which integrates AI to help people who have difficulties with writing by providing sentence completion, text summarization and tag generation features.
 
 ## My Role 🙋
-- Designed and implemented header, sidebar, footer, search, account settings, edit profile, my profile,
+- Designed and programmed header, sidebar, footer, search, account settings, edit profile, my profile,
 change password, saved blogs, posted blogs, and blog writing pages
 - Added changing font size/style, content folder management, adding memos, adding tags, image upload,
 and blog preview features to the blog writing page
