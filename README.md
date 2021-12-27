@@ -14,7 +14,7 @@ and blog preview features to the blog writing page
 - Used Vue.js, HTML, and CSS.
 
 ## Live Demo of Core Features 🎥
-🔗 Click below to watch the live demo! ⬇️<br>
+🔗 Click below to watch full live demo! ⬇️<br>
 [![Watch the live demo!](https://user-images.githubusercontent.com/81090746/147498094-8204d368-bb51-488c-995d-ba23a9b9fafd.png)](https://youtu.be/oDfjhOdMj88)
 <br><br>
 🔗 Demo of AI Sentence Autocompletion ⬇️ <br>
