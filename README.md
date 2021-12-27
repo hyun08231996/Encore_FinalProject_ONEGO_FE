@@ -41,7 +41,7 @@ With the click of a button AI generates...
 - Preview to get a feeling of what the blog will look like before posting
 
 ## Project Repo/Project Summary 📚
-[Link to full project repository](https://github.com/GeulReadyEditor/onego) <br>
-[Link to project summary](https://verdant-colt-ad5.notion.site/Encore-Playdata-AI-Writing-Web-Development-dda95b301f224c15be4bc4afc91c7417)
+- [Link to full project repository](https://github.com/GeulReadyEditor/onego) <br>
+- [Link to project summary](https://verdant-colt-ad5.notion.site/Encore-Playdata-AI-Writing-Web-Development-dda95b301f224c15be4bc4afc91c7417)
 
 
