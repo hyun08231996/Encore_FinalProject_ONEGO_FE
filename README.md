@@ -1,24 +1,4 @@
 # onego
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Description
+Developed a writing/blogging website which integrates AI to help people who have difficulties with writing by providing sentence completion, text summarization and tag generation features
