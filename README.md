@@ -33,19 +33,20 @@ With the click of a button AI generates...
 
 ### User-Friendly Writing Tool
 
-- Dark mode to reduce eye strain
-    - On/off toggle
-- Tooltips to help users know what the functions are
-    - Hover over buttons/arrows
-- Add contents to easily organize the writing
-    - Click “Add Content” icon to add new content
-    - Right-click on each content to edit/delete
+- Dark mode to reduce eye strain 
+    - On/off toggle ([Demo](https://youtu.be/oDfjhOdMj88?t=166))
+- Tooltips to help users know what the functions are 
+    - Hover over buttons/arrows ([Demo](https://youtu.be/oDfjhOdMj88?t=48))
+- Add contents to easily organize the writing 
+    - Click “Add Content” icon to add new content ([Demo](https://youtu.be/oDfjhOdMj88?t=20))
+    - Right-click on each content to edit/delete ([Demo](https://youtu.be/oDfjhOdMj88?t=33))
 - Keep track of story by writing down important memos
-    - Click “Add Memo” icon to add new memo
-    - Drag and drop memos
+    - Click “Add Memo” icon to add new memo ([Demo](https://youtu.be/oDfjhOdMj88?t=100))
+    - Drag and drop memos ([Demo](https://youtu.be/oDfjhOdMj88?t=114))
 - Ability to change font size and simple text formatting
-- Add background image to the blog post
-- Preview to get a feeling of what the blog will look like before posting
+- Adding tags easily by pressing enter ([Demo](https://youtu.be/oDfjhOdMj88?t=131)) 
+- Add background image to the blog post ([Demo](https://youtu.be/oDfjhOdMj88?t=151))
+- Preview to get a feeling of what the blog will look like before posting ([Demo](https://youtu.be/oDfjhOdMj88?t=157))
 
 ## Project Repo/Project Summary 📚
 - [Link to full project repository](https://github.com/GeulReadyEditor/onego) <br>
