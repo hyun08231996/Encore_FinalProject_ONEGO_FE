@@ -8,7 +8,7 @@
 	      <template v-slot:activator="{ on, attrs }">
 			<v-btn @click="showTag" icon v-bind="attrs" v-on="on"><v-icon small>mdi-chevron-right</v-icon></v-btn>
 		  </template>
-		  <span>태그</span>
+		  <span>Tags</span>
 		</v-tooltip>
 	  </div>
 	  <div v-else style="width:100%;float:left;" class="v-combobox-tag">
@@ -25,8 +25,8 @@
 			deletable-chips
 			single-line
 			dense
-			label="태그 입력 후 Enter를 누르세요"
-			placeholder="태그 입력 후 Enter를 누르세요"
+			label="Press enter after writing a tag"
+			placeholder="Press enter after writing a tag"
 			@input.native="word=$event.srcElement.value"
 			>
 			</v-combobox></div>
@@ -35,7 +35,7 @@
 				<template v-slot:activator="{ on, attrs }">
 					<v-btn icon height="6.5vh" v-bind="attrs" v-on="on" @click="generateTag"><v-icon>mdi-tag-plus-outline</v-icon></v-btn>
 				</template>
-				<span>태그 자동생성</span>
+				<span>Autogenerate Tag</span>
 		      </v-tooltip>
 			  <v-progress-circular v-if="isLoading"
 			    class="mt-4 ml-2"
@@ -52,7 +52,7 @@
 		  <template v-slot:activator="{ on, attrs }">
 			<v-btn @click="showFile" icon v-bind="attrs" v-on="on"><v-icon small>mdi-chevron-left</v-icon></v-btn>
 		  </template>
-		  <span>이미지 추가</span>
+		  <span>Add Image</span>
 		</v-tooltip>
 	  </div>
 	  <div v-else style="width:100%;float:right;" class="v-combobox-tag">
@@ -70,7 +70,7 @@
 			outlined
 			truncate-length="60"
 			prepend-icon="mdi-image"
-			placeholder="배경 이미지 파일을 선택하세요"
+			placeholder="Please select a background image file"
 			@change = "selectImage"
 			/>
 		  </div>
@@ -82,7 +82,7 @@
 	  <v-card height="7.5vh" elevation="2" class="wordcount-card">
 		<!-- 글자수 -->
 		<div style="float:right;padding-right:8px;padding-top:4px;">
-			<label style="opacity:70%;font-size:0.9em;">글자수: {{wordCount}}자</label>
+			<label style="opacity:70%;font-size:0.9em;">Count: {{wordCount}}</label>
 		</div>
 	  </v-card>
 	</div>
