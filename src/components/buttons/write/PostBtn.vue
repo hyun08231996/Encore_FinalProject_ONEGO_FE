@@ -1,7 +1,7 @@
 <template>
 	<v-btn id="post-btn" class="ma-2" rounded outlined color="#00d5aa"
 	@click="postDraft">
-		글 올리기
+		Post
 	</v-btn>
 </template>
 
