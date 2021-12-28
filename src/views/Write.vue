@@ -38,7 +38,7 @@
 							<template v-slot:activator="{ on, attrs }">
 								<v-btn icon :color="hover ? '#00d5aa' : ''" v-bind="attrs" v-on="on" @click="generateSub"><v-icon>mdi-clipboard-text-play-outline</v-icon></v-btn>
 							</template>
-							<span>소제목 자동생성</span>
+							<span>Autogenerate Subtitle</span>
 				        </v-tooltip>
 					  </v-hover>
 					</template>
@@ -60,7 +60,7 @@
 				:native-extensions="nativeExtensions"
 				:disabled="isActive"
 				autoFocus=true
-				placeholder="글 내용을 입력하세요"
+				placeholder="Start writing something..."
 				>
 			</tiptap-vuetify>
 		  </div>
@@ -134,10 +134,10 @@
  				}
 			}
 		]
-		titleLabel = '글 제목'
-		subtitleLabel = '글 소제목'
-		titlePlace = '글 제목을 입력하세요'
-		subtitlePlace = '글 소제목을 입력하세요'
+		titleLabel = 'Main Title'
+		subtitleLabel = 'Main Subtitle'
+		titlePlace = 'Insert main title here'
+		subtitlePlace = 'Insert main subtitle here'
 		title = ''
 		subtitle = ''
 		errored = false
@@ -155,15 +155,15 @@
 			}else this.isActive = false
 
 			if(this.activeVal > 1){
-				this.titleLabel = '목차 이름'
-				this.subtitleLabel = '목차 소제목'
-				this.titlePlace = '목차 이름을 입력하세요'
-				this.subtitlePlace = '목차 소제목을 입력하세요'
+				this.titleLabel = 'Content Title'
+				this.subtitleLabel = 'Content Subtitle'
+				this.titlePlace = 'Insert content title here'
+				this.subtitlePlace = 'Insert content subtitle here'
 			}else if(this.activeVal === 1){
-				this.titleLabel = '글 제목'
-				this.subtitleLabel = '글 소제목'
-				this.titlePlace = '글 제목을 입력하세요'
-				this.subtitlePlace = '글 소제목을 입력하세요'
+				this.titleLabel = 'Main Title'
+				this.subtitleLabel = 'Main Subtitle'
+				this.titlePlace = 'Insert main title here'
+				this.subtitlePlace = 'Insert main subtitle here'
 			}
 		}
 
