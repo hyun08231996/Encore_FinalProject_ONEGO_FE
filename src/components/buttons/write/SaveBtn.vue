@@ -1,7 +1,7 @@
 <template>
 	<v-btn id="saveit-btn" class="ma-2" rounded outlined color="grey"
 	@click="saveDraft">
-		저장
+		Save
 	</v-btn>
 </template>
 
