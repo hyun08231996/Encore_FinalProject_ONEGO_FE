@@ -14,7 +14,7 @@
 			v-bind="attrs"
           	v-on="on"
 			@click="getCurDate">
-			미리보기
+			Preview
 		</v-btn>
 	  </template>
 
@@ -38,7 +38,7 @@
 				  <v-flex id="title-preview-margin" class="mx-auto">
 					<h1 style="font-size:40px;" v-html="itemList[0].title"></h1>
 					<div style="opacity:80%;"><h3 v-html="itemList[0].subtitle"></h3></div>
-					<div style="opacity:60%;margin-top:30px;"><h5>{{this.$store.state.user.userAccount.attributes.nickname}} · {{date}}</h5></div>
+					<div style="opacity:60%;margin-top:30px;"><h5>Peter Nam · {{date}}</h5></div>
 				  </v-flex>
 			  </v-img>
 		</v-card>
@@ -47,7 +47,7 @@
 		<v-flex v-if="imageUrl == ''" id="title-content-preview-margin" class="mx-auto mb-12">
 			<h1 style="font-size:40px;" v-html="itemList[0].title"></h1>
 			<div style="opacity:80%;"><h3 v-html="itemList[0].subtitle"></h3></div>
-			<div style="opacity:60%;margin-top:30px;"><h5>{{this.$store.state.user.userAccount.attributes.nickname}} · {{date}}</h5></div>
+			<div style="opacity:60%;margin-top:30px;"><h5>Peter Nam · {{date}}</h5></div><!-- {{this.$store.state.user.userAccount.attributes.nickname}} -->
 		</v-flex>
 
 		<!-- Content -->
@@ -79,45 +79,34 @@
 <script lang="ts">
 	import { Component, Vue } from 'vue-property-decorator';
 	import { namespace } from 'vuex-class';
-
 	const WriteStoreModule = namespace('writeStore')
-
 	@Component
 	export default class PreviewModal extends Vue {
 		dialog = false
 		date = ''
-
 		@WriteStoreModule.State('imageUrl')
 		private imageUrl!:string
-
 		@WriteStoreModule.State('modDatetime')
 		private dateTime!:Date
-
 		@WriteStoreModule.State('tagList')
 		private tagList!:string[]
-
 		@WriteStoreModule.Mutation('setDate')
 		private setDate!:(date:Date)=>void
-
 		@WriteStoreModule.Getter('getItemList')
 		private itemList!:any[]
-
 		mounted(){
 			var mm = this.dateTime.getMonth() + 1 // getMonth() is zero-based
 			var dd = this.dateTime.getDate()
-
 			const date = [this.dateTime.getFullYear(),
 						(mm>9 ? '' : '0') + mm,
 						(dd>9 ? '' : '0') + dd
 						].join('.')
 			this.date = date
 		}
-
 		getCurDate():void{
 			const date = new Date()
 			this.setDate(date)
 		}
-
 	}
 </script>
 
