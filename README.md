@@ -7,7 +7,7 @@
 Developed a writing/blogging website which integrates AI to help people who have difficulties with writing by providing sentence completion, text summarization and tag generation features.
 
 ## My Role 🙋
-- Designed and programmed header, sidebar, footer, search, account settings, edit profile, my profile,
+- Designed and programmed header, sidebar, footer, search, search result, account settings, edit profile, my profile,
 change password, saved blogs, posted blogs, and blog writing pages
 - Added changing font size/style, content folder management, adding memos, adding tags, image upload,
 and blog preview features to the blog writing page
@@ -33,20 +33,20 @@ With the click of a button AI generates...
 
 ### User-Friendly Writing Tool
 
-- Dark mode to reduce eye strain 
+- Dark mode to reduce eye strain ([Src](https://github.com/hyun08231996/Encore_FinalProject_ONEGO_FE/blob/master/src/components/buttons/write/DarkModeSwitch.vue))
     - On/off toggle ([Demo](https://youtu.be/oDfjhOdMj88?t=166))
-- Tooltips to help users know what the functions are 
+- Tooltips to help users know what the functions are
     - Hover over buttons/arrows ([Demo](https://youtu.be/oDfjhOdMj88?t=48))
-- Add contents to easily organize the writing 
+- Add contents to easily organize the writing ([Src](https://github.com/hyun08231996/Encore_FinalProject_ONEGO_FE/blob/master/src/components/layout/write/Treeview.vue))
     - Click “Add Content” icon to add new content ([Demo](https://youtu.be/oDfjhOdMj88?t=20))
     - Right-click on each content to edit/delete ([Demo](https://youtu.be/oDfjhOdMj88?t=33))
-- Keep track of story by writing down important memos
+- Keep track of story by writing down important memos ([Src](https://github.com/hyun08231996/Encore_FinalProject_ONEGO_FE/blob/master/src/components/layout/write/Memo.vue))
     - Click “Add Memo” icon to add new memo ([Demo](https://youtu.be/oDfjhOdMj88?t=100))
     - Drag and drop memos ([Demo](https://youtu.be/oDfjhOdMj88?t=114))
-- Ability to change font size and simple text formatting
-- Adding tags easily by pressing enter ([Demo](https://youtu.be/oDfjhOdMj88?t=131)) 
-- Add background image to the blog post ([Demo](https://youtu.be/oDfjhOdMj88?t=151))
-- Preview to get a feeling of what the blog will look like before posting ([Demo](https://youtu.be/oDfjhOdMj88?t=157))
+- Text editor with ability to change font size and simple text formatting ([Src](https://github.com/hyun08231996/Encore_FinalProject_ONEGO_FE/blob/master/src/views/Write.vue))
+- Adding tags easily by pressing enter ([Demo](https://youtu.be/oDfjhOdMj88?t=131), [Src](https://github.com/hyun08231996/Encore_FinalProject_ONEGO_FE/blob/master/src/components/layout/write/Tag.vue)) 
+- Add background image to the blog post ([Demo](https://youtu.be/oDfjhOdMj88?t=151), [Src](https://github.com/hyun08231996/Encore_FinalProject_ONEGO_FE/blob/master/src/components/layout/write/Tag.vue))
+- Preview to get a feeling of what the blog will look like before posting ([Demo](https://youtu.be/oDfjhOdMj88?t=157), [Src](https://github.com/hyun08231996/Encore_FinalProject_ONEGO_FE/blob/master/src/views/PreviewModal.vue))
 
 ## Project Repo/Project Summary 📚
 - [Link to full project repository](https://github.com/GeulReadyEditor/onego) <br>
