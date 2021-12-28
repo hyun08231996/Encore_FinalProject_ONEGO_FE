@@ -7,7 +7,7 @@
 			  <v-icon>mdi-chevron-left</v-icon>
 			</v-btn>
 		  </template>
-		  <span>메모</span>
+		  <span>Memo</span>
 		</v-tooltip>
 	  </div>
 	  <div v-else style="margin-left:8px;position:relative;">
@@ -16,7 +16,7 @@
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn icon v-bind="attrs" v-on="on" @click="addMemo"><v-icon>mdi-note-plus-outline</v-icon></v-btn>
 			</template>
-			<span>메모추가</span>
+			<span>Add Memo</span>
 			</v-tooltip></span>
 			<span style="position:absolute;right:4px;"><v-btn @click="showMemo" icon><v-icon>mdi-chevron-down</v-icon></v-btn></span>
 		</div>
