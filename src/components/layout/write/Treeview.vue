@@ -6,7 +6,7 @@
 			  <template v-slot:activator="{ on, attrs }">
 				<v-btn @click="showTreeview" icon v-bind="attrs" v-on="on"><v-icon>mdi-chevron-right</v-icon></v-btn>
 			  </template>
-			  <span>목차</span>
+			  <span>Content</span>
 			</v-tooltip>
 		</div>
 		<div v-else style="margin-left:8px;position:relative;">
@@ -16,7 +16,7 @@
 				<template v-slot:activator="{ on, attrs }">
 				  <v-btn icon v-bind="attrs" v-on="on" @click="addContent"><v-icon>mdi-folder-plus-outline</v-icon></v-btn>
 				</template>
-				<span>목차추가</span>
+				<span>Add Content</span>
 			  </v-tooltip>
 			</span>
 		</div>
@@ -59,7 +59,7 @@
 					<a @click="editTitle()" id="menu-edit-hover" >
 					  <div id="list-item-edit">
 					    <v-list-item style="margin-top:-8px;padding-right:50px;padding-left:5px;" >
-						  <v-list-item-title><label id="edit-label" style="font-size:0.95em;opacity:70%;">수정</label></v-list-item-title>
+						  <v-list-item-title><label id="edit-label" style="font-size:0.95em;opacity:70%;">Edit</label></v-list-item-title>
 					    </v-list-item>
 					  </div>
 					</a>
@@ -68,7 +68,7 @@
 						<a @click="deleteContent()" id="menu-delete-hover">
 						<div id="list-item-delete">
 						  <v-list-item style="margin-bottom:-8px;padding-right:50px;padding-left:5px;" >
-							<v-list-item-title><label id="delete-label" style="font-size:0.95em;opacity:70%;">삭제</label></v-list-item-title>
+							<v-list-item-title><label id="delete-label" style="font-size:0.95em;opacity:70%;">Delete</label></v-list-item-title>
 						  </v-list-item>
 						</div>
 						</a>
