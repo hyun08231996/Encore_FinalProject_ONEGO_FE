@@ -1,7 +1,7 @@
 <template>
 	<v-btn id="delete-btn" class="ma-2" rounded outlined color="grey"
 	@click="deleteDraft">
-		삭제
+		Delete
 	</v-btn>
 </template>
 
